@@ -1,4 +1,4 @@
-package Blog.entity;
+package Blog.enums;
 public enum Role{
     ADMIN,
     USER
