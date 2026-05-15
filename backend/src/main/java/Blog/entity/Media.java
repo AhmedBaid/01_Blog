@@ -3,11 +3,12 @@ package Blog.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "like")
-public class Like {
+@Table(name = "media")
+public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long mediaId;
+    @ManyToOne
     private long postId;
-    private long userId;
+    private String mediaName;
 }
