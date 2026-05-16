@@ -3,6 +3,10 @@ package Blog.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import Blog.enums.Role;
 
 @Entity
@@ -26,4 +30,7 @@ public class User {
     private Boolean isBanned;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @CreationTimestamp
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 }
