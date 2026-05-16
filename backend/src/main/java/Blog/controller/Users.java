@@ -3,11 +3,14 @@ package Blog.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
 public class Users {
-    @GetMapping
-    public String test() {
-        System.out.println("fefef");
-        return "hello";
+    @GetMapping("/hello")
+    public String sayHello() {
+        return "Hello, Spring Boot!";
+    }
+
+    @PostMapping("/hi")
+    public String sayHi() {
+        return "hi, Spring Boot!";
     }
 }
