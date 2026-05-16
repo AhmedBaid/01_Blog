@@ -14,6 +14,7 @@ public class Report {
     private long reporterId;
     private long reportedUserId;
     private String reason;
+    @Enumerated(EnumType.STRING)
     private Status status;
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
