@@ -23,6 +23,7 @@ public class Post {
     private String description;
     private boolean isHidden;
     private int totalLikes;
+    private boolean isLikedByCurrentUser;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
