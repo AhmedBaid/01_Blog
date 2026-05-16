@@ -15,6 +15,7 @@ import lombok.Data;
 public class Follower {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long followerId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

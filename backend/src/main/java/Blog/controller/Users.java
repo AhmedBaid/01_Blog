@@ -3,8 +3,9 @@ package Blog.controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/auth")
 public class Users {
-    @GetMapping("/hello")
+    @GetMapping("/login")
     public String sayHello() {
         return "Hello, Spring Boot!";
     }
