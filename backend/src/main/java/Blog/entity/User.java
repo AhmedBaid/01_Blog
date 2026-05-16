@@ -15,7 +15,7 @@ import Blog.enums.Role;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
     private String firstname;
     private String lastname;
     @Column(unique = true)
