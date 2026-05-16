@@ -6,16 +6,31 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import Blog.enums.Status;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "reports")
+@Data
 public class Report {
-    private long reportId;
-    private long reporterId;
-    private long reportedUserId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long reportId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "reporter_id", nullable = false)
+    private User reporter;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "reported_user_id", nullable = false)
+    private User reportedUser;
+
+    @Column(nullable = false)
     private String reason;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
+
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;

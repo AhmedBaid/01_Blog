@@ -5,16 +5,23 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "medias")
+@Data
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long mediaId;
-    @ManyToOne
-    private long postId;
+    private Long mediaId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
+
+    @Column(nullable = false)
     private String mediaName;
+
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
