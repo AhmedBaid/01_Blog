@@ -1,4 +1,4 @@
-package Blog.service;
+package Blog.config;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
