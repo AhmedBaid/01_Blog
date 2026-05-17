@@ -2,9 +2,11 @@ package Blog.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
 
 import Blog.dto.RegisterUserDTO;
 import Blog.entity.User;
+import Blog.exception.GlobalException;
 import Blog.repository.UserRepository;
 
 @Service
@@ -19,10 +21,10 @@ public class RegisterService {
 
     public void registerUser(RegisterUserDTO registerDto) {
         if (userRepository.existsByEmail(registerDto.getEmail())) {
-            throw new IllegalArgumentException("Error: Username is already taken!");
+            throw new GlobalException("Email is already in use!", HttpStatus.CONFLICT);
         }
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            throw new IllegalArgumentException("Error: Email is already in use!");
+            throw new GlobalException("Username is already taken!", HttpStatus.CONFLICT);
         }
         User user = new User();
         user.setFirstname(registerDto.getFirstname());
