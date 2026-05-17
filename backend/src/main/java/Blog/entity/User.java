@@ -24,12 +24,12 @@ public class User {
     private String email;
     private String password;
     private String bio;
-    private Long followersCount;
-    private Long followingCount;
     private String avatar;
-    private Boolean isBanned;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.USER;
+    private Boolean isBanned = false;
+    private Long followersCount = 0L;
+    private Long followingCount = 0L;
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;

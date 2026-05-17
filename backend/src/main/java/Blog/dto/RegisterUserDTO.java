@@ -1,7 +1,5 @@
 package Blog.dto;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -35,8 +33,4 @@ public class RegisterUserDTO {
     private String bio;
 
     private String avatar;
-    @Value("USER")
-    private String role;
-    @Value("false")
-    private Boolean isBanned;
 }
