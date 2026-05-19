@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import Blog.entity.User;
 import Blog.enums.Role;
+import Blog.exception.GlobalException;
 import Blog.repository.UserRepository;
 
 @Service
@@ -21,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElseThrow(() -> new GlobalException("User not found: " + username, null));
 
         Role role = user.getRole() != null ? user.getRole() : Role.USER;
 

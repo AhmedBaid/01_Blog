@@ -1,1 +1,13 @@
-<p>register works!</p>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <input formControlName="username" placeholder="Username" type="text">
+  <input formControlName="email" placeholder="Email" type="text">
+  <input formControlName="firstname" placeholder="First Name" type="text">
+  <input formControlName="lastname" placeholder="Last Name" type="text">
+
+  <textarea formControlName="bio" id="bio" placeholder="enter your bio"></textarea>
+
+  <input title="avatar" type="file" id="avatar" (change)="onFileSelected($event)">
+
+  <input formControlName="password" placeholder="Password" type="password">
+  <button type="submit" [disabled]="registerForm.invalid">Submit</button>
+</form>
