@@ -1,5 +1,7 @@
 package Blog.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -35,5 +37,5 @@ public class RegisterUserDTO {
     @NotBlank(message = "Bio cannot be blank")
     private String bio;
 
-    private String avatar;
+    private MultipartFile avatar;
 }

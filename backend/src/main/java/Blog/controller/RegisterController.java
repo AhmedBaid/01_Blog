@@ -1,6 +1,11 @@
 package Blog.controller;
 
 import org.springframework.http.ResponseEntity;
+
+import java.util.Collections;
+import java.util.Map;
+
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import Blog.dto.RegisterUserDTO;
@@ -16,9 +21,9 @@ public class RegisterController {
         this.registerService = registerService;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@Valid @RequestBody RegisterUserDTO registrationData) {
+    @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, String>> register(@Valid @ModelAttribute RegisterUserDTO registrationData) {
         registerService.registerUser(registrationData);
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(Collections.singletonMap("message", "User registered successfully"));
     }
 }
