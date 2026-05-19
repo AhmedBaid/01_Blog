@@ -242,3 +242,121 @@ textarea {
 .sign-in a:hover {
   text-decoration: underline;
 }
+
+@media (max-height: 750px) {
+  .register-container {
+    padding: 6px 30px;
+  }
+
+  .form-header {
+    margin-bottom: 14px;
+  }
+
+  .form-header h1 {
+    font-size: 24px;
+  }
+
+  .form-grid {
+    gap: 10px;
+  }
+
+  .field {
+    gap: 4px;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  textarea {
+    min-height: 36px;
+    font-size: 13px;
+  }
+
+  textarea {
+    height: 50px;
+  }
+
+  .avatar-label {
+    padding: 4px;
+    gap: 5px;
+  }
+
+  .avatar-circle {
+    width: 42px;
+    height: 42px;
+  }
+
+  .avatar-circle svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .avatar-text-main {
+    font-size: 13px;
+  }
+
+  .avatar-text-sub {
+    font-size: 11px;
+  }
+
+  .submit-btn {
+    min-height: 42px;
+    font-size: 14px;
+    margin-top: 2px;
+  }
+
+  .sign-in {
+    margin-top: 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-height: 620px) {
+  .register-container {
+    padding: 4px 30px;
+    top: 0;
+    transform: translate(-50%, 0);
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+
+  .form-header {
+    margin-bottom: 10px;
+  }
+
+  .form-header h1 {
+    font-size: 20px;
+  }
+
+  .form-grid {
+    gap: 8px;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  textarea {
+    min-height: 32px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    font-size: 13px;
+  }
+
+  textarea {
+    height: 44px;
+  }
+
+  .avatar-circle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .submit-btn {
+    min-height: 38px;
+    margin-top: 0;
+  }
+
+  .sign-in {
+    margin-top: 8px;
+  }
+}
