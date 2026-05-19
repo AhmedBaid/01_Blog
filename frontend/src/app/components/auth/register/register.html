@@ -63,6 +63,20 @@
       </div>
 
       <div class="field full">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <input type="password" id="password" formControlName="password" placeholder="Min. 8 characters" />
+        </div>
+        <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          Password must be between 8 and 20 characters.
+        </small>
+      </div>
+
+      <div class="field full">
         <label for="bio">Bio</label>
         <div class="input-wrap">
           <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -92,20 +106,6 @@
         </label>
       </div>
 
-
-      <div class="field full">
-        <label for="password">Password</label>
-        <div class="input-wrap">
-          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="11" width="18" height="11" rx="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
-          <input type="password" id="password" formControlName="password" placeholder="Min. 8 characters" />
-        </div>
-        <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-          Password must be between 8 and 20 characters.
-        </small>
-      </div>
 
       <button class="submit-btn" type="submit">
         <svg viewBox="0 0 24 24">

@@ -34,8 +34,7 @@ public class LoginService {
     }
 
     private User findUser(String emailOrUsername) {
-        return userRepository.findByUsername(emailOrUsername)
-                .or(() -> userRepository.findByEmail(emailOrUsername))
+        return userRepository.findByUsernameOrEmail(emailOrUsername, emailOrUsername)
                 .orElseThrow(() -> new GlobalException("User not found: " + emailOrUsername, HttpStatus.NOT_FOUND));
     }
 }

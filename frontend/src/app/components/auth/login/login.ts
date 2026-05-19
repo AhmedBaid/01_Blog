@@ -34,7 +34,7 @@ export class LoginComponent {
     }
     this.isSubmitting = true;
     const userData: UserData = {
-      login: this.loginForm.value.login || '',
+      emailOrUsername: this.loginForm.value.login || '',
       password: this.loginForm.value.password || '',
     };
     this.authService
@@ -50,6 +50,7 @@ export class LoginComponent {
           this.router.navigate(['/home']);
         },
         error: (err) => {
+          console.error('Login error:', err);
           const errorMessage =
             err.error?.message || 'An error occurred during login. Please try again.';
           this.notificationToast.error(errorMessage, 'Login Failed');

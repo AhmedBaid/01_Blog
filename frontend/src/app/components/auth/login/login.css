@@ -41,6 +41,7 @@ small {
   min-width: 0;
   flex-direction: column;
   gap: 7px;
+  margin-bottom: 10px;
 }
 
 .field.full {

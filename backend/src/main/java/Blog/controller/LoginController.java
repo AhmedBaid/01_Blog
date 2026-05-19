@@ -19,6 +19,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginDTO loginData) {
+        System.out.println("Received login request: +++++++++++++++++ " + loginData);
         String token = loginService.login(loginData);
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
