@@ -1,9 +1,59 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthServiceTs } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { UserData } from '../../../models/models';
+import { finalize } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class LoginComponent {}
+export class LoginComponent {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthServiceTs);
+  private router = inject(Router);
+  private notificationToast = inject(ToastrService);
+  loginForm = this.fb.group({
+    login: ['', [Validators.required]],
+    password: ['', [Validators.required]],
+  });
+  isSubmitting = false;
+
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+    if (this.isSubmitting) {
+      return;
+    }
+    this.isSubmitting = true;
+    const userData: UserData = {
+      login: this.loginForm.value.login || '',
+      password: this.loginForm.value.password || '',
+    };
+    this.authService
+      .login(userData)
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+        }),
+      )
+      .subscribe({
+        next: (_) => {
+          this.notificationToast.success('Login successful', 'Success');
+          this.router.navigate(['/home']);
+        },
+        error: (err) => {
+          const errorMessage =
+            err.error?.message || 'An error occurred during login. Please try again.';
+          this.notificationToast.error(errorMessage, 'Login Failed');
+        },
+      });
+  }
+}

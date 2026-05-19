@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthServiceTs } from '../../../core/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
-import { finalize } from 'rxjs';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 @Component({
   selector: 'app-register',
@@ -16,10 +16,11 @@ import { finalize } from 'rxjs';
 export class RegisterComponent {
   registerForm: FormGroup;
   selectedFile: File | null = null;
+  selectedFileName: String = '';
   avatarError = '';
   isSubmitting = false;
 
-  private readonly maxAvatarSize = 2 * 1024 * 1024;
+  private readonly maxAvatarSize = 5 * 1024 * 1024;
   private readonly allowedAvatarTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
   private fb = inject(FormBuilder);
@@ -42,13 +43,14 @@ export class RegisterComponent {
         ],
       ],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
-      bio: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(100)]],
+      bio: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
     });
   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
+    this.selectedFileName = file ? file.name : '';
 
     this.selectedFile = null;
     this.avatarError = '';
@@ -73,8 +75,12 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
+    if (this.isSubmitting) {
+      return;
+    }
+    this.isSubmitting = true;
     if (this.registerForm.invalid) {
-      this.notificationToast.error('Please fix the form fields before submitting.', 'Invalid form');
+      this.registerForm.markAllAsTouched();
       return;
     }
 
@@ -97,20 +103,21 @@ export class RegisterComponent {
       formData.append('avatar', this.selectedFile);
     }
 
-    this.isSubmitting = true;
-    this.authService.register(formData).pipe(
-      finalize(() => {
-        this.isSubmitting = false;
-      }),
-    ).subscribe({
-      next: (_) => {
-        this.notificationToast.success('Registration successful', 'Success');
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        console.error('Registration error:', err);
-        this.notificationToast.error('Registration failed', 'Error');
-      },
-    });
+    this.authService
+      .register(formData)
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+        }),
+      )
+      .subscribe({
+        next: (_) => {
+          this.notificationToast.success('Registration successful', 'Success');
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err) => {
+          this.notificationToast.error(err.error.message, 'Error');
+        },
+      });
   }
 }
