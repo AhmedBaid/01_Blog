@@ -16,7 +16,6 @@
 
 small {
   display: block;
-  margin-top: 2px;
   color: #ff6f00;
   font-size: 11px;
 }
@@ -82,7 +81,7 @@ input[type='email'],
 input[type='password'],
 textarea {
   width: 100%;
-  min-height: 40px;
+  min-height: 37px;
   padding: 5px 13px 5px 42px;
   border: 1px solid #2d2d2d;
   border-radius: 12px;
@@ -109,7 +108,7 @@ textarea:focus {
 }
 
 textarea {
-  height: 60px;
+  height: 50px;
   resize: none;
   line-height: 1.45;
 }
@@ -149,8 +148,8 @@ textarea {
 }
 
 .avatar-circle {
-  width: 54px;
-  height: 54px;
+  width: 45px;
+  height: 45px;
   display: grid;
   place-items: center;
   border: 1px solid #373737;
@@ -183,7 +182,7 @@ textarea {
 }
 
 #avatar-name {
-  min-height: 14px;
+  min-height: 10px;
   margin-top: 2px;
   color: #ff6f00;
   font-size: 11px;

@@ -1,3 +1,10 @@
 <app-notification></app-notification>
-<app-navbar></app-navbar>
+
+@if (
+  router.url !== '/auth/login' &&
+  router.url !== '/auth/register'
+) {
+  <app-navbar></app-navbar>
+}
+
 <router-outlet></router-outlet>

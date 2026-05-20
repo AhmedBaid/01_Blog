@@ -31,4 +31,5 @@ export class AuthServiceTs {
   isUserLoggedIn(): boolean {
     return !!this.getToken();
   }
+  
 }
