@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import Blog.config.JwtUtil;
 import Blog.dto.LoginDTO;
+import Blog.dto.LoginResponseDTO;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
 import Blog.repository.UserRepository;
@@ -23,14 +24,15 @@ public class LoginService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String login(@Valid LoginDTO loginData) {
+    public LoginResponseDTO login(@Valid LoginDTO loginData) {
         User user = findUser(loginData.getEmailOrUsername());
 
         if (!passwordEncoder.matches(loginData.getPassword(), user.getPassword())) {
             throw new GlobalException("Invalid email/username or password", HttpStatus.UNAUTHORIZED);
         }
 
-        return jwtUtil.generateToken(user.getUsername(), user.getRole());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        return new LoginResponseDTO(token, user);
     }
 
     private User findUser(String emailOrUsername) {
