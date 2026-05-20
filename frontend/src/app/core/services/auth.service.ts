@@ -16,15 +16,18 @@ export class AuthServiceTs {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
       tap((response: any) => {
         if (response && response.token) {
-          localStorage.setItem('jwt_token', response.token);
+          localStorage.setItem('token', response.token);
         }
       }),
     );
   }
   logout(): void {
-    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('token');
   }
   getToken(): string | null {
-    return localStorage.getItem('jwt_token');
+    return localStorage.getItem('token');
+  }
+  isUserLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }
