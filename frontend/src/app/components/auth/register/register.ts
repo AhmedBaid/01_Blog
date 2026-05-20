@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthServiceTs } from '../../../core/services/auth.service';
-import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/internal/operators/finalize';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +25,7 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthServiceTs);
   private router = inject(Router);
-  private notificationToast = inject(ToastrService);
+  private notificationToast = inject(NotificationService);
 
   constructor() {
     this.registerForm = this.fb.group({

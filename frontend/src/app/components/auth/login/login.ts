@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServiceTs } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { UserData } from '../../../models/models';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthServiceTs);
   private router = inject(Router);
-  private notificationToast = inject(ToastrService);
+  private notificationToast = inject(NotificationService);
   loginForm = this.fb.group({
     login: ['', [Validators.required]],
     password: ['', [Validators.required]],
