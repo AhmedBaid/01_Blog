@@ -8,7 +8,6 @@ import { finalize } from 'rxjs/internal/operators/finalize';
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.html',
   styleUrls: ['./register.css'],
@@ -78,7 +77,6 @@ export class RegisterComponent {
     if (this.isSubmitting) {
       return;
     }
-    this.isSubmitting = true;
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
@@ -89,6 +87,7 @@ export class RegisterComponent {
       return;
     }
 
+    this.isSubmitting = true;
     const formData = new FormData();
     const formValue = this.registerForm.getRawValue();
 
@@ -102,7 +101,6 @@ export class RegisterComponent {
     if (this.selectedFile) {
       formData.append('avatar', this.selectedFile);
     }
-
     this.authService
       .register(formData)
       .pipe(

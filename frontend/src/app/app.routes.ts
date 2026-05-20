@@ -3,6 +3,7 @@ import { LoginComponent } from './components/auth/login/login';
 import { RegisterComponent } from './components/auth/register/register';
 import { HomeComponent } from './components/home/home';
 import { guestGuard } from './core/guards/guestGuard.guard';
+import { authGuard } from './core/guards/authGuard.guard';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [authGuard],
   },
 
   {
@@ -29,5 +31,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'home',
-  }
+  },
 ];

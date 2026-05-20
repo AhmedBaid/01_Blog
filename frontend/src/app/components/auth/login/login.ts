@@ -25,11 +25,11 @@ export class LoginComponent {
   isSubmitting = false;
 
   onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+    if (this.isSubmitting) {
       return;
     }
-    if (this.isSubmitting) {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
     this.isSubmitting = true;
