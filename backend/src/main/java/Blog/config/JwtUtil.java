@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import Blog.enums.Role;
+
 import java.security.Key;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -27,12 +29,8 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateToken(String username) {
-        return generateToken(Map.of(), username);
-    }
-
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(userDetails.getUsername());
+    public String generateToken(String username, Role role) {
+        return generateToken(Map.of("role", role), username);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -46,6 +44,7 @@ public class JwtUtil {
     }
 
     private String generateToken(Map<String, Object> claims, String username) {
+        System.out.println("Generating token for user: " + username);
         Date now = new Date();
         Date expiration = new Date(now.getTime() + jwtExpiration);
 

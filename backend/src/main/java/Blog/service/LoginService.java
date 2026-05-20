@@ -30,11 +30,11 @@ public class LoginService {
             throw new GlobalException("Invalid email/username or password", HttpStatus.UNAUTHORIZED);
         }
 
-        return jwtUtil.generateToken(user.getUsername());
+        return jwtUtil.generateToken(user.getUsername(), user.getRole());
     }
 
     private User findUser(String emailOrUsername) {
         return userRepository.findByUsernameOrEmail(emailOrUsername, emailOrUsername)
-                .orElseThrow(() -> new GlobalException("User not found: " + emailOrUsername, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GlobalException("Invalid email/username or password", HttpStatus.NOT_FOUND));
     }
 }
