@@ -1,30 +1,29 @@
-@if (user) {
-  <div class="navbar-container">
-    <nav class="navbar">
-      <h1><span>01</span>Blog</h1>
-      <div class="search-box">
-        <input type="search" placeholder="Search for users here">
-        <mat-icon>search</mat-icon>
-      </div>
-      <div class="home">
-        <mat-icon>home</mat-icon>
-        <h1>Home</h1>
-      </div>
-      <div class="create-post">
-        <mat-icon>add</mat-icon>
-        <h1>Create Post</h1>
-      </div>
-      <div class="notification">
-        <mat-icon>notifications</mat-icon>
-      </div>
-      <div class="profile">
-        @if (user.avatar) {
-          <img [src]="user.avatar" alt="Profile Picture">
-        } @else {
-          <div>{{ flName }}</div>
-        }
-        <h1>{{ user.firstname }} {{ user.lastname }}</h1>
-      </div>
-    </nav>
-  </div>
-}
+<div *ngIf="user" class="navbar-container">
+  <nav class="navbar">
+    <h1><span>01</span>Blog</h1>
+    <div class="search-box">
+      <input type="search" placeholder="Search for users here">
+      <mat-icon>search</mat-icon>
+    </div>
+    <div class="home">
+      <mat-icon>home</mat-icon>
+      <h1>Home</h1>
+    </div>
+    <div class="create-post">
+      <mat-icon>add</mat-icon>
+      <h1>Create Post</h1>
+    </div>
+    <div class="notification">
+      <mat-icon>notifications</mat-icon>
+    </div>
+    <div class="profile">
+      <ng-container *ngIf="user.avatar; else initials">
+        <img [src]="user.avatar" alt="Profile Picture" />
+      </ng-container>
+      <ng-template #initials>
+        <div>{{ flName }}</div>
+      </ng-template>
+      <h1>{{ user.firstname }} {{ user.lastname }}</h1>
+    </div>
+  </nav>
+</div>

@@ -59,7 +59,7 @@ export class RegisterComponent {
     }
 
     if (file.size > this.maxAvatarSize) {
-      this.avatarError = 'Avatar size must not exceed 2MB.';
+      this.avatarError = 'Avatar size must not exceed 5MB.';
       input.value = '';
       return;
     }

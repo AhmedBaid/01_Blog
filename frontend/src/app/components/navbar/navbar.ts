@@ -7,9 +7,9 @@ import { CommonModule } from '@angular/common';
   selector: 'app-navbar',
   imports: [MatIconModule, CommonModule],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css',
+  styleUrls: ['./navbar.css'],
 })
-export class NavbarComponent implements OnInit{
+export class NavbarComponent implements OnInit {
   user: any;
   authService = inject(AuthService);
   flName: String = '';

@@ -5,9 +5,9 @@ import { NavbarComponent } from './components/navbar/navbar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NotificationComponent,NavbarComponent],
+  imports: [RouterOutlet, NotificationComponent, NavbarComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css'],
 })
 export class App {
   protected readonly title = signal('frontend');
