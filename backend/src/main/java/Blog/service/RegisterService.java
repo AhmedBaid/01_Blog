@@ -78,7 +78,7 @@ public class RegisterService {
             Path destination = AVATAR_UPLOAD_DIR.resolve(filename).normalize();
 
             Files.copy(avatar.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-            return destination.toString().replace("\\", "/");
+            return "http://localhost:8080/avatars/" + filename;
         } catch (IOException exception) {
             throw new GlobalException("Could not save avatar image", HttpStatus.INTERNAL_SERVER_ERROR);
         }

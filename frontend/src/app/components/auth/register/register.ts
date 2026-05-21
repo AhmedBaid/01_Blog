@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthServiceTs } from '../../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { NotificationService } from '../../../core/services/notification.service';
 
@@ -23,7 +23,7 @@ export class RegisterComponent {
   private readonly allowedAvatarTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
   private fb = inject(FormBuilder);
-  private authService = inject(AuthServiceTs);
+  private authService = inject(AuthService);
   private router = inject(Router);
   private notificationToast = inject(NotificationService);
 

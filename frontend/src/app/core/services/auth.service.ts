@@ -6,14 +6,14 @@ import { UserData } from '../../models/models';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthServiceTs {
-  private apiUrl = 'http://localhost:8080/api/auth';
+export class AuthService {
+  private apiUrl = 'http://localhost:8080/api';
   private http = inject(HttpClient);
   register(userData: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    return this.http.post(`${this.apiUrl}/auth/register`, userData);
   }
   login(credentials: UserData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap((response: any) => {
         console.log('Login response:', response);
         if (response && response.token) {
@@ -31,5 +31,7 @@ export class AuthServiceTs {
   isUserLoggedIn(): boolean {
     return !!this.getToken();
   }
-  
+  getCurrentUser(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/me`);
+  }
 }
