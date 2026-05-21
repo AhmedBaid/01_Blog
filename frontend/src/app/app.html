@@ -1,9 +1,6 @@
 <app-notification></app-notification>
 
-@if (
-  router.url !== '/auth/login' &&
-  router.url !== '/auth/register'
-) {
+@if (router.url !== '/auth/login' && router.url !== '/auth/register') {
   <app-navbar></app-navbar>
 }
 
