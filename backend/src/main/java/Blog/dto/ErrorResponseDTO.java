@@ -12,7 +12,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponse {
+public class ErrorResponseDTO {
     private LocalDateTime timestamp;
     private int status;
     private String error;
