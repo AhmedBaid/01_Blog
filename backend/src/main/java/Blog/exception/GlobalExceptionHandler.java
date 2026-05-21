@@ -5,14 +5,17 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import Blog.dto.ErrorResponseDTO;
+import io.jsonwebtoken.JwtException;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -75,7 +78,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleUnexpectedException(Exception ex, WebRequest request) {
+        System.out.println("Unexpected error: " + ex.getMessage());
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request);
+    }
+
+    @ExceptionHandler({JwtException.class, UsernameNotFoundException.class})
+    public ResponseEntity<ErrorResponseDTO> handleUnauthorized(Exception ex, WebRequest request) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, "An unexpected error occurred", request);
+    }
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMethodNotAllowed(Exception ex, WebRequest request) {
+        return buildResponse(HttpStatus.METHOD_NOT_ALLOWED, "Method not allowed", request);
     }
 
     private String getPath(WebRequest request) {
