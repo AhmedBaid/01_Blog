@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core'; // Add ChangeDetectorRef
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -12,10 +13,12 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent implements OnInit {
   user: any;
   authService = inject(AuthService);
-  // Inject the ChangeDetectorRef
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
   flName: string = '';
-
+  navigateToCreatePost() {
+    this.router.navigate(['/home']);
+  }
   ngOnInit() {
     if (!this.authService.getToken()) {
       return;
@@ -23,7 +26,6 @@ export class NavbarComponent implements OnInit {
 
     this.authService.getCurrentUser().subscribe({
       next: (userData) => {
-        console.log('User data fetched successfully:', userData);
         this.user = userData;
 
         if (!this.user?.avatar) {
@@ -32,7 +34,6 @@ export class NavbarComponent implements OnInit {
             this.user.lastname.charAt(0).toUpperCase();
         }
 
-        // Tell Angular it is safe to update the HTML now!
         this.cdr.detectChanges();
       },
       error: (err) => {

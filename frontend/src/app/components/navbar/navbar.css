@@ -1,30 +1,268 @@
-nav{
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 10px 35px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #121212;
+  gap: 14px;
+  background: #141414;
+  border-bottom: 1px solid #222;
 }
-.search-box {
+
+.nb-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nb-brand span {
+  width: 32px;
+  height: 32px;
+  background: #ff7800;
+  border-radius: 2px;
+  color: #fff;
+  padding: 6px;
+  text-align: center;
+}
+
+
+.nb-brand-name {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+}
+
+
+
+.nb-search {
   position: relative;
-  width: 300px;
+  flex: 1;
+  min-width: 0;
+  max-width: 300px;
+  margin-left: 20px;
 }
 
-.search-box input {
+.nb-search input {
   width: 100%;
-  padding: 10px 40px 10px 15px;
-  border-radius: 8px;
-  border: 1px solid gray;
+  padding: 8px 14px 8px 36px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
   outline: none;
-  background-color: #121212;
-  color: white;
+  transition: border-color 0.2s, background 0.2s;
 }
 
-.search-box mat-icon {
+.nb-search input::placeholder {
+  color: #555;
+}
+
+.nb-search input:focus {
+  border-color: #ff7800;
+  background: #1f1a15;
+  box-shadow: 0 0 0 3px rgba(255, 120, 0, 0.1);
+}
+
+.nb-search-icon {
   position: absolute;
-  right: 10px;
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: gray;
+  width: 15px;
+  height: 15px;
+  color: #555;
+  pointer-events: none;
+}
+
+.nb-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: auto;
+}
+
+.nb-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #888;
   cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.nb-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.nb-btn:hover {
+  background: #1e1e1e;
+  color: #ccc;
+}
+
+.nb-btn.active {
+  color: #ff7800;
+}
+
+.nb-btn.active svg {
+  stroke: #ff7800;
+}
+
+.nb-create {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 120, 0, 0.12);
+  color: #ff8a1f;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.nb-create svg {
+  width: 16px;
+  height: 16px;
+  stroke: #ff8a1f;
+  fill: none;
+  stroke-width: 2.2;
+}
+
+.nb-create:hover {
+  background: rgba(255, 120, 0, 0.2);
+}
+
+.nb-notif-wrap {
+  position: relative;
+}
+
+.nb-notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff7800;
+  border: 1.5px solid #141414;
+}
+
+.nb-profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 8px 5px 5px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: #1e1e1e;
+  border-color: #2a2a2a;}
+
+
+.nb-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ff7800;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.nb-avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.nb-profile-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #ddd;
+  line-height: 1;
+}
+
+.nb-profile-role {
+  font-size: 11px;
+  color: #555;
+  margin-top: 2px;
+}
+
+.nb-chevron {
+  width: 13px;
+  height: 13px;
+  stroke: #555;
+  fill: none;
+  stroke-width: 2;
+}
+
+@media (max-width: 768px) {
+  .nb-search {
+    max-width: 160px;
+  }
+
+  .nb-actions {
+    gap: 5px;
+  }
+
+  .navbar {
+    padding: 10px 5px;
+  }
+
+  .nb-search {
+    margin-left: 0;
+  }
+
+  .nb-btn span,
+  .nb-btn {
+    font-size: 0;
+  }
+
+  .nb-btn svg {
+    width: 19px;
+    height: 19px;
+  }
+
+
+  .nb-profile-info {
+    display: none;
+  }
+
+  .nb-chevron {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .nb-create-text {
+    display: none;
+  }
 }

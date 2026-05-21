@@ -17,6 +17,6 @@ public class WebConfig implements WebMvcConfigurer {
         String dataPath = dataDir.toFile().getAbsolutePath();
 
         registry.addResourceHandler("/avatars/**")
-                .addResourceLocations("file:/" + dataPath + "/avatars/");
+                .addResourceLocations("file:" + dataPath + "/avatars/");
     }
 }
