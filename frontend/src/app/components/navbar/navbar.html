@@ -67,17 +67,18 @@
           <div class="nb-dropdown-user-info">
             <i class="fa-solid fa-xmark" (click)="toggleProfileMenu()"></i>
             <h3>{{ user.firstname }} {{ user.lastname }}</h3>
-            <div class="nb-follow-stats">
-              <span>
-                <strong>{{ user.followersCount }}</strong>
-                Followers
-              </span>
-              <span>
-                <strong>{{ user.followingCount }}</strong>
-                Following
-              </span>
-            </div>
+            <div class="bio">{{ user.bio }}</div>
           </div>
+        </div>
+        <div class="nb-follow-stats">
+          <span>
+            <strong>{{ user.followersCount }}</strong>
+            Followers
+          </span>
+          <span>
+            <strong>{{ user.followingCount }}</strong>
+            Following
+          </span>
         </div>
         <div class="nb-dropdown-actions">
           <button class="nb-dropdown-btn profile-btn" (click)="navigateToProfile()">

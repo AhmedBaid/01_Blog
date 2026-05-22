@@ -26,7 +26,7 @@ public class UserController {
     public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
         User user = userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
-        String avatarUrl = user.getAvatar();
+        String avatarUrl = user.getAvatar() == null ? null : "http://localhost:8080/avatars/" + user.getAvatar();
         UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail(), user.getFirstname(), user.getLastname(),
                 user.getBio(), user.getFollowingCount(), user.getFollowersCount(), avatarUrl);
 
