@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   flName: string = '';
+  showProfileMenu: boolean = false;
   navigateToCreatePost() {
     this.router.navigate(['/home']);
   }
@@ -40,5 +41,16 @@ export class NavbarComponent implements OnInit {
         console.error('Error fetching user data:', err);
       },
     });
+  }
+  navigateToProfile(){
+    this.router.navigate(['/profile']);
+    this.showProfileMenu = false;
+  }
+  toggleProfileMenu(){
+    this.showProfileMenu = !this.showProfileMenu;
+  }
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

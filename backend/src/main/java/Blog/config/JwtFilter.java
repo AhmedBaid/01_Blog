@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,7 +24,9 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final HandlerExceptionResolver handlerExceptionResolver;
-    public JwtFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService, HandlerExceptionResolver handlerExceptionResolver) {
+
+    public JwtFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService,
+            HandlerExceptionResolver handlerExceptionResolver) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
@@ -36,12 +37,16 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
+        System.out.println("Authorization header: " + authHeader);
         final String jwt;
         final String username;
-
+        System.out.println("Received request: ");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new JwtException("Missing or invalid Authorization header");
+            System.out.println("No JWT token found in request headers");
+            filterChain.doFilter(request, response);
+            return;
         }
+        System.out.println("+++++++++++++++++++++++");
 
         jwt = authHeader.substring(7);
 
@@ -61,8 +66,9 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-        } catch (JwtException | UsernameNotFoundException e) {
+        } catch (JwtException e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
+            return;
         }
 
         filterChain.doFilter(request, response);
