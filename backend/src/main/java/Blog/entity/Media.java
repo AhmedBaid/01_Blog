@@ -5,11 +5,12 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "medias")
-@Data
+@Getter
+@Setter
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

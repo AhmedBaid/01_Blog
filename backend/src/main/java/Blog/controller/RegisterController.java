@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import Blog.dto.RegisterUserDTO;
-import Blog.dto.RegisterResponseDTO;
+import Blog.dto.ResponseDTO;
 import Blog.service.RegisterService;
 import jakarta.validation.Valid;
 
@@ -20,8 +20,8 @@ public class RegisterController {
     }
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<RegisterResponseDTO> register(@Valid @ModelAttribute RegisterUserDTO registrationData) {
+    public ResponseEntity<ResponseDTO> register(@Valid @ModelAttribute RegisterUserDTO registrationData) {
         registerService.registerUser(registrationData);
-        return ResponseEntity.ok(new RegisterResponseDTO("User registered successfully"));
+        return ResponseEntity.ok(new ResponseDTO("User registered successfully"));
     }
 }
