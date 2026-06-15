@@ -1,1 +1,27 @@
-<p>create post ajmii</p>
+<div className="create-post-wrapper">
+  <div className="create-post-container">
+    <div className="create-post-header">
+      <div className="post-icon">
+        <img src="{{user.avatar}}" alt="avatar">
+      </div>
+      <div className="post-input-wrapper">
+        <input type="text" className="post-input" placeholder="What's on your mind, {{user.username}}" readOnly />
+      </div>
+
+    </div>
+    <div className="post-divider">
+    </div>
+    <div className="post-actions">
+      <button className="action-button photo">
+        <i className="fa-solid fa-image"></i>
+        <span>Photo/Video</span> </button>
+      <button className="action-button video">
+        <i className="fa-solid fa-video"></i>
+        <span>Live Video</span> </button>
+      <button className="action-button feeling">
+        <i className="fa-solid fa-face-smile"></i>
+        <span>Feeling</span>
+      </button>
+    </div>
+  </div>
+</div>

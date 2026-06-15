@@ -10,3 +10,13 @@ export interface Notification {
   title?: string;
   type: NotificationType;
 }
+export interface User {
+  username: string;
+  firstname: string;
+  lastname: string;
+  avatar: string;
+  email: string;
+  bio: string;
+  followersCount: number;
+  followingCount: number;
+}

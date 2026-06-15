@@ -42,11 +42,11 @@ export class NavbarComponent implements OnInit {
       },
     });
   }
-  navigateToProfile(){
+  navigateToProfile() {
     this.router.navigate(['/profile']);
     this.showProfileMenu = false;
   }
-  toggleProfileMenu(){
+  toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
   }
   logout() {

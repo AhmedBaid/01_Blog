@@ -2,11 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { UserData } from '../../models/models';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  userService = inject(UserService);
   private apiUrl = 'http://localhost:8080/api';
   private http = inject(HttpClient);
   register(userData: FormData): Observable<any> {
@@ -24,6 +26,7 @@ export class AuthService {
   }
   logout(): void {
     localStorage.removeItem('token');
+    this.userService.clearCurrentUser();
   }
   getToken(): string | null {
     return localStorage.getItem('token');
