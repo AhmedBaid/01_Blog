@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { NotificationService } from '../../core/services/notification.service';
 import { CommonModule } from '@angular/common';
 import { getRealMimeType } from '../../helpers/getRealMimeType';
+import { PostService } from '../../core/services/post.service';
+import { finalize } from 'rxjs';
 
 interface FilePreview {
   url: string;
@@ -22,6 +24,7 @@ export class CreatePost {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
   private notificationToast = inject(NotificationService);
+  private postService = inject(PostService);
 
   createPostForm: FormGroup;
   user = this.userService.currentUser;
@@ -33,8 +36,13 @@ export class CreatePost {
 
   readonly MAX_FILE_SIZE = 30 * 1024 * 1024;
   readonly ALLOWED_TYPES = new Set([
-    'image/jpeg', 'image/png', 'image/webp', 'image/gif',
-    'video/mp4', 'video/webm', 'video/ogg',
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'image/gif',
+    'video/mp4',
+    'video/webm',
+    'video/ogg',
   ]);
 
   constructor() {
@@ -58,7 +66,7 @@ export class CreatePost {
 
       try {
         const realMimeType = await getRealMimeType(file);
-
+        console.log(`File: ${file.name}, Real MIME Type: ${realMimeType}`);
         if (!this.ALLOWED_TYPES.has(realMimeType)) {
           this.notificationToast.error(`File ${file.name} has an invalid format.`);
           continue;
@@ -73,7 +81,7 @@ export class CreatePost {
             url: previewUrl,
             type: realMimeType.startsWith('video/') ? 'video' : 'image',
             name: file.name,
-          }
+          },
         ]);
       } catch (error) {
         this.notificationToast.error(`Error validating file: ${file.name}`);
@@ -122,7 +130,21 @@ export class CreatePost {
     this.selectedFiles.forEach((file) => {
       formData.append('medias', file);
     });
-
-    console.log('FormData ready to send!');
+    this.postService
+      .createPost(formData)
+      .pipe(
+        finalize(() => {
+          this.isSubmitting = false;
+        }),
+      )
+      .subscribe({
+        next: (_) => {
+          this.closeCreatePostModal();
+          this.notificationToast.success('Post Created successfully', 'Success');
+        },
+        error: (err) => {
+          this.notificationToast.error(err.error.message, 'Error');
+        },
+      });
   }
 }

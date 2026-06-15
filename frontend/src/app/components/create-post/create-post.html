@@ -1,7 +1,7 @@
+@if(user(); as currentUser) {
 <div class="create-post-wrapper" (click)="openCreatePostModal()">
   <div class="create-post-container">
     <div class="create-post-header">
-      @if(user(); as currentUser) {
       <div class="post-icon">
         @if(currentUser.avatar) {
         <img [src]="currentUser.avatar" alt="avatar">
@@ -15,7 +15,6 @@
       <div class="post-input-wrapper">
         <input type="text" class="post-input" placeholder="What's on your mind, {{ currentUser.username }}?" readOnly />
       </div>
-      }
     </div>
     <div class="post-divider"></div>
     <div class="post-actions">
@@ -34,6 +33,7 @@
     </div>
   </div>
 </div>
+}
 
 @if(toggle){
 <form [formGroup]="createPostForm" (ngSubmit)="onSubmit()">
