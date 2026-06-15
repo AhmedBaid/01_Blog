@@ -1,27 +1,117 @@
-<div className="create-post-wrapper">
-  <div className="create-post-container">
-    <div className="create-post-header">
-      <div className="post-icon">
-        <img src="{{user.avatar}}" alt="avatar">
+<div class="create-post-wrapper" (click)="openCreatePostModal()">
+  <div class="create-post-container">
+    <div class="create-post-header">
+      @if(user(); as currentUser) {
+      <div class="post-icon">
+        @if(currentUser.avatar) {
+        <img [src]="currentUser.avatar" alt="avatar">
+        } @else {
+        <div class="avatar-fallback">
+          {{ currentUser.firstname.charAt(0).toUpperCase() }}
+          {{ currentUser.lastname.charAt(0).toUpperCase() }}
+        </div>
+        }
       </div>
-      <div className="post-input-wrapper">
-        <input type="text" className="post-input" placeholder="What's on your mind, {{user.username}}" readOnly />
+      <div class="post-input-wrapper">
+        <input type="text" class="post-input" placeholder="What's on your mind, {{ currentUser.username }}?" readOnly />
       </div>
-
+      }
     </div>
-    <div className="post-divider">
-    </div>
-    <div className="post-actions">
-      <button className="action-button photo">
-        <i className="fa-solid fa-image"></i>
-        <span>Photo/Video</span> </button>
-      <button className="action-button video">
-        <i className="fa-solid fa-video"></i>
-        <span>Live Video</span> </button>
-      <button className="action-button feeling">
-        <i className="fa-solid fa-face-smile"></i>
+    <div class="post-divider"></div>
+    <div class="post-actions">
+      <button class="action-button photo">
+        <i class="fa-solid fa-image"></i>
+        <span>Photo/Video</span>
+      </button>
+      <button class="action-button video">
+        <i class="fa-solid fa-video"></i>
+        <span>Live Video</span>
+      </button>
+      <button class="action-button feeling">
+        <i class="fa-solid fa-face-smile"></i>
         <span>Feeling</span>
       </button>
     </div>
   </div>
 </div>
+
+@if(toggle){
+<form [formGroup]="createPostForm" (ngSubmit)="onSubmit()">
+  <div class="create-post-modal">
+    <div class="modal-content">
+      <div class="header">
+        @if(user(); as currentUser) {
+        <div class="user-info">
+          @if(currentUser.avatar) {
+          <img [src]="currentUser.avatar" alt="avatar">
+          } @else {
+          <div class="avatar-fallback">
+            {{ currentUser.firstname.charAt(0).toUpperCase() }}
+            {{ currentUser.lastname.charAt(0).toUpperCase() }}
+          </div>
+          }
+          <div>{{ currentUser.firstname }} {{ currentUser.lastname }}</div>
+        </div>
+        }
+        <button title="close" type="button" (click)="closeCreatePostModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" placeholder="Enter title" formControlName="title" />
+      <small class="error-msg" *ngIf="createPostForm.get('title')?.invalid && createPostForm.get('title')?.touched">
+        Title must be between 5 and 15 characters.
+      </small>
+
+      <label for="description">Description</label>
+      <textarea placeholder="What's on your mind?" name="description" id="description"
+        formControlName="description"></textarea>
+      <small class="error-msg"
+        *ngIf="createPostForm.get('description')?.invalid && createPostForm.get('description')?.touched">
+        Description must be between 10 and 30 characters.
+      </small>
+
+      <div class="field full">
+        <label>Post Media</label>
+        <label class="avatar-label" for="avatar">
+          <input multiple title="avatar" accept="image/*,video/*" type="file" id="avatar"
+            (change)="onFileSelected($event)">
+          <div class="avatar-circle">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
+          <div class="avatar-text-main"><span>Upload</span> photos or videos</div>
+          <div class="avatar-text-sub">PNG, JPEG, WEBP, GIF, MP4, WEBM, OGG · Max 30MB</div>
+        </label>
+      </div>
+
+      @if (previews().length > 0) {
+      <div class="preview-grid">
+        <div class="preview-item" *ngFor="let item of previews(); let i = index">
+
+          <button type="button" class="remove-preview-btn" (click)="removeFile(i)" title="Remove file">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+
+          @if (item.type === 'image') {
+          <img [src]="item.url" alt="Image preview" />
+          } @else if (item.type === 'video') {
+          <video [src]="item.url" controls loop autoplay muted></video>
+          }
+
+          <div class="file-name-overlay">
+            <span class="file-name-tag">{{ item.name }}</span>
+          </div>
+        </div>
+      </div>
+      }
+
+      <button type="submit" title="Create Post">Create Post</button>
+    </div>
+  </div>
+</form>
+}

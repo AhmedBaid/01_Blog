@@ -1,0 +1,14 @@
+.home-component {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px auto 0 auto;
+  max-width: 1500px;
+}
+
+.first-section {
+  width: 50%;
+}
+
+.second-section {
+  width: 50%;
+}
