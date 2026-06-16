@@ -3,7 +3,6 @@ package Blog.service;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -111,7 +110,7 @@ public class PostService {
     }
 
     public List<PostDTO> getAllPosts() {
-        return postRepository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+        return postRepository.findAll().stream().map(post -> mapToDTO(post)).toList();
     }
 
     private PostDTO mapToDTO(Post post) {
@@ -135,7 +134,7 @@ public class PostService {
         dto.setMediaUrls(
                 post.getMedias()
                         .stream()
-                        .map(Media::getMediaName)
+                        .map(media -> media.getMediaName())
                         .toList());
 
         return dto;
