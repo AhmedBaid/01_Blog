@@ -1,40 +1,65 @@
-export function getRealMimeType(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    const blob = file.slice(0, 12);
+import { Injectable } from '@angular/core';
 
-    reader.onloadend = (e: any) => {
-      if (e.target.readyState !== FileReader.DONE) return;
+@Injectable({
+  providedIn: 'root',
+})
+export class Filevalidator {
 
-      const arr = new Uint8Array(e.target.result);
-      let header = '';
-      for (let i = 0; i < Math.min(arr.length, 6); i++) {
-        header += arr[i].toString(16).padStart(2, '0');
-      }
+  async validateRealMimeType(file: File): Promise<string> {
+    return new Promise((resolve) => {
+      const blob = file.slice(0, 16);
+      const reader = new FileReader();
 
-      header = header.toUpperCase();
-      const infoString = arr.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
+      reader.onloadend = (e) => {
+        if (!e.target?.result) {
+          resolve("unknown");
+          return;
+        }
 
-      if (header.startsWith('89504E47')) return resolve('image/png');
-      if (header.startsWith('FFD8FF')) return resolve('image/jpeg');
-      if (header.startsWith('47494638')) return resolve('image/gif');
-      if (header.startsWith('52494646') && header.endsWith('57454250', 12))
-        return resolve('image/webp');
+        const arr = new Uint8Array(e.target.result as ArrayBuffer);
+        let hex = '';
 
-      if (header.includes('1A45DFA3')) return resolve('video/webm');
-      if (
-        infoString.includes('ftypmp42') ||
-        infoString.includes('ftypisom') ||
-        infoString.includes('ftypmp41')
-      ) {
-        return resolve('video/mp4');
-      }
-      if (header.startsWith('4F676753')) return resolve('video/ogg');
+        for (let i = 0; i < arr.length; i++) {
+          hex += arr[i].toString(16).padStart(2, '0');
+        }
 
-      resolve(file.type || 'unknown');
-    };
+        resolve(this.detectMimeType(hex.toLowerCase()));
+      };
 
-    reader.onerror = () => reject();
-    reader.readAsArrayBuffer(blob);
-  });
+      reader.onerror = () => resolve("unknown");
+      reader.readAsArrayBuffer(blob);
+    });
+  }
+
+  private detectMimeType(hex: string): string {
+    if (hex.startsWith('ffd8ff')) {
+      return 'image/jpeg';
+    }
+
+    if (hex.startsWith('89504e47')) {
+      return 'image/png';
+    }
+
+    if (hex.startsWith('47494638')) {
+      return 'image/gif';
+    }
+
+    if (hex.startsWith('52494646') && hex.substring(16, 24) === '57454250') {
+      return 'image/webp';
+    }
+
+    if (hex.substring(8, 16) === '66747970') {
+      return 'video/mp4';
+    }
+
+    if (hex.startsWith('1a45dfa3')) {
+      return 'video/webm';
+    }
+
+    if (hex.startsWith('4f676753')) {
+      return 'video/ogg';
+    }
+
+    return "unknown";
+  }
 }

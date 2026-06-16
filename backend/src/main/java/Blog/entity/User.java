@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,8 +32,6 @@ public class User {
     private Boolean isBanned = false;
     private Long followersCount = 0L;
     private Long followingCount = 0L;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> posts = new ArrayList<>();
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 import { finalize } from 'rxjs/internal/operators/finalize';
 import { NotificationService } from '../../../core/services/notification.service';
+import { Filevalidator } from '../../../helpers/getRealMimeType';
 
 @Component({
   selector: 'app-register',
@@ -20,12 +21,18 @@ export class RegisterComponent {
   isSubmitting = false;
 
   private readonly maxAvatarSize = 5 * 1024 * 1024;
-  private readonly allowedAvatarTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  private readonly allowedAvatarTypes = new Set([
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'image/gif',
+  ]);
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
   private notificationToast = inject(NotificationService);
+  private getRealMimeType = inject(Filevalidator);
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -46,7 +53,7 @@ export class RegisterComponent {
     });
   }
 
-  onFileSelected(event: Event): void {
+  async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
     this.selectedFileName = file ? file.name : '';
@@ -63,8 +70,9 @@ export class RegisterComponent {
       input.value = '';
       return;
     }
+    const realMimeType = await this.getRealMimeType.validateRealMimeType(file);
 
-    if (!this.allowedAvatarTypes.includes(file.type)) {
+    if (!this.allowedAvatarTypes.has(realMimeType)) {
       this.avatarError = 'Avatar must be a JPEG, PNG, WEBP, or GIF image.';
       input.value = '';
       return;

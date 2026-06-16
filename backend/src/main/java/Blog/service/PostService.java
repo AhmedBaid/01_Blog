@@ -3,6 +3,7 @@ package Blog.service;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,11 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import Blog.dto.PostCreateDto;
+import Blog.dto.PostDTO;
 import Blog.entity.Media;
 import Blog.entity.Post;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
 import Blog.helpers.FileValidator;
+import Blog.repository.LikeRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
 
@@ -32,10 +35,12 @@ public class PostService {
             "video/ogg");
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
-    public PostService(PostRepository postRepo, UserRepository userRepo) {
+    public PostService(PostRepository postRepo, UserRepository userRepo, LikeRepository likeRepository) {
         this.postRepository = postRepo;
         this.userRepository = userRepo;
+        this.likeRepository = likeRepository;
     }
 
     public void createPost(PostCreateDto postCreateDto) {
@@ -103,5 +108,36 @@ public class PostService {
             case "video/ogg" -> ".ogg";
             default -> "";
         };
+    }
+
+    public List<PostDTO> getAllPosts() {
+        return postRepository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    private PostDTO mapToDTO(Post post) {
+        PostDTO dto = new PostDTO();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        boolean isLikedByCurrentUser = likeRepository.existsByPost_PostIdAndUser_UserId(post.getPostId(),
+                currentUser.getUserId());
+        dto.setId(post.getPostId());
+        dto.setUserId(post.getUser().getUserId());
+        dto.setTitle(post.getTitle());
+        dto.setDescription(post.getDescription());
+
+        dto.setUsername(post.getUser().getUsername());
+        dto.setFirstname(post.getUser().getFirstname());
+        dto.setLastname(post.getUser().getLastname());
+        dto.setAvatar(post.getUser().getAvatar());
+        dto.setLikedByCurrentUser(isLikedByCurrentUser);
+        dto.setMediaUrls(
+                post.getMedias()
+                        .stream()
+                        .map(Media::getMediaName)
+                        .toList());
+
+        return dto;
     }
 }

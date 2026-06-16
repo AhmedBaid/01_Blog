@@ -1,4 +1,3 @@
-@if (user) {
 <div class="navbar-container">
   <nav class="navbar">
 
@@ -36,6 +35,7 @@
 
 
       <div class="nb-profile" (click)="toggleProfileMenu()">
+        @if (user) {
 
         @if (user.avatar) {
         <img class="nb-avatar-img" [src]="user.avatar" alt="Profile" />
@@ -48,7 +48,7 @@
             {{ user.firstname }} {{ user.lastname }}
           </div>
         </div>
-
+        }
 
       </div>
       @if (showProfileMenu) {
@@ -95,4 +95,3 @@
     </div>
   </nav>
 </div>
-}

@@ -1,11 +1,11 @@
-import { Component, inject, signal } from '@angular/core'; // 🔥 Inject signal
+import { Component, inject, signal } from '@angular/core';
 import { UserService } from '../../core/services/user.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NotificationService } from '../../core/services/notification.service';
 import { CommonModule } from '@angular/common';
-import { getRealMimeType } from '../../helpers/getRealMimeType';
 import { PostService } from '../../core/services/post.service';
 import { finalize } from 'rxjs';
+import { Filevalidator } from '../../helpers/getRealMimeType';
 
 interface FilePreview {
   url: string;
@@ -25,6 +25,7 @@ export class CreatePost {
   private userService = inject(UserService);
   private notificationToast = inject(NotificationService);
   private postService = inject(PostService);
+  private getRealMimeType = inject(Filevalidator);
 
   createPostForm: FormGroup;
   user = this.userService.currentUser;
@@ -57,16 +58,14 @@ export class CreatePost {
 
     const files = Array.from(event.target.files) as File[];
     this.clearPreviews();
-
+    const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+    if (totalSize > this.MAX_FILE_SIZE) {
+      this.notificationToast.error('Total file size exceeds the 30MB limit.');
+      return;
+    }
     for (const file of files) {
-      if (file.size > this.MAX_FILE_SIZE) {
-        this.notificationToast.error(`File ${file.name} exceeds the 30MB size limit.`);
-        continue;
-      }
-
       try {
-        const realMimeType = await getRealMimeType(file);
-        console.log(`File: ${file.name}, Real MIME Type: ${realMimeType}`);
+        const realMimeType = await this.getRealMimeType.validateRealMimeType(file);
         if (!this.ALLOWED_TYPES.has(realMimeType)) {
           this.notificationToast.error(`File ${file.name} has an invalid format.`);
           continue;
