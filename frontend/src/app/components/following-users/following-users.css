@@ -1,4 +1,6 @@
 .suggestions-wrapper {
+  position: sticky;
+  top: 90px;
   background: #141414;
   border: 1px solid #1e1e1e;
   border-radius: 14px;
