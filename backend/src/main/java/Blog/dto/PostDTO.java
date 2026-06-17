@@ -15,6 +15,8 @@ public class PostDTO {
     private String firstname;
     private String lastname;
     private String avatar;
-    private boolean isLikedByCurrentUser;
+    private boolean likedByCurrentUser;
+    private boolean itsMyPost;
     private List<String> mediaUrls;
+    private String createdAt;
 }

@@ -121,6 +121,7 @@ public class PostService {
 
         boolean isLikedByCurrentUser = likeRepository.existsByPost_PostIdAndUser_UserId(post.getPostId(),
                 currentUser.getUserId());
+        boolean isItMyPost = post.getUser().getUserId() == currentUser.getUserId();
         dto.setId(post.getPostId());
         dto.setUserId(post.getUser().getUserId());
         dto.setTitle(post.getTitle());
@@ -132,12 +133,13 @@ public class PostService {
         dto.setAvatar(post.getUser().getAvatar() == null ? null
                 : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
         dto.setLikedByCurrentUser(isLikedByCurrentUser);
+        dto.setItsMyPost(isItMyPost);
         dto.setMediaUrls(
                 post.getMedias()
                         .stream()
                         .map(media -> "http://localhost:8080/posts/" + media.getMediaName())
                         .toList());
-
+        dto.setCreatedAt(post.getCreatedAt().toString());
         return dto;
     }
 }

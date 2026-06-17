@@ -67,43 +67,13 @@ small {
   border-color: #3a3a3a;
   background: #1e1e1e;
 }
-
-.post-divider {
-  height: 1px;
-  background: #1e1e1e;
-  margin: 0 16px;
-}
-
-.post-actions {
-  display: flex;
-  align-items: center;
-  padding: 8px 10px;
-  gap: 4px;
-}
-
-.action-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  flex: 1;
-  padding: 9px 12px;
-  border-radius: 10px;
-  border: none;
-  background: transparent;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: 'DM Sans', sans-serif;
+.create-post-header i {
+  font-size: 22px;
+  color: #c97d3a;
   cursor: pointer;
-  color: #888;
-  transition: background 0.15s, color 0.15s;
-}
+  transition: color 0.15s;
 
-.action-button i { font-size: 16px; }
-.action-button:hover { background: #1e1e1e; color: #ccc; }
-.action-button.photo i  { color: #4ade80; }
-.action-button.video i  { color: #60a5fa; }
-.action-button.feeling i { color: #facc15; }
+}
 
 .create-post-modal {
   position: fixed;

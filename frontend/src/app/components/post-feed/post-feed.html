@@ -12,7 +12,21 @@
       <div class="p-fullname">{{ post.firstname }} {{ post.lastname }}</div>
       <div class="p-username">@{{ post.username }}</div>
     </div>
-    <button class="p-menu" aria-label="Post options">···</button>
+    <button class="p-menu" aria-label="Post options" (click)="openPostOptions(post)">
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </button>
+    @if(post.toggleOptions) {
+      @if (post.itsMyPost) {
+      <div class="post-options">
+        <button type="button" class="option-btn">Edit</button>
+        <button type="button" class="option-btn">Delete</button>
+      </div>
+      } @else {
+      <div class="post-options">
+        <button type="button" class="option-btn">Report</button>
+      </div>
+      }
+    }
   </div>
 
   <h2 class="p-title">{{ post.title }}</h2>
@@ -51,8 +65,8 @@
   }
 
   <div class="p-actions">
-    <button class="p-action-btn" [class.liked]="post.isLikedByCurrentUser" (click)="toggleLike()">
-      <i [class]="post.isLikedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+    <button class="p-action-btn" [class.liked]="post.likedByCurrentUser" (click)="toggleLike()">
+      <i [class]="post.likedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
       <span class="count">{{ likeCount }}</span>
     </button>
     <button class="p-action-btn">

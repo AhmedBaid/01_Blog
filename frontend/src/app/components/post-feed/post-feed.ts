@@ -14,6 +14,7 @@ export class PostFeed {
   likeCount = 0;
   comments = 'fff';
   currentMediaIndex = 0;
+  toggleOptions = false;
   ngOnInit() {
     this.postService.getPosts().subscribe({
       next: (data) => {
@@ -54,5 +55,8 @@ export class PostFeed {
     } else {
       post.currentMediaIndex = post.mediaUrls.length - 1;
     }
+  }
+  openPostOptions(post: Post): void {
+    post.toggleOptions = !post.toggleOptions;
   }
 }

@@ -29,7 +29,10 @@ export interface Post {
   firstname: string;
   lastname: string;
   avatar: string | null;
-  isLikedByCurrentUser: boolean;
+  likedByCurrentUser: boolean;
+  itsMyPost: boolean;
   mediaUrls: string[];
   currentMediaIndex?: number;
+  toggleOptions: boolean;
+  createdAt: string;
 }
