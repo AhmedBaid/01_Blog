@@ -1,9 +1,13 @@
 package Blog.controller;
 
 import java.security.Principal;
+import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,9 +31,32 @@ public class UserController {
         User user = userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
         String avatarUrl = user.getAvatar() == null ? null : "http://localhost:8080/avatars/" + user.getAvatar();
-        UserDTO userDTO = new UserDTO(user.getUsername(), user.getEmail(), user.getFirstname(), user.getLastname(),
+        UserDTO userDTO = new UserDTO(user.getUserId(), user.getUsername(), user.getEmail(), user.getFirstname(),
+                user.getLastname(),
                 user.getBio(), user.getFollowingCount(), user.getFollowersCount(), avatarUrl);
 
         return ResponseEntity.ok(userDTO);
+    }
+
+    @GetMapping("/suggestedUsers")
+    public List<UserDTO> getLatestUsersToFollow() {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        Pageable topTen = PageRequest.of(0, 10);
+
+        List<User> users = userRepository.suggestedUsers(currentUser.getUserId(), topTen);
+
+        return users.stream().map(user -> {
+            UserDTO dto = new UserDTO();
+            dto.setUserId(user.getUserId());
+            dto.setUsername(user.getUsername());
+            dto.setFirstname(user.getFirstname());
+            dto.setLastname(user.getLastname());
+            dto.setAvatar(user.getAvatar() != null ? "http://localhost:8080/avatars/" + user.getAvatar() : null);
+            dto.setBio(user.getBio());
+            return dto;
+        }).toList();
     }
 }
