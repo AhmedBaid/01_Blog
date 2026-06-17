@@ -110,7 +110,7 @@ public class PostService {
     }
 
     public List<PostDTO> getAllPosts() {
-        return postRepository.findAll().stream().map(post -> mapToDTO(post)).toList();
+        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(post -> mapToDTO(post)).toList();
     }
 
     private PostDTO mapToDTO(Post post) {
@@ -129,12 +129,13 @@ public class PostService {
         dto.setUsername(post.getUser().getUsername());
         dto.setFirstname(post.getUser().getFirstname());
         dto.setLastname(post.getUser().getLastname());
-        dto.setAvatar(post.getUser().getAvatar());
+        dto.setAvatar(post.getUser().getAvatar() == null ? null
+                : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
         dto.setLikedByCurrentUser(isLikedByCurrentUser);
         dto.setMediaUrls(
                 post.getMedias()
                         .stream()
-                        .map(media -> media.getMediaName())
+                        .map(media -> "http://localhost:8080/posts/" + media.getMediaName())
                         .toList());
 
         return dto;

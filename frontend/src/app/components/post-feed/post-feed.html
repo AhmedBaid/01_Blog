@@ -1,1 +1,64 @@
-<p>post feed ajmii</p>
+@for (post of posts; track post.id) {
+<div class="post-card">
+  <div class="post-header">
+    @if (post.avatar) {
+    <img title="img" class="p-avatar" [src]="post.avatar" [alt]="post.firstname" />
+    } @else {
+    <div class="p-avatar-fb">
+      {{ post.firstname.charAt(0).toUpperCase() }}{{ post.lastname.charAt(0).toUpperCase() }}
+    </div>
+    }
+    <div class="p-author-info">
+      <div class="p-fullname">{{ post.firstname }} {{ post.lastname }}</div>
+      <div class="p-username">@{{ post.username }}</div>
+    </div>
+    <button class="p-menu" aria-label="Post options">···</button>
+  </div>
+
+  <h2 class="p-title">{{ post.title }}</h2>
+  <p class="p-desc">{{ post.description }}</p>
+
+  @if (post.mediaUrls && post.mediaUrls.length > 0) {
+  <div class="p-media-slider">
+
+    @if (post.mediaUrls.length > 1) {
+    <button title="prev" type="button" class="slide-arrow prev" (click)="prevMedia(post)">
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <button title="next" type="button" class="slide-arrow next" (click)="nextMedia(post)">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    }
+
+    <div class="slider-content">
+      @let activeUrl = post.mediaUrls[post.currentMediaIndex || 0];
+
+      @if (isVideo(activeUrl)) {
+      <video [src]="activeUrl" controls class="slider-media" loop autoplay muted></video>
+      } @else {
+      <img [src]="activeUrl" alt="Post media" class="slider-media" />
+      }
+    </div>
+
+    @if (post.mediaUrls.length > 1) {
+    <div class="slider-indicators">
+      @for (med of post.mediaUrls; track med; let idx = $index) {
+      <span class="dot" [class.active]="(post.currentMediaIndex || 0) === idx"></span>
+      }
+    </div>
+    }
+  </div>
+  }
+
+  <div class="p-actions">
+    <button class="p-action-btn" [class.liked]="post.isLikedByCurrentUser" (click)="toggleLike()">
+      <i [class]="post.isLikedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+      <span class="count">{{ likeCount }}</span>
+    </button>
+    <button class="p-action-btn">
+      <i class="fa-regular fa-comment"></i>
+      <span class="count">{{ comments.length }}</span>
+    </button>
+  </div>
+</div>
+}

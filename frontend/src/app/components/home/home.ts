@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CreatePost } from '../create-post/create-post';
 import { FollowingUsers } from '../following-users/following-users';
 import { PostFeed } from '../post-feed/post-feed';
@@ -10,7 +10,7 @@ import { UserService } from '../../core/services/user.service';
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   userService = inject(UserService);
   ngOnInit() {
     console.log('HomeComponent initialized');

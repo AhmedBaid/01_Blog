@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   user: any;
   authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);

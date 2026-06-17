@@ -20,3 +20,16 @@ export interface User {
   followersCount: number;
   followingCount: number;
 }
+export interface Post {
+  id: number;
+  userId: number;
+  title: string;
+  description: string;
+  username: string;
+  firstname: string;
+  lastname: string;
+  avatar: string | null;
+  isLikedByCurrentUser: boolean;
+  mediaUrls: string[];
+  currentMediaIndex?: number;
+}
