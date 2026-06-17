@@ -1,6 +1,5 @@
 package Blog.controller;
 
-import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import Blog.dto.ResponseDTO;
 import Blog.service.PostService;
 import jakarta.validation.Valid;
 
-// import Blog.entity.Post;
 
 @RestController
 @RequestMapping("/api")

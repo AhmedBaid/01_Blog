@@ -84,7 +84,7 @@
           @if (item.type === 'image') {
           <img [src]="item.url" alt="Image preview" />
           } @else if (item.type === 'video') {
-          <video [src]="item.url" controls loop autoplay muted></video>
+          <video [src]="item.url" controls></video>
           }
 
           <div class="file-name-overlay">

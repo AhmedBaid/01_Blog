@@ -2,7 +2,6 @@ package Blog.service;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.springframework.http.HttpStatus;
@@ -113,17 +112,12 @@ public class PostService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        
+
         return postsPage.map(post -> {
             PostDTO dto = new PostDTO();
             dto.setId(post.getPostId());
             dto.setTitle(post.getTitle());
             dto.setDescription(post.getDescription());
-
-            if (post.getCreatedAt() != null) {
-                dto.setCreatedAt(post.getCreatedAt().format(formatter));
-            }
 
             if (currentUser != null) {
                 dto.setItsMyPost(post.getUser().getUserId().equals(currentUser.getUserId()));
@@ -135,12 +129,11 @@ public class PostService {
             dto.setUsername(post.getUser().getUsername());
             dto.setFirstname(post.getUser().getFirstname());
             dto.setLastname(post.getUser().getLastname());
+            dto.setAvatar(
+                    post.getUser().getAvatar() == null ? null
+                            : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
 
-            if (post.getUser().getAvatar() != null) {
-                dto.setAvatar(
-                        dto.getAvatar() == null ? null : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
-            }
-
+            dto.setCreatedAt(post.getCreatedAt().toString());
             dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
 
             return dto;

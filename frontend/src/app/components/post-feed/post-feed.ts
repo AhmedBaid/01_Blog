@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
 import { FormatTime } from '../../helpers/formatTime';
@@ -14,24 +14,46 @@ export class PostFeed {
   private formatTime = inject(FormatTime);
 
   posts = signal<Post[]>([]);
+  currentPage = 0;
+  isLastPage = false;
+  isLoading = false;
   likeCount = 0;
   comments = 'fff';
   currentMediaIndex = 0;
   toggleOptions = false;
   ngOnInit() {
-    this.postService.getPosts().subscribe({
-      next: (data) => {
-        const mappedPosts = data.map((post) => ({
-          ...post,
-          formattedCreatedAt: this.formatTime.formatTimeAgo(post.createdAt),
-        }));
+    this.loadNextPage();
+  }
+  loadNextPage() {
+    if (this.isLoading || this.isLastPage) return;
 
-        this.posts.set(mappedPosts);
+    this.isLoading = true;
+    this.postService.getPosts(this.currentPage).subscribe({
+      next: (response) => {
+        const newPosts = response.content;
+        this.isLastPage = response.last;
+
+        if (newPosts.length > 0) {
+          this.posts.update((current) => [...current, ...newPosts]);
+          this.currentPage++;
+        }
+        this.isLoading = false;
       },
       error: (err) => {
-        console.log(err);
+        console.error(err);
+        this.isLoading = false;
       },
     });
+  }
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const pos =
+      (document.documentElement.scrollTop || document.body.scrollTop) +
+      document.documentElement.clientHeight;
+    const max = document.documentElement.scrollHeight;
+    if (pos >= max - 200) {
+      this.loadNextPage();
+    }
   }
   toggleLike(): void {}
 

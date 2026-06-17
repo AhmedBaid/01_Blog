@@ -48,7 +48,7 @@
       @let activeUrl = post.mediaUrls[post.currentMediaIndex || 0];
 
       @if (isVideo(activeUrl)) {
-      <video [src]="activeUrl" controls class="slider-media" loop autoplay muted></video>
+      <video [src]="activeUrl" controls class="slider-media"></video>
       } @else {
       <img [src]="activeUrl" alt="Post media" class="slider-media" />
       }
