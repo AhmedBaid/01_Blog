@@ -10,7 +10,7 @@
     }
     <div class="p-author-info">
       <div class="p-fullname">{{ post.firstname }} {{ post.lastname }}</div>
-      <div class="p-username">{{ post.formattedCreatedAt }}</div>
+      <div class="p-username">{{ post.createdAt }}</div>
     </div>
     <button class="p-menu" aria-label="Post options" (click)="openPostOptions(post)">
       <i class="fa-solid fa-ellipsis-vertical"></i>

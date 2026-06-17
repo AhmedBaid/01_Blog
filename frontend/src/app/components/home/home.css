@@ -1,14 +1,14 @@
 .home-component {
   display: flex;
-  justify-content: space-between;
+  gap: 250px;
   margin: 20px auto 0 auto;
-  max-width: 1500px;
+  max-width: 1300px;
 }
 
 .first-section {
-  width: 50%;
+  width: 70%;
 }
 
 .second-section {
-  width: 50%;
+  width: 30%;
 }

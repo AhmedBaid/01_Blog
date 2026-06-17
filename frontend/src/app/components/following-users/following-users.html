@@ -1,1 +1,58 @@
-<p>following users ajmii</p>
+<div class="suggestions-wrapper">
+  <div class="suggestions-header">
+    <h3>Who to follow</h3>
+    <button class="refresh-btn" (click)="loadSuggestedUsers()" title="Refresh suggestions">
+      <i class="fa-solid fa-rotate-right"></i>Refresh
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="suggestions-loading">
+      <div class="mini-spinner"></div>
+      <span>Loading suggestions...</span>
+    </div>
+  } @else {
+    <div class="suggestions-list">
+      @for (user of suggestedUsers(); track user.userId) {
+        <div class="suggested-user-card">
+
+          <div class="su-avatar-box">
+            @if (user.avatar) {
+              <img title="imggg" [src]="user.avatar" [alt]="user.firstname" class="su-avatar">
+            } @else {
+              <div class="su-avatar-fallback">
+                {{ user.firstname.charAt(0).toUpperCase() }}{{ user.lastname.charAt(0).toUpperCase() }}
+              </div>
+            }
+          </div>
+
+          <div class="su-info-box">
+            <div class="su-fullname" title="{{ user.firstname }} {{ user.lastname }}">
+              {{ user.firstname }} {{ user.lastname }}
+            </div>
+            <div class="su-username">&#64;{{ user.username }}</div>
+            @if (user.bio) {
+              <p class="su-bio" title="{{ user.bio }}">{{ user.bio }}</p>
+            }
+          </div>
+
+          <div class="su-action-box">
+            <button
+              type="button"
+              class="su-follow-btn"
+            >
+              @if (user.isFollowed) {
+                <i class="fa-solid fa-user-check"></i> Following
+              } @else {
+                <i class="fa-solid fa-user-plus"></i> Follow
+              }
+            </button>
+          </div>
+
+        </div>
+      } @empty {
+        <div class="suggestions-empty">No new suggestions found</div>
+      }
+    </div>
+  }
+</div>

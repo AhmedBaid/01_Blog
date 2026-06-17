@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import Blog.dto.RegisterUserDTO;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
-import Blog.helpers.FileValidator;
+import Blog.helpers.GetRealMimeType;
 import Blog.repository.UserRepository;
 
 @Service
@@ -64,7 +64,7 @@ public class RegisterService {
             throw new GlobalException("Avatar size must not exceed 5MB", HttpStatus.BAD_REQUEST);
         }
 
-        String contentType = FileValidator.getRealMimeType(avatar);
+        String contentType = GetRealMimeType.getRealMimeType(avatar);
         System.out.println("Avatar content type: +++++++++++++++++++" + contentType);
         if (contentType == null || !ALLOWED_AVATAR_TYPES.contains(contentType)) {
             throw new GlobalException("Avatar must be a JPEG, PNG, WEBP, or GIF image", HttpStatus.BAD_REQUEST);

@@ -35,5 +35,16 @@ export interface Post {
   currentMediaIndex?: number;
   toggleOptions: boolean;
   createdAt: string;
-  formattedCreatedAt: string;
+}
+export interface SuggestedUser {
+  userId: number;
+  username: string;
+  email: string | null;
+  firstname: string;
+  lastname: string;
+  bio: string | null;
+  followingCount: number | null;
+  followersCount: number | null;
+  avatar: string | null;
+  isFollowed?: boolean;
 }

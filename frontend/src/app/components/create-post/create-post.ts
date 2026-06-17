@@ -142,6 +142,7 @@ export class CreatePost {
         next: (_) => {
           this.closeCreatePostModal();
           this.notificationToast.success('Post Created successfully', 'Success');
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           this.notificationToast.error(err.error.message, 'Error');

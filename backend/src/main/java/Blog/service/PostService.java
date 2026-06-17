@@ -16,7 +16,8 @@ import Blog.dto.PostDTO;
 import Blog.entity.Post;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
-import Blog.helpers.FileValidator;
+import Blog.helpers.FormatTimeUtil;
+import Blog.helpers.GetRealMimeType;
 import Blog.repository.LikeRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
@@ -72,7 +73,7 @@ public class PostService {
         }
         List<String> savedFileNames = new ArrayList<>();
         for (MultipartFile file : medias) {
-            String contentType = FileValidator.getRealMimeType(file);
+            String contentType = GetRealMimeType.getRealMimeType(file);
             if (contentType == null || !ALLOWED_MEDIA_TYPES.contains(contentType)) {
                 throw new GlobalException("Invalid media type", HttpStatus.BAD_REQUEST);
             }
@@ -133,7 +134,7 @@ public class PostService {
                     post.getUser().getAvatar() == null ? null
                             : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
 
-            dto.setCreatedAt(post.getCreatedAt().toString());
+            dto.setCreatedAt(FormatTimeUtil.formatTimeAgo(post.getCreatedAt()));
             dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
 
             return dto;

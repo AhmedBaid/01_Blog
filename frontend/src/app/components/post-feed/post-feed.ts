@@ -1,7 +1,6 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
-import { FormatTime } from '../../helpers/formatTime';
 
 @Component({
   selector: 'app-posts-feed',
@@ -11,7 +10,6 @@ import { FormatTime } from '../../helpers/formatTime';
 })
 export class PostFeed {
   private postService = inject(PostService);
-  private formatTime = inject(FormatTime);
 
   posts = signal<Post[]>([]);
   currentPage = 0;
