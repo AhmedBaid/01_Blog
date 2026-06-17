@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
+import { FormatTime } from '../../helpers/formatTime';
 
 @Component({
   selector: 'app-posts-feed',
@@ -10,7 +11,9 @@ import { PostService } from '../../core/services/post.service';
 })
 export class PostFeed {
   private postService = inject(PostService);
-  posts: Post[] = [];
+  private formatTime = inject(FormatTime);
+
+  posts = signal<Post[]>([]);
   likeCount = 0;
   comments = 'fff';
   currentMediaIndex = 0;
@@ -18,7 +21,12 @@ export class PostFeed {
   ngOnInit() {
     this.postService.getPosts().subscribe({
       next: (data) => {
-        this.posts = data;
+        const mappedPosts = data.map((post) => ({
+          ...post,
+          formattedCreatedAt: this.formatTime.formatTimeAgo(post.createdAt),
+        }));
+
+        this.posts.set(mappedPosts);
       },
       error: (err) => {
         console.log(err);

@@ -25,8 +25,7 @@ public class Post {
     private String title;
     private String description;
     private boolean isHidden;
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Media> medias = new ArrayList<>();
+    private List<String> medias = new ArrayList<>();
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;

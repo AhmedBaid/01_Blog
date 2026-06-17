@@ -35,4 +35,5 @@ export interface Post {
   currentMediaIndex?: number;
   toggleOptions: boolean;
   createdAt: string;
+  formattedCreatedAt: string;
 }

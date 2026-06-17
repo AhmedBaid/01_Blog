@@ -1,24 +1,22 @@
 <div class="create-post-wrapper" (click)="openCreatePostModal()">
-  <div class="create-post-container">
-    @if(user(); as currentUser) {
-    <div class="create-post-header">
-      <div class="post-icon">
-        @if(currentUser.avatar) {
-        <img [src]="currentUser.avatar" alt="avatar">
-        } @else {
-        <div class="avatar-fallback">
-          {{ currentUser.firstname.charAt(0).toUpperCase() }}
-          {{ currentUser.lastname.charAt(0).toUpperCase() }}
-        </div>
-        }
+  @if(user(); as currentUser) {
+  <div class="create-post-header">
+    <div class="post-icon">
+      @if(currentUser.avatar) {
+      <img [src]="currentUser.avatar" alt="avatar">
+      } @else {
+      <div class="avatar-fallback">
+        {{ currentUser.firstname.charAt(0).toUpperCase() }}
+        {{ currentUser.lastname.charAt(0).toUpperCase() }}
       </div>
-      <div class="post-input-wrapper">
-        <input type="text" class="post-input" placeholder="What's on your mind, {{ currentUser.username }}?" readOnly />
-      </div>
-      <i class="fa-solid fa-image"></i>
+      }
     </div>
-    }
+    <div class="post-input-wrapper">
+      <input type="text" class="post-input" placeholder="What's on your mind, {{ currentUser.username }}?" readOnly />
+    </div>
+    <i class="fa-solid fa-image"></i>
   </div>
+  }
 </div>
 
 @if(toggle){

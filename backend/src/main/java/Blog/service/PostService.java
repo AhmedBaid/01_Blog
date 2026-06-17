@@ -2,16 +2,18 @@ package Blog.service;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import Blog.dto.PostCreateDto;
 import Blog.dto.PostDTO;
-import Blog.entity.Media;
 import Blog.entity.Post;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
@@ -54,11 +56,7 @@ public class PostService {
             List<String> savedFileNames = saveMedias(postCreateDto.getMedias());
 
             for (String fileName : savedFileNames) {
-                Media mediaEntity = new Media();
-                mediaEntity.setMediaName(fileName);
-                mediaEntity.setPost(post);
-
-                post.getMedias().add(mediaEntity);
+                post.getMedias().add(fileName);
             }
         }
 
@@ -109,37 +107,43 @@ public class PostService {
         };
     }
 
-    public List<PostDTO> getAllPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(post -> mapToDTO(post)).toList();
-    }
+    public Page<PostDTO> getAllPosts(Pageable pageable) {
+        Page<Post> postsPage = postRepository.findAll(pageable);
 
-    private PostDTO mapToDTO(Post post) {
-        PostDTO dto = new PostDTO();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        
+        return postsPage.map(post -> {
+            PostDTO dto = new PostDTO();
+            dto.setId(post.getPostId());
+            dto.setTitle(post.getTitle());
+            dto.setDescription(post.getDescription());
 
-        boolean isLikedByCurrentUser = likeRepository.existsByPost_PostIdAndUser_UserId(post.getPostId(),
-                currentUser.getUserId());
-        boolean isItMyPost = post.getUser().getUserId() == currentUser.getUserId();
-        dto.setId(post.getPostId());
-        dto.setUserId(post.getUser().getUserId());
-        dto.setTitle(post.getTitle());
-        dto.setDescription(post.getDescription());
+            if (post.getCreatedAt() != null) {
+                dto.setCreatedAt(post.getCreatedAt().format(formatter));
+            }
 
-        dto.setUsername(post.getUser().getUsername());
-        dto.setFirstname(post.getUser().getFirstname());
-        dto.setLastname(post.getUser().getLastname());
-        dto.setAvatar(post.getUser().getAvatar() == null ? null
-                : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
-        dto.setLikedByCurrentUser(isLikedByCurrentUser);
-        dto.setItsMyPost(isItMyPost);
-        dto.setMediaUrls(
-                post.getMedias()
-                        .stream()
-                        .map(media -> "http://localhost:8080/posts/" + media.getMediaName())
-                        .toList());
-        dto.setCreatedAt(post.getCreatedAt().toString());
-        return dto;
+            if (currentUser != null) {
+                dto.setItsMyPost(post.getUser().getUserId().equals(currentUser.getUserId()));
+                dto.setLikedByCurrentUser(
+                        likeRepository.existsByPost_PostIdAndUser_UserId(post.getPostId(), currentUser.getUserId()));
+            }
+
+            dto.setUserId(post.getUser().getUserId());
+            dto.setUsername(post.getUser().getUsername());
+            dto.setFirstname(post.getUser().getFirstname());
+            dto.setLastname(post.getUser().getLastname());
+
+            if (post.getUser().getAvatar() != null) {
+                dto.setAvatar(
+                        dto.getAvatar() == null ? null : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
+            }
+
+            dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
+
+            return dto;
+        });
     }
 }

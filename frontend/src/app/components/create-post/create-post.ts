@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { PostService } from '../../core/services/post.service';
 import { finalize } from 'rxjs';
 import { Filevalidator } from '../../helpers/getRealMimeType';
+import { Router } from '@angular/router';
 
 interface FilePreview {
   url: string;
@@ -26,6 +27,7 @@ export class CreatePost {
   private notificationToast = inject(NotificationService);
   private postService = inject(PostService);
   private getRealMimeType = inject(Filevalidator);
+  private router = inject(Router);
 
   createPostForm: FormGroup;
   user = this.userService.currentUser;

@@ -2,18 +2,6 @@
   cursor: pointer;
 }
 
-.create-post-container {
-  background: #141414;
-  border: 1px solid #222;
-  border-radius: 16px;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.create-post-container:hover {
-  border-color: #333;
-}
-
 small {
   display: block;
   margin-left: 20px;
@@ -25,7 +13,10 @@ small {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 10px 12px;
+  background: #191919;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
 }
 
 .post-icon img,

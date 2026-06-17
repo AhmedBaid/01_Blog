@@ -1,4 +1,4 @@
-@for (post of posts; track post.id) {
+@for (post of posts(); track post.id) {
 <div class="post-card">
   <div class="post-header">
     @if (post.avatar) {
@@ -10,7 +10,7 @@
     }
     <div class="p-author-info">
       <div class="p-fullname">{{ post.firstname }} {{ post.lastname }}</div>
-      <div class="p-username">@{{ post.username }}</div>
+      <div class="p-username">{{ post.formattedCreatedAt }}</div>
     </div>
     <button class="p-menu" aria-label="Post options" (click)="openPostOptions(post)">
       <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -18,12 +18,12 @@
     @if(post.toggleOptions) {
       @if (post.itsMyPost) {
       <div class="post-options">
-        <button type="button" class="option-btn">Edit</button>
-        <button type="button" class="option-btn">Delete</button>
+        <button type="button" class="option-btn"><i class="fa-solid fa-pen"></i>Edit</button>
+        <button type="button" class="option-btn"><i class="fa-solid fa-trash"></i>Delete</button>
       </div>
       } @else {
       <div class="post-options">
-        <button type="button" class="option-btn">Report</button>
+        <button type="button" class="option-btn"><i class="fa-solid fa-flag"></i>Report</button>
       </div>
       }
     }
