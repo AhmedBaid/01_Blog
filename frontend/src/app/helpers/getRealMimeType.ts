@@ -31,35 +31,41 @@ export class Filevalidator {
     });
   }
 
-  private detectMimeType(hex: string): string {
-    if (hex.startsWith('ffd8ff')) {
-      return 'image/jpeg';
-    }
-
-    if (hex.startsWith('89504e47')) {
-      return 'image/png';
-    }
-
-    if (hex.startsWith('47494638')) {
-      return 'image/gif';
-    }
-
-    if (hex.startsWith('52494646') && hex.substring(16, 24) === '57454250') {
-      return 'image/webp';
-    }
-
-    if (hex.substring(8, 16) === '66747970') {
-      return 'video/mp4';
-    }
-
-    if (hex.startsWith('1a45dfa3')) {
-      return 'video/webm';
-    }
-
-    if (hex.startsWith('4f676753')) {
-      return 'video/ogg';
-    }
-
-    return "unknown";
+private detectMimeType(hex: string): string {
+  if (hex.startsWith('ffd8ff')) {
+    return 'image/jpeg';
   }
+
+  if (hex.startsWith('89504e47')) {
+    return 'image/png';
+  }
+
+  if (hex.startsWith('47494638')) {
+    return 'image/gif';
+  }
+
+  if (hex.startsWith('52494646') && hex.substring(16, 24) === '57454250') {
+    return 'image/webp';
+  }
+
+  if (hex.substring(8, 16) === '66747970') {
+    const subBrand = hex.substring(16, 32);
+
+    if (subBrand.startsWith('61766966') || subBrand.startsWith('61766973')) {
+      return 'image/avif';
+    }
+
+    return 'video/mp4';
+  }
+
+  if (hex.startsWith('1a45dfa3')) {
+    return 'video/webm';
+  }
+
+  if (hex.startsWith('4f676753')) {
+    return 'video/ogg';
+  }
+
+  return "unknown";
+}
 }

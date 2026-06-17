@@ -74,6 +74,7 @@ public class PostService {
         List<String> savedFileNames = new ArrayList<>();
         for (MultipartFile file : medias) {
             String contentType = GetRealMimeType.getRealMimeType(file);
+            System.out.println("Content Type: " + contentType);
             if (contentType == null || !ALLOWED_MEDIA_TYPES.contains(contentType)) {
                 throw new GlobalException("Invalid media type", HttpStatus.BAD_REQUEST);
             }
