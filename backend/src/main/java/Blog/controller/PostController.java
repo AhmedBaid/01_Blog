@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.*;
 import Blog.dto.PostCreateDto;
 import Blog.dto.PostDTO;
-import Blog.dto.ResponseDTO;
 import Blog.service.PostService;
 import jakarta.validation.Valid;
 
@@ -28,9 +27,8 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<ResponseDTO> createPost(@Valid @ModelAttribute PostCreateDto postCreateDto) {
-        postService.createPost(postCreateDto);
-        return ResponseEntity.ok(new ResponseDTO("Post created successfully"));
+    public ResponseEntity<PostDTO> createPost(@Valid @ModelAttribute PostCreateDto postCreateDto) {
+        return ResponseEntity.ok(postService.createPost(postCreateDto));
     }
 
     @GetMapping("/posts")

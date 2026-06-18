@@ -44,7 +44,7 @@ public class PostService {
         this.likeRepository = likeRepository;
     }
 
-    public void createPost(PostCreateDto postCreateDto) {
+    public PostDTO createPost(PostCreateDto postCreateDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
@@ -60,7 +60,8 @@ public class PostService {
             }
         }
 
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        return mapToPostDTO(savedPost, currentUser);
     }
 
     public List<String> saveMedias(List<MultipartFile> medias) {
@@ -115,31 +116,32 @@ public class PostService {
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
 
-        return postsPage.map(post -> {
-            PostDTO dto = new PostDTO();
-            dto.setId(post.getPostId());
-            dto.setTitle(post.getTitle());
-            dto.setDescription(post.getDescription());
+        return postsPage.map(post -> mapToPostDTO(post, currentUser));
+    }
 
-            if (currentUser != null) {
-                dto.setItsMyPost(post.getUser().getUserId().equals(currentUser.getUserId()));
-                dto.setLikedByCurrentUser(
-                        likeRepository.existsByPost_PostIdAndUser_UserId(post.getPostId(), currentUser.getUserId()));
-            }
+    private PostDTO mapToPostDTO(Post post, User currentUser) {
+        PostDTO dto = new PostDTO();
+        dto.setId(post.getPostId());
+        dto.setTitle(post.getTitle());
+        dto.setDescription(post.getDescription());
 
-            dto.setUserId(post.getUser().getUserId());
-            dto.setUsername(post.getUser().getUsername());
-            dto.setFirstname(post.getUser().getFirstname());
-            dto.setLastname(post.getUser().getLastname());
-            dto.setAvatar(
-                    post.getUser().getAvatar() == null ? null
-                            : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
+        if (currentUser != null) {
+            dto.setItsMyPost(post.getUser().getUserId().equals(currentUser.getUserId()));
+            dto.setLikedByCurrentUser(
+                    likeRepository.existsByPost_PostIdAndUser_UserId(post.getPostId(), currentUser.getUserId()));
+        }
 
-            dto.setCreatedAt(FormatTimeUtil.formatTimeAgo(post.getCreatedAt()));
+        dto.setUserId(post.getUser().getUserId());
+        dto.setUsername(post.getUser().getUsername());
+        dto.setFirstname(post.getUser().getFirstname());
+        dto.setLastname(post.getUser().getLastname());
+        dto.setAvatar(
+                post.getUser().getAvatar() == null ? null
+                        : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
 
-            dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
+        dto.setCreatedAt(FormatTimeUtil.formatTimeAgo(post.getCreatedAt()));
+        dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
 
-            return dto;
-        });
+        return dto;
     }
 }

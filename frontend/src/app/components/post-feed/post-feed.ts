@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
 
@@ -11,7 +11,7 @@ import { PostService } from '../../core/services/post.service';
 export class PostFeed {
   private postService = inject(PostService);
 
-  posts = signal<Post[]>([]);
+  posts = this.postService.posts;
   currentPage = 0;
   isLastPage = false;
   isLoading = false;
@@ -32,7 +32,7 @@ export class PostFeed {
         this.isLastPage = response.last;
 
         if (newPosts.length > 0) {
-          this.posts.update((current) => [...current, ...newPosts]);
+          this.postService.appendPosts(newPosts);
           this.currentPage++;
         }
         this.isLoading = false;

@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { PostService } from '../../core/services/post.service';
 import { finalize } from 'rxjs';
 import { Filevalidator } from '../../helpers/getRealMimeType';
-import { Router } from '@angular/router';
 
 interface FilePreview {
   url: string;
@@ -139,7 +138,8 @@ export class CreatePost {
         }),
       )
       .subscribe({
-        next: (_) => {
+        next: (post) => {
+          this.postService.addPost(post);
           this.closeCreatePostModal();
           this.notificationToast.success('Post Created successfully', 'Success');
         },
