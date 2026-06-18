@@ -15,6 +15,14 @@ export class PostService {
     return this.http.post<Post>(`${this.apiUrl}/posts`, postData);
   }
 
+  updatePost(postId: number, postData: FormData): Observable<Post> {
+    return this.http.put<Post>(`${this.apiUrl}/posts/${postId}`, postData);
+  }
+
+  deletePost(postId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/posts/${postId}`);
+  }
+
   getPosts(page: number): Observable<PostsPage> {
     return this.http.get<PostsPage>(`${this.apiUrl}/posts?page=${page}`);
   }
@@ -32,5 +40,15 @@ export class PostService {
 
   resetPosts(): void {
     this.posts.set([]);
+  }
+
+  removePost(postId: number): void {
+    this.posts.update((current) => current.filter((p) => p.id !== postId));
+  }
+
+  updatePostInList(updatedPost: Post): void {
+    this.posts.update((current) =>
+      current.map((p) => (p.id === updatedPost.id ? updatedPost : p)),
+    );
   }
 }

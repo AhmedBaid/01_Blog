@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import Blog.dto.EditPostDto;
 import Blog.dto.PostCreateDto;
 import Blog.dto.PostDTO;
 import Blog.entity.Post;
@@ -62,6 +63,59 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
         return mapToPostDTO(savedPost, currentUser);
+    }
+
+    public PostDTO updatePost(Long postId, EditPostDto editPostDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new GlobalException("Post not found", HttpStatus.NOT_FOUND));
+
+        if (!post.getUser().getUserId().equals(currentUser.getUserId())) {
+            throw new GlobalException("You are not authorized to edit this post", HttpStatus.FORBIDDEN);
+        }
+
+        post.setTitle(editPostDto.getTitle());
+        post.setDescription(editPostDto.getDescription());
+
+        if (editPostDto.getMedias() != null && !editPostDto.getMedias().isEmpty()) {
+            deleteOldMedias(post.getMedias());
+            post.getMedias().clear();
+            List<String> savedFileNames = saveMedias(editPostDto.getMedias());
+            post.getMedias().addAll(savedFileNames);
+        }
+
+        Post savedPost = postRepository.save(post);
+        return mapToPostDTO(savedPost, currentUser);
+    }
+
+    public void deletePost(Long postId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new GlobalException("Post not found", HttpStatus.NOT_FOUND));
+
+        if (!post.getUser().getUserId().equals(currentUser.getUserId())) {
+            throw new GlobalException("You are not authorized to delete this post", HttpStatus.FORBIDDEN);
+        }
+
+        deleteOldMedias(post.getMedias());
+        postRepository.delete(post);
+    }
+
+    private void deleteOldMedias(List<String> mediaNames) {
+        for (String mediaName : mediaNames) {
+            try {
+                Path filePath = MEDIA_UPLOAD_DIR.resolve(mediaName).normalize();
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                System.err.println("Could not delete media file: " + mediaName);
+            }
+        }
     }
 
     public List<String> saveMedias(List<MultipartFile> medias) {

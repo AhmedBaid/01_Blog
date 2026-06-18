@@ -1,15 +1,19 @@
-import { Component, HostListener, inject, Input, OnInit } from '@angular/core'; // 🔥 ضفنا Input
+import { Component, HostListener, inject, Input, OnInit } from '@angular/core';
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
+import { NotificationService } from '../../core/services/notification.service';
+import { EditPostComponent } from '../edit-post/edit-post';
 
 @Component({
   selector: 'app-posts-feed',
-  standalone: true, // تأكد منها
+  standalone: true,
+  imports: [EditPostComponent],
   templateUrl: './post-feed.html',
   styleUrls: ['./post-feed.css'],
 })
 export class PostFeed implements OnInit {
   private postService = inject(PostService);
+  private notificationToast = inject(NotificationService);
 
   @Input() userId: number | null = null;
 
@@ -21,6 +25,13 @@ export class PostFeed implements OnInit {
   comments = 'fff';
   currentMediaIndex = 0;
   toggleOptions = false;
+
+  // Edit state
+  editingPost: Post | null = null;
+
+  // Delete confirmation state
+  deletingPost: Post | null = null;
+  isDeleting = false;
 
   ngOnInit() {
     this.postService.resetPosts();
@@ -96,5 +107,49 @@ export class PostFeed implements OnInit {
 
   openPostOptions(post: Post): void {
     post.toggleOptions = !post.toggleOptions;
+  }
+
+  // Edit
+  startEdit(post: Post): void {
+    post.toggleOptions = false;
+    this.editingPost = post;
+  }
+
+  onEditClose(): void {
+    this.editingPost = null;
+  }
+
+  onPostUpdated(_updatedPost: Post): void {
+    this.editingPost = null;
+  }
+
+  // Delete
+  confirmDelete(post: Post): void {
+    post.toggleOptions = false;
+    this.deletingPost = post;
+  }
+
+  cancelDelete(): void {
+    this.deletingPost = null;
+  }
+
+  executeDelete(): void {
+    if (!this.deletingPost || this.isDeleting) return;
+
+    this.isDeleting = true;
+    const postId = this.deletingPost.id;
+
+    this.postService.deletePost(postId).subscribe({
+      next: () => {
+        this.postService.removePost(postId);
+        this.deletingPost = null;
+        this.isDeleting = false;
+        this.notificationToast.success('Post deleted successfully', 'Deleted');
+      },
+      error: (err) => {
+        this.notificationToast.error(err.error?.message || 'Failed to delete post', 'Error');
+        this.isDeleting = false;
+      },
+    });
   }
 }

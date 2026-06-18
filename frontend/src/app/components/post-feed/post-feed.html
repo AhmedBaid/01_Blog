@@ -12,14 +12,14 @@
       <div class="p-fullname">{{ post.firstname }} {{ post.lastname }}</div>
       <div class="p-username">{{ post.createdAt }}</div>
     </div>
-    <button class="p-menu" aria-label="Post options" (click)="openPostOptions(post)">
+    <button type="button" class="p-menu" aria-label="Post options" (click)="openPostOptions(post)">
       <i class="fa-solid fa-ellipsis-vertical"></i>
     </button>
     @if(post.toggleOptions) {
       @if (post.itsMyPost) {
       <div class="post-options">
-        <button type="button" class="option-btn"><i class="fa-solid fa-pen"></i>Edit</button>
-        <button type="button" class="option-btn"><i class="fa-solid fa-trash"></i>Delete</button>
+        <button type="button" class="option-btn" (click)="startEdit(post)"><i class="fa-solid fa-pen"></i>Edit</button>
+        <button type="button" class="option-btn" (click)="confirmDelete(post)"><i class="fa-solid fa-trash"></i>Delete</button>
       </div>
       } @else {
       <div class="post-options">
@@ -65,11 +65,11 @@
   }
 
   <div class="p-actions">
-    <button class="p-action-btn" [class.liked]="post.likedByCurrentUser" (click)="toggleLike()">
+    <button type="button" class="p-action-btn" [class.liked]="post.likedByCurrentUser" (click)="toggleLike()">
       <i [class]="post.likedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
       <span class="count">{{ likeCount }}</span>
     </button>
-    <button class="p-action-btn">
+    <button type="button" class="p-action-btn">
       <i class="fa-regular fa-comment"></i>
       <span class="count">{{ comments.length }}</span>
     </button>
@@ -80,5 +80,36 @@
 <div class="loading-spinner">
   <div class="spinner"></div>
   <span>Loading posts...</span>
+</div>
+}
+
+<!-- Edit Post Modal -->
+@if (editingPost) {
+<app-edit-post [post]="editingPost" (close)="onEditClose()" (updated)="onPostUpdated($event)"></app-edit-post>
+}
+
+<!-- Delete Confirmation Dialog -->
+@if (deletingPost) {
+<div class="confirm-overlay" (click)="cancelDelete()">
+  <div class="confirm-dialog" (click)="$event.stopPropagation()">
+    <div class="confirm-icon">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+    </div>
+    <h3 class="confirm-title">Delete Post?</h3>
+    <p class="confirm-desc">
+      This action cannot be undone. The post and all its media will be permanently removed.
+    </p>
+    <div class="confirm-actions">
+      <button type="button" class="btn-cancel" (click)="cancelDelete()" [disabled]="isDeleting">Cancel</button>
+      <button type="button" class="btn-delete" (click)="executeDelete()" [disabled]="isDeleting">
+        @if (isDeleting) {
+        <span class="btn-spinner"></span>
+        Deleting...
+        } @else {
+        Delete
+        }
+      </button>
+    </div>
+  </div>
 </div>
 }

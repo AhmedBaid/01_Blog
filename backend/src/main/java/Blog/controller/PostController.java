@@ -3,14 +3,17 @@ package Blog.controller;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.*;
+import Blog.dto.EditPostDto;
 import Blog.dto.PostCreateDto;
 import Blog.dto.PostDTO;
 import Blog.service.PostService;
@@ -41,5 +44,16 @@ public class PostController {
     public ResponseEntity<Page<PostDTO>> getUserPosts(@PathVariable Long userId, @RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by("createdAt").descending());
         return ResponseEntity.ok(postService.getUserPosts(userId, pageable));
+    }
+
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<PostDTO> updatePost(@PathVariable Long postId, @Valid @ModelAttribute EditPostDto editPostDto) {
+        return ResponseEntity.ok(postService.updatePost(postId, editPostDto));
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+        return ResponseEntity.noContent().build();
     }
 }
