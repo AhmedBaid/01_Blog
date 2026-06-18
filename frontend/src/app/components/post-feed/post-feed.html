@@ -16,16 +16,17 @@
       <i class="fa-solid fa-ellipsis-vertical"></i>
     </button>
     @if(post.toggleOptions) {
-      @if (post.itsMyPost) {
-      <div class="post-options">
-        <button type="button" class="option-btn" (click)="startEdit(post)"><i class="fa-solid fa-pen"></i>Edit</button>
-        <button type="button" class="option-btn" (click)="confirmDelete(post)"><i class="fa-solid fa-trash"></i>Delete</button>
-      </div>
-      } @else {
-      <div class="post-options">
-        <button type="button" class="option-btn"><i class="fa-solid fa-flag"></i>Report</button>
-      </div>
-      }
+    @if (post.itsMyPost) {
+    <div class="post-options">
+      <button type="button" class="option-btn" (click)="startEdit(post)"><i class="fa-solid fa-pen"></i>Edit</button>
+      <button type="button" class="option-btn" (click)="confirmDelete(post)"><i
+          class="fa-solid fa-trash"></i>Delete</button>
+    </div>
+    } @else {
+    <div class="post-options">
+      <button type="button" class="option-btn"><i class="fa-solid fa-flag"></i>Report</button>
+    </div>
+    }
     }
   </div>
 
@@ -76,19 +77,17 @@
   </div>
 </div>
 }
-@if (isLoading) {
+@if (isLoading()) {
 <div class="loading-spinner">
   <div class="spinner"></div>
   <span>Loading posts...</span>
 </div>
 }
 
-<!-- Edit Post Modal -->
 @if (editingPost) {
 <app-edit-post [post]="editingPost" (close)="onEditClose()" (updated)="onPostUpdated($event)"></app-edit-post>
 }
 
-<!-- Delete Confirmation Dialog -->
 @if (deletingPost) {
 <div class="confirm-overlay" (click)="cancelDelete()">
   <div class="confirm-dialog" (click)="$event.stopPropagation()">
@@ -111,5 +110,10 @@
       </button>
     </div>
   </div>
+</div>
+}
+@if (posts().length === 0 && !isLoading()) {
+<div class="no-posts-message">
+  <p>No posts available.</p>
 </div>
 }

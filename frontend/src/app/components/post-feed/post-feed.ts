@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, Input, OnInit } from '@angular/core';
+import { Component, HostListener, inject, Input, OnInit, signal } from '@angular/core';
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -19,32 +19,28 @@ export class PostFeed implements OnInit {
 
   posts = this.postService.posts;
   currentPage = 0;
-  isLastPage = false;
-  isLoading = false;
+  isLastPage = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
   likeCount = 0;
   comments = 'fff';
   currentMediaIndex = 0;
   toggleOptions = false;
-
-  // Edit state
   editingPost: Post | null = null;
-
-  // Delete confirmation state
   deletingPost: Post | null = null;
   isDeleting = false;
 
   ngOnInit() {
     this.postService.resetPosts();
     this.currentPage = 0;
-    this.isLastPage = false;
-    this.isLoading = false;
+    this.isLastPage.set(false);
+    this.isLoading.set(false);
     this.loadNextPage();
   }
 
   loadNextPage() {
-    if (this.isLoading || this.isLastPage) return;
+    if (this.isLoading() || this.isLastPage()) return;
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     const postsObservable = this.userId
       ? this.postService.getUserPosts(this.userId, this.currentPage)
@@ -53,17 +49,17 @@ export class PostFeed implements OnInit {
     postsObservable.subscribe({
       next: (response) => {
         const newPosts = response.content;
-        this.isLastPage = response.last;
+        this.isLastPage.set(response.last);
 
         if (newPosts.length > 0) {
           this.postService.appendPosts(newPosts);
           this.currentPage++;
         }
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
       error: (err) => {
         console.error(err);
-        this.isLoading = false;
+        this.isLoading.set(false);
       },
     });
   }
@@ -109,7 +105,6 @@ export class PostFeed implements OnInit {
     post.toggleOptions = !post.toggleOptions;
   }
 
-  // Edit
   startEdit(post: Post): void {
     post.toggleOptions = false;
     this.editingPost = post;
@@ -123,7 +118,6 @@ export class PostFeed implements OnInit {
     this.editingPost = null;
   }
 
-  // Delete
   confirmDelete(post: Post): void {
     post.toggleOptions = false;
     this.deletingPost = post;

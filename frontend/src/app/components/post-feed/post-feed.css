@@ -464,3 +464,15 @@
 @keyframes spinBtn {
   to { transform: rotate(360deg); }
 }
+.no-posts-message{
+  color: #888;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  gap: 10px;
+}
