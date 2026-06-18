@@ -119,6 +119,16 @@ public class PostService {
         return postsPage.map(post -> mapToPostDTO(post, currentUser));
     }
 
+    public Page<PostDTO> getUserPosts(Long userId, Pageable pageable) {
+        Page<Post> postsPage = postRepository.findAllByUser_UserIdOrderByCreatedAtDesc(userId, pageable);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        return postsPage.map(post -> mapToPostDTO(post, currentUser));
+    }
+
     private PostDTO mapToPostDTO(Post post, User currentUser) {
         PostDTO dto = new PostDTO();
         dto.setId(post.getPostId());

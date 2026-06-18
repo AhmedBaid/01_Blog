@@ -78,6 +78,9 @@
   </div>
 
   <div class="user-posts-feed">
+    @if (user.userId) {
+    <app-posts-feed [userId]="user.userId"></app-posts-feed>
+    }
   </div>
 
 </div>

@@ -13,7 +13,6 @@ import { UserService } from '../../core/services/user.service';
 export class HomeComponent {
   userService = inject(UserService);
   ngOnInit() {
-    console.log('HomeComponent initialized');
     this.userService.loadCurrentUser();
   }
 }

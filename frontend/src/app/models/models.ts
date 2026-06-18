@@ -38,6 +38,10 @@ export interface Post {
   toggleOptions: boolean;
   createdAt: string;
 }
+export interface PostsPage {
+  content: Post[];
+  last: boolean;
+}
 export interface SuggestedUser {
   userId: number;
   username: string;

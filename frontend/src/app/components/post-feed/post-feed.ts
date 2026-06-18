@@ -1,15 +1,17 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, Input, OnInit } from '@angular/core'; // 🔥 ضفنا Input
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
 
 @Component({
   selector: 'app-posts-feed',
-  imports: [],
+  standalone: true, // تأكد منها
   templateUrl: './post-feed.html',
   styleUrls: ['./post-feed.css'],
 })
-export class PostFeed {
+export class PostFeed implements OnInit {
   private postService = inject(PostService);
+
+  @Input() userId: number | null = null;
 
   posts = this.postService.posts;
   currentPage = 0;
@@ -19,14 +21,25 @@ export class PostFeed {
   comments = 'fff';
   currentMediaIndex = 0;
   toggleOptions = false;
+
   ngOnInit() {
+    this.postService.resetPosts();
+    this.currentPage = 0;
+    this.isLastPage = false;
+    this.isLoading = false;
     this.loadNextPage();
   }
+
   loadNextPage() {
     if (this.isLoading || this.isLastPage) return;
 
     this.isLoading = true;
-    this.postService.getPosts(this.currentPage).subscribe({
+
+    const postsObservable = this.userId
+      ? this.postService.getUserPosts(this.userId, this.currentPage)
+      : this.postService.getPosts(this.currentPage);
+
+    postsObservable.subscribe({
       next: (response) => {
         const newPosts = response.content;
         this.isLastPage = response.last;
@@ -43,6 +56,7 @@ export class PostFeed {
       },
     });
   }
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const pos =
@@ -53,6 +67,7 @@ export class PostFeed {
       this.loadNextPage();
     }
   }
+
   toggleLike(): void {}
 
   isVideo(url: string): boolean {
@@ -62,10 +77,7 @@ export class PostFeed {
   }
 
   nextMedia(post: Post): void {
-    if (post.currentMediaIndex === undefined) {
-      post.currentMediaIndex = 0;
-    }
-
+    if (post.currentMediaIndex === undefined) post.currentMediaIndex = 0;
     if (post.currentMediaIndex < post.mediaUrls.length - 1) {
       post.currentMediaIndex++;
     } else {
@@ -74,16 +86,14 @@ export class PostFeed {
   }
 
   prevMedia(post: Post): void {
-    if (post.currentMediaIndex === undefined) {
-      post.currentMediaIndex = 0;
-    }
-
+    if (post.currentMediaIndex === undefined) post.currentMediaIndex = 0;
     if (post.currentMediaIndex > 0) {
       post.currentMediaIndex--;
     } else {
       post.currentMediaIndex = post.mediaUrls.length - 1;
     }
   }
+
   openPostOptions(post: Post): void {
     post.toggleOptions = !post.toggleOptions;
   }

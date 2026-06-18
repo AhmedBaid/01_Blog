@@ -1,18 +1,21 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/models';
-import { UserService } from '../../core/services/user.service';
+import { NotificationService } from '../../core/services/notification.service';
+import { PostFeed } from '../post-feed/post-feed';
 
 @Component({
   selector: 'app-profile',
+  imports: [PostFeed],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css'],
 })
 export class ProfileComponent {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
-  private userService = inject(UserService);
+  private router = inject(Router);
+  private notification = inject(NotificationService);
   private apiUrl = 'http://localhost:8080/api/users';
   private apime = 'http://localhost:8080/api';
 
@@ -65,6 +68,9 @@ export class ProfileComponent {
             },
             error: (err) => {
               console.error(err);
+              this.notification.error(
+                'Could not load your profile details. Please try again later.',
+              );
               this.isLoading.set(false);
             },
           });
@@ -77,6 +83,7 @@ export class ProfileComponent {
             },
             error: (err) => {
               console.error(err);
+              this.router.navigate(['/home']);
               this.isLoading.set(false);
             },
           });
