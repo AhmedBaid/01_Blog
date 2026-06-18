@@ -15,25 +15,31 @@ import org.springframework.web.bind.annotation.RestController;
 import Blog.dto.UserDTO;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
+import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
+
     }
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getCurrentUser(Principal principal) {
         User user = userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+        long postCount = postRepository.countByUser_Username(user.getUsername());
         String avatarUrl = user.getAvatar() == null ? null : "http://localhost:8080/avatars/" + user.getAvatar();
+
         UserDTO userDTO = new UserDTO(user.getUserId(), user.getUsername(), user.getEmail(), user.getFirstname(),
                 user.getLastname(),
-                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), avatarUrl);
+                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), postCount, avatarUrl);
 
         return ResponseEntity.ok(userDTO);
     }

@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../../models/models';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -6,5 +10,84 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile.css'],
 })
 export class ProfileComponent {
-  
+  private route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
+  private userService = inject(UserService);
+  private apiUrl = 'http://localhost:8080/api/users';
+  private apime = 'http://localhost:8080/api';
+
+  covers: string[] = [
+    '1.jpeg',
+    '2.jpeg',
+    '3.jpeg',
+    '4.jpeg',
+    '5.jpeg',
+    '6.jpeg',
+    '7.jpeg',
+    '8.jpeg',
+    '9.jpeg',
+    '10.jpeg',
+    '11.jpeg',
+    '12.jpeg',
+    '13.jpeg',
+    '14.jpeg',
+    '15.jpeg',
+  ];
+  randomIndex = Math.floor(Math.random() * this.covers.length);
+  cover = 'http://localhost:8080/covers/' + this.covers[this.randomIndex];
+
+  user = signal<User | null>(null);
+  isMyOwnProfile = signal<boolean>(false);
+  isLoading = signal<boolean>(true);
+  CurrentuserId = signal<number | null>(null);
+
+  ngOnInit(): void {
+    this.route.url.subscribe(() => {
+      this.fetchProfileData();
+    });
+  }
+
+  fetchProfileData(): void {
+    this.isLoading.set(true);
+    const userId = this.route.snapshot.paramMap.get('id');
+    const isMePath = this.route.snapshot.url.some((segment) => segment.path === 'me');
+
+    this.http.get<User>(`${this.apime}/me`).subscribe({
+      next: (currentUser) => {
+        this.CurrentuserId.set(currentUser.userId);
+
+        if (isMePath || (userId && userId === currentUser.userId.toString())) {
+          this.isMyOwnProfile.set(true);
+          this.http.get<User>(`${this.apiUrl}/me`).subscribe({
+            next: (data) => {
+              this.user.set(data);
+              this.isLoading.set(false);
+            },
+            error: (err) => {
+              console.error(err);
+              this.isLoading.set(false);
+            },
+          });
+        } else {
+          this.isMyOwnProfile.set(false);
+          this.http.get<User>(`${this.apiUrl}/${userId}`).subscribe({
+            next: (data) => {
+              this.user.set(data);
+              this.isLoading.set(false);
+            },
+            error: (err) => {
+              console.error(err);
+              this.isLoading.set(false);
+            },
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch current user info:', err);
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  toggleFollow(): void {}
 }

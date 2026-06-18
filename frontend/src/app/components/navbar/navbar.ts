@@ -43,7 +43,7 @@ export class NavbarComponent {
     });
   }
   navigateToProfile() {
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/profile/me']);
     this.showProfileMenu = false;
   }
   toggleProfileMenu() {

@@ -1,1 +1,84 @@
-<div>Profile</div>
+@if (isLoading()) {
+<div class="profile-loading-box">
+  <div class="spinner"></div>
+  <span>Loading profile...</span>
+</div>
+} @else if (user(); as user) {
+<div class="profile-container">
+
+  <div class="profile-cover">
+    @if (cover) {
+    <img [src]="cover" alt="Profile Cover">
+    } @else {
+    <div class="cover-placeholder"></div>
+    }
+  </div>
+
+  <div class="profile-header-content">
+
+    <div class="profile-meta-row">
+      <div class="avatar-wrapper">
+        @if (user.avatar) {
+        <img [src]="user.avatar" class="user-avatar-img" alt="Avatar">
+        } @else {
+        <div class="user-avatar-fallback">
+          {{ user.firstname.charAt(0).toUpperCase() }}{{ user.lastname.charAt(0).toUpperCase() }}
+        </div>
+        }
+      </div>
+
+      <div class="actions-wrapper">
+        @if (isMyOwnProfile()) {
+        <button type="button" class="edit-profile-btn">
+          <i class="fa-solid fa-pen"></i> Edit Profile
+        </button>
+        } @else {
+        <button type="button" class="option-btn" (click)="toggleFollow()">
+          <i class="fa-solid fa-user-plus"></i> Follow
+        </button>
+        <button type="button" class="option-btn" (click)="toggleFollow()">
+          <i class="fa-solid fa-flag"></i>Report
+        </button>
+        }
+      </div>
+    </div>
+
+    <div class="profile-info-block">
+      <h2 class="profile-display-name">{{ user.firstname }} {{ user.lastname }}</h2>
+      <p class="profile-handle">&#64;{{ user.username }}</p>
+
+      @if (user.email) {
+      <p class="profile-email-text">
+        <i class="fa-regular fa-envelope"></i> {{ user.email }}
+      </p>
+      }
+
+      @if (user.bio) {
+      <p class="profile-bio-text">{{ user.bio }}</p>
+      } @else {
+      <p class="profile-bio-text no-bio">No bio available yet.</p>
+      }
+    </div>
+
+    <div class="profile-counters-row">
+      <div class="stat-item">
+        <span class="stat-count">{{ user.postsCount }}</span>
+        <span class="stat-label">Posts</span>
+      </div>
+      <div class="stat-item fff">
+        <span class="stat-count">{{ user.followersCount }}</span>
+        <span class="stat-label">Followers</span>
+      </div>
+      <div class="stat-item fff">
+        <span class="stat-count">{{ user.followingCount }}</span>
+        <span class="stat-label">Following</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="user-posts-feed">
+  </div>
+
+</div>
+}

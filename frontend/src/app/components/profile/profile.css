@@ -1,0 +1,257 @@
+.profile-container {
+  background: #141414;
+  border: 1px solid #1e1e1e;
+  border-radius: 14px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 680px;
+  margin: 80px auto 0 auto;
+  box-sizing: border-box;
+}
+
+.profile-cover {
+  width: 100%;
+  height: 160px;
+  position: relative;
+  background: #1a1a1a;
+}
+
+.profile-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+}
+
+.profile-header-content {
+  padding: 0 16px 16px;
+  position: relative;
+}
+
+.profile-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: -45px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 10;
+}
+
+.avatar-wrapper {
+  flex-shrink: 0;
+}
+
+.user-avatar-img,
+.user-avatar-fallback {
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: 4px solid #141414;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.user-avatar-img {
+  object-fit: cover;
+}
+
+.user-avatar-fallback {
+  background: #ff7800;
+  display: grid;
+  place-items: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.actions-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-profile-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.edit-profile-btn {
+  background: transparent;
+  border: 1px solid #ff7800;
+  color: #ff7800;
+}
+
+.edit-profile-btn:hover {
+  background: #ff7800;
+  color: #fff;
+}
+
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 14px;
+  border: none;
+  background: transparent;
+  color: #999;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-align: left;
+}
+
+.option-btn i {
+  font-size: 13px;
+  width: 14px;
+}
+
+.option-btn:hover {
+  background: #222;
+  color: #ddd;
+  border-radius: 6px;
+}
+
+
+.option-btn:has(.fa-user-plus) i {
+  color: #ff7800;
+}
+
+.option-btn:has(.fa-user-plus):hover {
+  color: #ff8a1f;
+}
+
+.option-btn:has(.fa-flag) i {
+  color: #facc15;
+}
+
+.option-btn:has(.fa-flag):hover {
+  color: #fde047;
+}
+
+
+.profile-info-block {
+  margin-bottom: 16px;
+}
+
+.profile-display-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ece7df;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.profile-handle {
+  font-size: 12px;
+  color: #555;
+  margin: 2px 0 0 0;
+}
+
+.profile-email-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #ff7800;
+  opacity: 0.8;
+  margin: 6px 0 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-bio-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #777;
+  line-height: 1.5;
+  margin: 10px 0 0 0;
+}
+
+.profile-bio-text.no-bio {
+  color: #333;
+  font-style: italic;
+}
+
+.profile-counters-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 14px;
+  border-top: 1px solid #1e1e1e;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+}
+
+.fff {
+  padding: 10px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.fff:hover {
+  background-color: #1e1e1e;
+  transition: all 0.4s ease-in-out;
+}
+
+.stat-count {
+  color: #ece7df;
+  font-weight: 600;
+}
+
+.stat-label {
+  color: #555;
+}
+
+.profile-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  gap: 10px;
+  margin-top: 150px;
+}
+
+.profile-loading-box .spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #1e1e1e;
+  border-top-color: #ff7800;
+  border-radius: 50%;
+  animation: spinProfile 0.8s linear infinite;
+}
+
+@keyframes spinProfile {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.profile-loading-box span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #555;
+}

@@ -36,7 +36,6 @@
 
       <div class="nb-profile" (click)="toggleProfileMenu()">
         @if (user) {
-
         @if (user.avatar) {
         <img class="nb-avatar-img" [src]="user.avatar" alt="Profile" />
         } @else {
@@ -46,6 +45,13 @@
         <div class="nb-profile-info">
           <div class="nb-profile-name">
             {{ user.firstname }} {{ user.lastname }}
+          </div>
+        </div>
+        }@else{
+        <img class="nb-avatar-img" [src]="'http://localhost:8080/avatars/default.jpeg'" alt="Profile" />
+        <div class="nb-profile-info">
+          <div class="nb-profile-name">
+            ahmed baid
           </div>
         </div>
         }

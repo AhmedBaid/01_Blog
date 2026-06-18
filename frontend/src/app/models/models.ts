@@ -11,6 +11,7 @@ export interface Notification {
   type: NotificationType;
 }
 export interface User {
+  userId: number;
   username: string;
   firstname: string;
   lastname: string;
@@ -19,6 +20,7 @@ export interface User {
   bio: string;
   followersCount: number;
   followingCount: number;
+  postsCount: number;
 }
 export interface Post {
   id: number;

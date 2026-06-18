@@ -24,11 +24,15 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'profile',
+    path: 'profile/me',
     component: ProfileComponent,
     canActivate: [authGuard],
   },
-
+  {
+    path: 'profile/:id',
+    component: ProfileComponent,
+    canActivate: [authGuard],
+  },
   {
     path: '',
     redirectTo: 'auth/login',

@@ -18,5 +18,6 @@ public class UserDTO {
     private String bio;
     private Long followingCount;
     private Long followersCount;
+    private Long postsCount;
     private String avatar;
 }
