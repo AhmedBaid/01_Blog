@@ -27,7 +27,6 @@ export class CreatePost {
   private notificationToast = inject(NotificationService);
   private postService = inject(PostService);
   private getRealMimeType = inject(Filevalidator);
-  private router = inject(Router);
 
   createPostForm: FormGroup;
   user = this.userService.currentUser;
@@ -143,7 +142,6 @@ export class CreatePost {
         next: (_) => {
           this.closeCreatePostModal();
           this.notificationToast.success('Post Created successfully', 'Success');
-          this.router.navigate(['/home']);
         },
         error: (err) => {
           this.notificationToast.error(err.error.message, 'Error');

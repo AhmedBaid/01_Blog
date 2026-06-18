@@ -109,7 +109,7 @@ public class PostService {
     }
 
     public Page<PostDTO> getAllPosts(Pageable pageable) {
-        Page<Post> postsPage = postRepository.findAll(pageable);
+        Page<Post> postsPage = postRepository.findAllPostsWithUser(pageable);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
@@ -136,6 +136,7 @@ public class PostService {
                             : "http://localhost:8080/avatars/" + post.getUser().getAvatar());
 
             dto.setCreatedAt(FormatTimeUtil.formatTimeAgo(post.getCreatedAt()));
+
             dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
 
             return dto;
