@@ -255,3 +255,8 @@
   font-size: 13px;
   color: #555;
 }
+.user-posts-feed{
+  width: 100%;
+  max-width: 680px;
+  margin: 15px auto 0 auto;
+}
