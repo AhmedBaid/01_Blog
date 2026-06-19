@@ -209,8 +209,8 @@
   cursor: pointer;
 }
 
-.fff:hover > span{
-  color: #facc15 ;
+.fff:hover>span {
+  color: #facc15;
   transition: all 0.2s ease-in-out;
 }
 
@@ -253,7 +253,8 @@
   font-size: 13px;
   color: #555;
 }
-.user-posts-feed{
+
+.user-posts-feed {
   width: 100%;
   max-width: 680px;
   margin: 15px auto 0 auto;

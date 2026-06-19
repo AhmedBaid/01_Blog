@@ -80,7 +80,10 @@ export class RegisterComponent {
 
     this.selectedFile = file;
   }
-
+  goToLogin(): void {
+    this.router.navigate(['/auth/login']);
+  }
+  
   onSubmit(): void {
     if (this.isSubmitting) {
       return;

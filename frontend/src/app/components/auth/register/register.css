@@ -172,7 +172,7 @@ textarea {
 }
 
 .avatar-text-main span,
-.sign-in a {
+.sign-in span {
   color: #ff8a1f;
 }
 
@@ -233,12 +233,13 @@ textarea {
   font-size: 14px;
 }
 
-.sign-in a {
+.sign-in span {
+  cursor: pointer;
   font-weight: 600;
   text-decoration: none;
 }
 
-.sign-in a:hover {
+.sign-in span:hover {
   text-decoration: underline;
 }
 

@@ -101,7 +101,8 @@ input:focus {
   box-shadow: 0 0 0 4px rgba(255, 120, 0, 0.12);
 }
 
-.sign-in a {
+.sign-in span {
+  cursor: pointer;
   color: #ff8a1f;
 }
 
@@ -149,11 +150,11 @@ input:focus {
   font-size: 14px;
 }
 
-.sign-in a {
+.sign-in span {
   font-weight: 600;
   text-decoration: none;
 }
 
-.sign-in a:hover {
+.sign-in span:hover {
   text-decoration: underline;
 }

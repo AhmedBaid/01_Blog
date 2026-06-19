@@ -23,7 +23,9 @@ export class LoginComponent {
     password: ['', [Validators.required]],
   });
   isSubmitting = false;
-
+  goToRegister(): void {
+    this.router.navigate(['/auth/register']);
+  }
   onSubmit(): void {
     if (this.isSubmitting) {
       return;
