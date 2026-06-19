@@ -58,47 +58,49 @@
 
       </div>
       @if (showProfileMenu) {
-      <div class="nb-profile-dropdown">
+      <div class="overlay-navbar" (click)="toggleProfileMenu()">
+        <div class="nb-profile-dropdown" (click)="$event.stopPropagation()">
 
-        <div class="nb-dropdown-header">
+          <div class="nb-dropdown-header">
 
-          @if (user.avatar) {
-          <img class="nb-dropdown-avatar" [src]="user.avatar" alt="Profile" />
-          } @else {
-          <div class="nb-dropdown-avatar-fallback">
-            {{ flName }}
+            @if (user.avatar) {
+            <img class="nb-dropdown-avatar" [src]="user.avatar" alt="Profile" />
+            } @else {
+            <div class="nb-dropdown-avatar-fallback">
+              {{ flName }}
+            </div>
+            }
+
+            <div class="nb-dropdown-user-info">
+              <i class="fa-solid fa-xmark" (click)="toggleProfileMenu()"></i>
+              <h3>{{ user.firstname }} {{ user.lastname }}</h3>
+              <div class="bio">{{ user.bio }}</div>
+            </div>
           </div>
-          }
-
-          <div class="nb-dropdown-user-info">
-            <i class="fa-solid fa-xmark" (click)="toggleProfileMenu()"></i>
-            <h3>{{ user.firstname }} {{ user.lastname }}</h3>
-            <div class="bio">{{ user.bio }}</div>
+          <div class="nb-follow-stats">
+            <span>
+              <strong>{{ user.postsCount }}</strong>
+              Posts
+            </span>
+            <span>
+              <strong>{{ user.followersCount }}</strong>
+              Followers
+            </span>
+            <span>
+              <strong>{{ user.followingCount }}</strong>
+              Following
+            </span>
           </div>
-        </div>
-        <div class="nb-follow-stats">
-          <span>
-            <strong>{{ user.postsCount }}</strong>
-            Posts
-          </span>
-          <span>
-            <strong>{{ user.followersCount }}</strong>
-            Followers
-          </span>
-          <span>
-            <strong>{{ user.followingCount }}</strong>
-            Following
-          </span>
-        </div>
-        <div class="nb-dropdown-actions">
-          <button class="nb-dropdown-btn profile-btn" (click)="navigateToProfile()">
-            <i class="fa-solid fa-user"></i>
-            Profile
-          </button>
-          <button class="nb-dropdown-btn logout-btn" (click)="logout()">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            Logout
-          </button>
+          <div class="nb-dropdown-actions">
+            <button class="nb-dropdown-btn profile-btn" (click)="navigateToProfile()">
+              <i class="fa-solid fa-user"></i>
+              Profile
+            </button>
+            <button class="nb-dropdown-btn logout-btn" (click)="logout()">
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
       }

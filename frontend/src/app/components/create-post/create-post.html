@@ -31,8 +31,8 @@
 
 @if(toggle){
 <form [formGroup]="createPostForm" (ngSubmit)="onSubmit()">
-  <div class="create-post-modal">
-    <div class="modal-content">
+  <div class="create-post-modal" (click)="closeCreatePostModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="header">
         @if(user(); as currentUser) {
         <div class="user-info">

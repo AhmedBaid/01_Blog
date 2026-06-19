@@ -1,6 +1,6 @@
 <form [formGroup]="editPostForm" (ngSubmit)="onSubmit()">
-  <div class="edit-post-modal">
-    <div class="modal-content">
+  <div class="edit-post-modal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="header">
         <h2>Edit Post</h2>
         <button title="close" type="button" (click)="closeModal()">

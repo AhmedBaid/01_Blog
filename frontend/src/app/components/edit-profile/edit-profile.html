@@ -1,6 +1,6 @@
 <form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
-  <div class="edit-profile-modal">
-    <div class="modal-content">
+  <div class="edit-profile-modal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="header">
         <h2>Edit Profile</h2>
         <button title="close" type="button" (click)="closeModal()">
