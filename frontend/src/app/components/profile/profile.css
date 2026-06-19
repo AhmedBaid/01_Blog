@@ -199,20 +199,19 @@
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
 }
 
 .fff {
-  padding: 10px;
   border-radius: 15px;
   cursor: pointer;
 }
 
-.fff:hover {
-  background-color: #1e1e1e;
-  transition: all 0.4s ease-in-out;
+.fff:hover > span{
+  color: #facc15 ;
+  transition: all 0.2s ease-in-out;
 }
 
 .stat-count {
