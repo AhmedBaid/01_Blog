@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { User } from '../../models/models';
 
 @Injectable({
@@ -28,5 +29,11 @@ export class UserService {
       next: (user) => this.setCurrentUser(user),
       error: (err) => console.error(err),
     });
+  }
+
+  updateProfile(profileData: FormData): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/me`, profileData).pipe(
+      tap((user) => this.setCurrentUser(user)),
+    );
   }
 }

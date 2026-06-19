@@ -4,10 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
 import { PostFeed } from '../post-feed/post-feed';
+import { EditProfileComponent } from '../edit-profile/edit-profile';
 
 @Component({
   selector: 'app-profile',
-  imports: [PostFeed],
+  imports: [PostFeed, EditProfileComponent],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css'],
 })
@@ -43,6 +44,7 @@ export class ProfileComponent {
   isMyOwnProfile = signal<boolean>(false);
   isLoading = signal<boolean>(true);
   CurrentuserId = signal<number | null>(null);
+  isEditProfileOpen = signal<boolean>(false);
 
   ngOnInit(): void {
     this.route.url.subscribe(() => {
@@ -94,6 +96,18 @@ export class ProfileComponent {
         this.isLoading.set(false);
       },
     });
+  }
+
+  openEditProfile(): void {
+    this.isEditProfileOpen.set(true);
+  }
+
+  closeEditProfile(): void {
+    this.isEditProfileOpen.set(false);
+  }
+
+  onProfileUpdated(updatedUser: User): void {
+    this.user.set(updatedUser);
   }
 
   toggleFollow(): void {}

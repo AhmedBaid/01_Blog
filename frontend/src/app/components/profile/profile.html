@@ -29,7 +29,7 @@
 
       <div class="actions-wrapper">
         @if (isMyOwnProfile()) {
-        <button type="button" class="edit-profile-btn">
+        <button type="button" class="edit-profile-btn" (click)="openEditProfile()">
           <i class="fa-solid fa-pen"></i> Edit Profile
         </button>
         } @else {
@@ -77,6 +77,9 @@
 
   </div>
 </div>
+@if (isEditProfileOpen()) {
+<app-edit-profile [user]="user" (close)="closeEditProfile()" (updated)="onProfileUpdated($event)"></app-edit-profile>
+}
 <div class="user-posts-feed">
   @if (user.userId) {
   <app-posts-feed [userId]="user.userId"></app-posts-feed>

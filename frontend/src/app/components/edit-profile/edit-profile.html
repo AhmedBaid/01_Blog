@@ -1,0 +1,103 @@
+<form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
+  <div class="edit-profile-modal">
+    <div class="modal-content">
+      <div class="header">
+        <h2>Edit Profile</h2>
+        <button title="close" type="button" (click)="closeModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="avatar-preview-row">
+        @if (avatarPreviewUrl) {
+        <img [src]="avatarPreviewUrl" class="avatar-preview-img" alt="New avatar preview">
+        } @else if (user.avatar) {
+        <img [src]="user.avatar" class="avatar-preview-img" alt="Current avatar">
+        } @else {
+        <div class="avatar-preview-fallback">
+          {{ user.firstname.charAt(0).toUpperCase() }}{{ user.lastname.charAt(0).toUpperCase() }}
+        </div>
+        }
+
+        <div class="avatar-preview-copy">
+          <span>{{ selectedFileName || 'Current avatar' }}</span>
+          <p>Avatar is optional. Choose a new image only if you want to replace it.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="edit-firstname">Firstname</label>
+          <input type="text" id="edit-firstname" placeholder="Enter firstname" formControlName="firstname">
+          <small class="error-msg"
+            *ngIf="editProfileForm.get('firstname')?.invalid && editProfileForm.get('firstname')?.touched">
+            Firstname must be between 5 and 15 characters.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="edit-lastname">Lastname</label>
+          <input type="text" id="edit-lastname" placeholder="Enter lastname" formControlName="lastname">
+          <small class="error-msg"
+            *ngIf="editProfileForm.get('lastname')?.invalid && editProfileForm.get('lastname')?.touched">
+            Lastname must be between 5 and 15 characters.
+          </small>
+        </div>
+      </div>
+
+      <label for="edit-username">Username</label>
+      <input type="text" id="edit-username" placeholder="Enter username" formControlName="username" readonly>
+      <small class="error-msg"
+        *ngIf="editProfileForm.get('username')?.invalid && editProfileForm.get('username')?.touched">
+        Username must be between 5 and 15 characters.
+      </small>
+
+      <label for="edit-email">Email</label>
+      <input type="email" id="edit-email" placeholder="Enter email" formControlName="email">
+      <small class="error-msg" *ngIf="editProfileForm.get('email')?.invalid && editProfileForm.get('email')?.touched">
+        Enter a valid email between 8 and 30 characters.
+      </small>
+
+      <label for="edit-bio">Bio</label>
+      <textarea id="edit-bio" placeholder="Tell people about yourself" formControlName="bio"></textarea>
+      <small class="error-msg" *ngIf="editProfileForm.get('bio')?.invalid && editProfileForm.get('bio')?.touched">
+        Bio must be between 10 and 100 characters.
+      </small>
+
+      <div class="field full">
+        <label class="field-label">Avatar <span class="optional">(optional)</span></label>
+        <label class="avatar-label" for="edit-avatar">
+          <input title="avatar" accept="image/*" type="file" id="edit-avatar" (change)="onFileSelected($event)">
+          <div class="avatar-circle">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
+          <div class="avatar-text-main"><span>Upload</span> new avatar</div>
+          <div class="avatar-text-sub">PNG, JPG, WEBP or GIF · Max 5MB</div>
+        </label>
+      </div>
+
+      @if (avatarPreviewUrl) {
+      <button type="button" class="remove-avatar-btn" (click)="removeSelectedAvatar()">
+        <i class="fa-solid fa-xmark"></i>
+        Remove selected avatar
+      </button>
+      }
+
+      <div class="btn-row">
+        <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+        <button type="submit" class="btn-save" [disabled]="isSubmitting">
+          @if (isSubmitting) {
+          <span class="btn-spinner"></span>
+          Saving...
+          } @else {
+          Save Changes
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
