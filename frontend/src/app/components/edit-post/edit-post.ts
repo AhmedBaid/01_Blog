@@ -137,13 +137,19 @@ export class EditPostComponent implements OnInit {
 
   onSubmit(): void {
     if (this.isSubmitting) return;
+    this.isSubmitting = true;
 
     if (this.editPostForm.invalid) {
       this.editPostForm.markAllAsTouched();
+      this.isSubmitting = false;
+      return;
+    }
+    if (this.previews().length === 0) {
+      this.notificationToast.error('Please select at least one media file.');
+      this.isSubmitting = false;
       return;
     }
 
-    this.isSubmitting = true;
     const formData = new FormData();
     const formValues = this.editPostForm.getRawValue();
 
@@ -154,8 +160,7 @@ export class EditPostComponent implements OnInit {
       formData.append('medias', file);
     });
     this.removedMediaUrls.forEach((url) => {
-
-      console.log("url to remove:", url);
+      console.log('url to remove:', url);
       const fileName = this.getName(url);
       formData.append('removedMedias', fileName);
     });
