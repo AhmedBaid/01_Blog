@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PostService } from '../../core/services/post.service';
@@ -15,12 +15,11 @@ interface FilePreview {
 
 @Component({
   selector: 'app-edit-post',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-post.html',
   styleUrls: ['./edit-post.css'],
 })
-export class EditPostComponent implements OnInit {
+export class EditPostComponent {
   private fb = inject(FormBuilder);
   private postService = inject(PostService);
   private notificationToast = inject(NotificationService);

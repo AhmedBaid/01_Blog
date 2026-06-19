@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { UserService } from '../../core/services/user.service';
@@ -25,7 +25,7 @@ export class EditProfileComponent {
 
   editProfileForm: FormGroup;
   selectedFile: File | null = null;
-  avatarPreviewUrl: string | null = null;
+  avatarPreviewUrl = signal<string | null>(null);
   selectedFileName = '';
   avatarError = '';
   isSubmitting = false;
@@ -52,7 +52,7 @@ export class EditProfileComponent {
           Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,3}'),
         ],
       ],
-      bio: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
+      bio: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(30)]],
     });
   }
 
@@ -94,7 +94,7 @@ export class EditProfileComponent {
 
     this.selectedFile = file;
     this.selectedFileName = file.name;
-    this.avatarPreviewUrl = URL.createObjectURL(file);
+    this.avatarPreviewUrl.set(URL.createObjectURL(file));
   }
 
   removeSelectedAvatar(): void {
@@ -144,16 +144,20 @@ export class EditProfileComponent {
           this.notificationToast.success('Profile updated successfully', 'Success');
         },
         error: (err) => {
+          console.log(err);
           this.notificationToast.error(err.error.message, 'Error');
         },
       });
   }
 
   private clearSelectedAvatar(): void {
-    if (this.avatarPreviewUrl) {
-      URL.revokeObjectURL(this.avatarPreviewUrl);
+    const previewUrl = this.avatarPreviewUrl();
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
     }
-    this.avatarPreviewUrl = null;
+
+    this.avatarPreviewUrl.set(null);
     this.selectedFile = null;
     this.selectedFileName = '';
   }

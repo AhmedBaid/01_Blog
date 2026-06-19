@@ -46,7 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println("+++++++++++++++++++++++");
 
         jwt = authHeader.substring(7);
 

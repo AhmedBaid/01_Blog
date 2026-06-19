@@ -10,17 +10,17 @@ import java.nio.file.Paths;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        Path dataDir = Paths.get("data");
-        String dataPath = dataDir.toFile().getAbsolutePath();
+                Path dataDir = Paths.get("data");
+                String dataPath = dataDir.toFile().getAbsolutePath();
 
-        registry.addResourceHandler("/avatars/**")
-                .addResourceLocations("file:" + dataPath + "/avatars/");
-        registry.addResourceHandler("/posts/**")
-                .addResourceLocations("file:" + dataPath + "/posts/");
-        registry.addResourceHandler("/covers/**")
-                .addResourceLocations("file:" + dataPath + "/covers/");
-    }
+                registry.addResourceHandler("/avatars/**")
+                                .addResourceLocations("file:" + dataPath + "/avatars/");
+                registry.addResourceHandler("/posts/**")
+                                .addResourceLocations("file:" + dataPath + "/posts/");
+                registry.addResourceHandler("/covers/**")
+                                .addResourceLocations("file:" + dataPath + "/covers/");
+        }
 }

@@ -9,8 +9,8 @@
       </div>
 
       <div class="avatar-preview-row">
-        @if (avatarPreviewUrl) {
-        <img [src]="avatarPreviewUrl" class="avatar-preview-img" alt="New avatar preview">
+        @if (avatarPreviewUrl()) {
+        <img [src]="avatarPreviewUrl()" class="avatar-preview-img" alt="New avatar preview">
         } @else if (user.avatar) {
         <img [src]="user.avatar" class="avatar-preview-img" alt="Current avatar">
         } @else {
@@ -46,7 +46,7 @@
       </div>
 
       <label for="edit-username">Username</label>
-      <input type="text" id="edit-username" placeholder="Enter username" formControlName="username" readonly>
+      <input type="text" id="edit-username" placeholder="Enter username" formControlName="username">
       <small class="error-msg"
         *ngIf="editProfileForm.get('username')?.invalid && editProfileForm.get('username')?.touched">
         Username must be between 5 and 15 characters.
@@ -61,7 +61,7 @@
       <label for="edit-bio">Bio</label>
       <textarea id="edit-bio" placeholder="Tell people about yourself" formControlName="bio"></textarea>
       <small class="error-msg" *ngIf="editProfileForm.get('bio')?.invalid && editProfileForm.get('bio')?.touched">
-        Bio must be between 10 and 100 characters.
+        Bio must be between 10 and 30 characters.
       </small>
 
       <div class="field full">
@@ -80,7 +80,7 @@
         </label>
       </div>
 
-      @if (avatarPreviewUrl) {
+      @if (avatarPreviewUrl()) {
       <button type="button" class="remove-avatar-btn" (click)="removeSelectedAvatar()">
         <i class="fa-solid fa-xmark"></i>
         Remove selected avatar

@@ -29,7 +29,7 @@ public class EditProfileDto {
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE, message = "Email is not valid")
     private String email;
 
-    @Size(min = 10, max = 100, message = "Bio must be between 10 and 100 characters")
+    @Size(min = 10, max = 30, message = "Bio must be between 10 and 20 characters")
     @NotBlank(message = "Bio cannot be blank")
     private String bio;
 

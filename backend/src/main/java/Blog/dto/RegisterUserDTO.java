@@ -33,7 +33,7 @@ public class RegisterUserDTO {
     @NotBlank(message = "Password cannot be blank")
     private String password;
 
-    @Size(min = 10, max = 20, message = "Bio must be between 10 and 20 characters")
+    @Size(min = 10, max = 30, message = "Bio must be between 10 and 30 characters")
     @NotBlank(message = "Bio cannot be blank")
     private String bio;
 

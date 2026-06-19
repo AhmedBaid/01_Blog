@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, Input, signal } from '@angular/core';
 import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -6,12 +6,11 @@ import { EditPostComponent } from '../edit-post/edit-post';
 
 @Component({
   selector: 'app-posts-feed',
-  standalone: true,
   imports: [EditPostComponent],
   templateUrl: './post-feed.html',
   styleUrls: ['./post-feed.css'],
 })
-export class PostFeed implements OnInit {
+export class PostFeed {
   private postService = inject(PostService);
   private notificationToast = inject(NotificationService);
 

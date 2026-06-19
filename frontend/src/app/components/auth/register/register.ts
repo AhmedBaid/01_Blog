@@ -49,7 +49,7 @@ export class RegisterComponent {
         ],
       ],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
-      bio: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(100)]],
+      bio: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(30)]],
     });
   }
 

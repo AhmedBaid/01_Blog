@@ -39,7 +39,6 @@ public class UserService {
     }
 
     public UserDTO getUserProfileByUsername(String username) {
-
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
         return mapUserToUserDTO(user);
@@ -58,6 +57,11 @@ public class UserService {
         userRepository.findByEmail(editProfileDto.getEmail()).ifPresent(existingUser -> {
             if (!existingUser.getUserId().equals(user.getUserId())) {
                 throw new GlobalException("Email already exists", HttpStatus.BAD_REQUEST);
+            }
+        });
+        userRepository.findByUsername(editProfileDto.getUsername()).ifPresent(existingUser -> {
+            if (!existingUser.getUserId().equals(user.getUserId())) {
+                throw new GlobalException("Username already exists", HttpStatus.BAD_REQUEST);
             }
         });
 

@@ -85,7 +85,7 @@
           <textarea id="bio" formControlName="bio" placeholder="Tell us about you"></textarea>
         </div>
         <small *ngIf="registerForm.get('bio')?.invalid && registerForm.get('bio')?.touched">
-          Bio must be between 10 and 100 characters.
+          Bio must be between 10 and 30 characters.
         </small>
       </div>
 

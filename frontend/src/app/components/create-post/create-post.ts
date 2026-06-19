@@ -15,7 +15,6 @@ interface FilePreview {
 
 @Component({
   selector: 'app-create-post',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './create-post.html',
   styleUrls: ['./create-post.css'],
