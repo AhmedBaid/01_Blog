@@ -66,6 +66,7 @@ public class PostService {
     }
 
     public PostDTO updatePost(Long postId, EditPostDto editPostDto) {
+        System.out.println("removed files " + editPostDto.getRemovedMedias());
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
@@ -77,9 +78,21 @@ public class PostService {
             throw new GlobalException("You are not authorized to edit this post", HttpStatus.FORBIDDEN);
         }
 
+        int removedCount = (editPostDto.getRemovedMedias() != null) ? editPostDto.getRemovedMedias().size() : 0;
+
+        boolean hasNewMedias = editPostDto.getMedias() != null && !editPostDto.getMedias().isEmpty();
+
+        if (removedCount > 0 && removedCount == post.getMedias().size() && !hasNewMedias) {
+            throw new GlobalException("At least one media file is required in the post", HttpStatus.BAD_REQUEST);
+        }
+        
         post.setTitle(editPostDto.getTitle());
         post.setDescription(editPostDto.getDescription());
 
+        if (editPostDto.getRemovedMedias() != null && !editPostDto.getRemovedMedias().isEmpty()) {
+            deleteOldMedias(editPostDto.getRemovedMedias());
+            post.getMedias().removeAll(editPostDto.getRemovedMedias());
+        }
         if (editPostDto.getMedias() != null && !editPostDto.getMedias().isEmpty()) {
             deleteOldMedias(post.getMedias());
             post.getMedias().clear();

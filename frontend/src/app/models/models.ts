@@ -54,3 +54,8 @@ export interface SuggestedUser {
   avatar: string | null;
   isFollowed?: boolean;
 }
+export interface FilePreview {
+  url: string;
+  type: 'image' | 'video';
+  name: string;
+}

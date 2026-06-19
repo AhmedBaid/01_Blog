@@ -34,6 +34,7 @@ export class EditPostComponent implements OnInit {
   selectedFiles: File[] = [];
   previews = signal<FilePreview[]>([]);
   isSubmitting = false;
+  removedMediaUrls: string[] = [];
 
   readonly MAX_FILE_SIZE = 30 * 1024 * 1024;
   readonly ALLOWED_TYPES = new Set([
@@ -58,6 +59,26 @@ export class EditPostComponent implements OnInit {
       title: this.post.title,
       description: this.post.description,
     });
+
+    if (this.post.mediaUrls && this.post.mediaUrls.length > 0) {
+      const existingPreviews = this.post.mediaUrls.map((url) => ({
+        url: url,
+        type: this.isVideo(url) ? ('video' as const) : ('image' as const),
+        name: this.getName(url),
+      }));
+
+      this.previews.set(existingPreviews);
+    }
+  }
+
+  private isVideo(url: string): boolean {
+    const videoExtensions = ['.mp4', '.webm', '.ogg'];
+    return videoExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+  }
+
+  private getName(url: string): string {
+    if (!url) return 'media';
+    return url.substring(url.lastIndexOf('/') + 1);
   }
 
   async onFileSelected(event: any): Promise<void> {
@@ -81,7 +102,11 @@ export class EditPostComponent implements OnInit {
         const previewUrl = URL.createObjectURL(file);
         this.previews.update((prev) => [
           ...prev,
-          { url: previewUrl, type: realMimeType.startsWith('video/') ? 'video' : 'image', name: file.name },
+          {
+            url: previewUrl,
+            type: realMimeType.startsWith('video/') ? 'video' : 'image',
+            name: file.name,
+          },
         ]);
       } catch (error) {
         this.notificationToast.error(`Error validating file: ${file.name}`);
@@ -90,8 +115,11 @@ export class EditPostComponent implements OnInit {
   }
 
   removeFile(index: number): void {
-    URL.revokeObjectURL(this.previews()[index].url);
+    const previewToRemove = this.previews()[index].url;
+    console.log('Removing file with preview URL:', previewToRemove);
+    URL.revokeObjectURL(previewToRemove);
     this.selectedFiles.splice(index, 1);
+    this.removedMediaUrls.push(previewToRemove);
     this.previews.update((prev) => prev.filter((_, i) => i !== index));
   }
 
@@ -125,7 +153,12 @@ export class EditPostComponent implements OnInit {
     this.selectedFiles.forEach((file) => {
       formData.append('medias', file);
     });
+    this.removedMediaUrls.forEach((url) => {
 
+      console.log("url to remove:", url);
+      const fileName = this.getName(url);
+      formData.append('removedMedias', fileName);
+    });
     this.postService
       .updatePost(this.post.id, formData)
       .pipe(finalize(() => (this.isSubmitting = false)))

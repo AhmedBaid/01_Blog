@@ -18,6 +18,7 @@ public class EditPostDto {
     @Size(min = 10, max = 30, message = "Description must be between 10 and 30 characters")
     @NotBlank(message = "Description cannot be blank")
     private String description;
-
+    
     private List<MultipartFile> medias;
+    private List<String> removedMedias;
 }
