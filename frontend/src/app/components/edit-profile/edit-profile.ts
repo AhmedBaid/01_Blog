@@ -138,9 +138,10 @@ export class EditProfileComponent {
       .updateProfile(formData)
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
-        next: (user) => {
+        next: (user: any) => {
           this.updated.emit(user);
           this.closeModal();
+          localStorage.setItem('token', user.newToken);
           this.notificationToast.success('Profile updated successfully', 'Success');
         },
         error: (err) => {

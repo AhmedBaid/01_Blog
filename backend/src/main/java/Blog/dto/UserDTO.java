@@ -20,4 +20,5 @@ public class UserDTO {
     private Long followersCount;
     private Long postsCount;
     private String avatar;
+    private String newToken;
 }

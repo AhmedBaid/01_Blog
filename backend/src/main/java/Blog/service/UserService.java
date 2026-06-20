@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import Blog.config.JwtUtil;
 import Blog.dto.EditProfileDto;
 import Blog.dto.UserDTO;
 import Blog.entity.User;
@@ -32,10 +33,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, PostRepository postRepository) {
+    public UserService(UserRepository userRepository, PostRepository postRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public UserDTO getUserProfileByUsername(String username) {
@@ -68,14 +71,15 @@ public class UserService {
         user.setFirstname(editProfileDto.getFirstname());
         user.setLastname(editProfileDto.getLastname());
         user.setEmail(editProfileDto.getEmail());
+        user.setUsername(editProfileDto.getUsername());
         user.setBio(editProfileDto.getBio());
-
+        String newToken = jwtUtil.generateToken(user.getUsername(), user.getRole());
         if (editProfileDto.getAvatar() != null && !editProfileDto.getAvatar().isEmpty()) {
             deleteAvatar(user.getAvatar());
             user.setAvatar(saveAvatar(editProfileDto.getAvatar()));
         }
 
-        return mapUserToUserDTO(userRepository.save(user));
+        return mapUserToUpdatedUserDTO(userRepository.save(user), newToken);
     }
 
     private String saveAvatar(MultipartFile avatar) {
@@ -134,6 +138,22 @@ public class UserService {
         userDto.setFollowersCount(user.getFollowersCount());
         userDto.setFollowingCount(user.getFollowingCount());
         userDto.setPostsCount(postCount);
+        return userDto;
+    }
+        public UserDTO mapUserToUpdatedUserDTO(User user, String newToken) {
+        UserDTO userDto = new UserDTO();
+        long postCount = postRepository.countByUser_Username(user.getUsername());
+        userDto.setUserId(user.getUserId());
+        userDto.setUsername(user.getUsername());
+        userDto.setAvatar(user.getAvatar() == null ? null : "http://localhost:8080/avatars/" + user.getAvatar());
+        userDto.setFirstname(user.getFirstname());
+        userDto.setLastname(user.getLastname());
+        userDto.setEmail(user.getEmail());
+        userDto.setBio(user.getBio());
+        userDto.setFollowersCount(user.getFollowersCount());
+        userDto.setFollowingCount(user.getFollowingCount());
+        userDto.setPostsCount(postCount);
+        userDto.setNewToken(newToken);
         return userDto;
     }
 }
