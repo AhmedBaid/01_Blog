@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Post, PostsPage } from '../../models/models';
+import { LikeResponse, Post, PostsPage } from '../../models/models';
 
 @Injectable({
   providedIn: 'root',
@@ -23,9 +23,14 @@ export class PostService {
     return this.http.delete<void>(`${this.apiUrl}/posts/${postId}`);
   }
 
+  LikePost(postId: number): Observable<LikeResponse> {
+    return this.http.post<LikeResponse>(`${this.apiUrl}/posts/${postId}/like`, {});
+  }
+
   getPosts(page: number): Observable<PostsPage> {
     return this.http.get<PostsPage>(`${this.apiUrl}/posts?page=${page}`);
   }
+
   getUserPosts(userId: number, page: number): Observable<PostsPage> {
     return this.http.get<PostsPage>(`${this.apiUrl}/users/${userId}/posts?page=${page}`);
   }
@@ -47,8 +52,6 @@ export class PostService {
   }
 
   updatePostInList(updatedPost: Post): void {
-    this.posts.update((current) =>
-      current.map((p) => (p.id === updatedPost.id ? updatedPost : p)),
-    );
+    this.posts.update((current) => current.map((p) => (p.id === updatedPost.id ? updatedPost : p)));
   }
 }

@@ -37,10 +37,16 @@ export interface Post {
   currentMediaIndex?: number;
   toggleOptions: boolean;
   createdAt: string;
+  likeCount: number;
+  commentCount: number;
 }
 export interface PostsPage {
   content: Post[];
   last: boolean;
+}
+export interface LikeResponse {
+  likeCount: number;
+  likedByCurrentUser: boolean;
 }
 export interface SuggestedUser {
   userId: number;

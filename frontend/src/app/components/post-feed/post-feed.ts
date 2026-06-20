@@ -3,6 +3,7 @@ import { Post } from '../../models/models';
 import { PostService } from '../../core/services/post.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { EditPostComponent } from '../edit-post/edit-post';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-posts-feed',
@@ -20,13 +21,13 @@ export class PostFeed {
   currentPage = 0;
   isLastPage = signal<boolean>(false);
   isLoading = signal<boolean>(false);
-  likeCount = 0;
-  comments = 'fff';
   currentMediaIndex = 0;
   toggleOptions = false;
   editingPost: Post | null = null;
   deletingPost: Post | null = null;
   isDeleting = false;
+  likedByCurrentUser = false;
+  likingPostIds = new Set<number>();
 
   ngOnInit() {
     this.postService.resetPosts();
@@ -74,7 +75,47 @@ export class PostFeed {
     }
   }
 
-  toggleLike(): void {}
+  toggleLike(post: Post): void {
+    if (this.likingPostIds.has(post.id)) return;
+
+    this.likingPostIds.add(post.id);
+    const previousState = post.likedByCurrentUser;
+    const previousCount = post.likeCount;
+
+    this.postService
+      .LikePost(post.id)
+      .pipe(finalize(() => this.likingPostIds.delete(post.id)))
+      .subscribe({
+        next: (likeResponse) => {
+          this.postService.posts.update((currentPosts) =>
+            currentPosts.map((p) =>
+              p.id === post.id
+                ? {
+                    ...p,
+                    likedByCurrentUser: likeResponse.likedByCurrentUser,
+                    likeCount: likeResponse.likeCount,
+                  }
+                : p,
+            ),
+          );
+        },
+        error: (err) => {
+          console.error('Failed to toggle like', err);
+          this.postService.posts.update((currentPosts) =>
+            currentPosts.map((p) =>
+              p.id === post.id
+                ? { ...p, likedByCurrentUser: previousState, likeCount: previousCount }
+                : p,
+            ),
+          );
+          this.notificationToast.error('Could not process like action', 'Error');
+        },
+      });
+  }
+
+  isLikeSubmitting(postId: number): boolean {
+    return this.likingPostIds.has(postId);
+  }
 
   isVideo(url: string): boolean {
     if (!url) return false;

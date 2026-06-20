@@ -1,7 +1,5 @@
 package Blog.controller;
 
-
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +10,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
+
 import org.springframework.data.domain.*;
 import Blog.dto.EditPostDto;
+import Blog.dto.LikeResponseDTO;
 import Blog.dto.PostCreateDto;
 import Blog.dto.PostDTO;
 import Blog.service.PostService;
 import jakarta.validation.Valid;
-
 
 @RestController
 @RequestMapping("/api")
@@ -40,14 +41,17 @@ public class PostController {
         Pageable pageable = PageRequest.of(page, 5, Sort.by("createdAt").descending());
         return ResponseEntity.ok(postService.getAllPosts(pageable));
     }
+
     @GetMapping("/users/{userId}/posts")
-    public ResponseEntity<Page<PostDTO>> getUserPosts(@PathVariable Long userId, @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<Page<PostDTO>> getUserPosts(@PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page) {
         Pageable pageable = PageRequest.of(page, 5, Sort.by("createdAt").descending());
         return ResponseEntity.ok(postService.getUserPosts(userId, pageable));
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable Long postId, @Valid @ModelAttribute EditPostDto editPostDto) {
+    public ResponseEntity<PostDTO> updatePost(@PathVariable Long postId,
+            @Valid @ModelAttribute EditPostDto editPostDto) {
         return ResponseEntity.ok(postService.updatePost(postId, editPostDto));
     }
 
@@ -55,5 +59,12 @@ public class PostController {
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/posts/{postId}/like")
+    public ResponseEntity<LikeResponseDTO> postLike(Principal principal, @PathVariable Long postId) {
+        String username = principal.getName();
+        LikeResponseDTO likeResponse = postService.postLike(username, postId);
+        return ResponseEntity.ok(likeResponse);
     }
 }

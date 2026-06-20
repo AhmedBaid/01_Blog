@@ -66,13 +66,14 @@
   }
 
   <div class="p-actions">
-    <button type="button" class="p-action-btn" [class.liked]="post.likedByCurrentUser" (click)="toggleLike()">
+    <button type="button" class="p-action-btn" [class.liked]="post.likedByCurrentUser"
+      [disabled]="isLikeSubmitting(post.id)" (click)="toggleLike(post)">
       <i [class]="post.likedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
-      <span class="count">{{ likeCount }}</span>
+      <span class="count">{{ post.likeCount }}</span>
     </button>
     <button type="button" class="p-action-btn">
       <i class="fa-regular fa-comment"></i>
-      <span class="count">{{ comments.length }}</span>
+      <span class="count">{{ post.commentCount }}</span>
     </button>
   </div>
 </div>

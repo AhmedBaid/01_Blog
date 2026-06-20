@@ -20,4 +20,6 @@ public class PostDTO {
     private boolean itsMyPost;
     private List<String> mediaUrls;
     private String createdAt;
+    private Long likeCount;
+    private Long commentCount;
 }

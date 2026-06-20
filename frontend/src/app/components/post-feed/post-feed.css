@@ -285,6 +285,11 @@
   color: #ccc;
 }
 
+.p-action-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 .p-action-btn.liked {
   color: #ff7800;
 }

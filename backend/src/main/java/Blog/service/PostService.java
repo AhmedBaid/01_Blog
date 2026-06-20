@@ -12,13 +12,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import Blog.dto.EditPostDto;
+import Blog.dto.LikeResponseDTO;
 import Blog.dto.PostCreateDto;
 import Blog.dto.PostDTO;
+import Blog.entity.Like;
 import Blog.entity.Post;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
 import Blog.helpers.FormatTimeUtil;
 import Blog.helpers.GetRealMimeType;
+import Blog.repository.CommentRepository;
 import Blog.repository.LikeRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
@@ -38,11 +41,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+    private final CommentRepository commentRepository;
 
-    public PostService(PostRepository postRepo, UserRepository userRepo, LikeRepository likeRepository) {
+    public PostService(PostRepository postRepo, UserRepository userRepo, LikeRepository likeRepository,
+            CommentRepository commentRepository) {
         this.postRepository = postRepo;
         this.userRepository = userRepo;
         this.likeRepository = likeRepository;
+        this.commentRepository = commentRepository;
     }
 
     public PostDTO createPost(PostCreateDto postCreateDto) {
@@ -85,7 +91,7 @@ public class PostService {
         if (removedCount > 0 && removedCount == post.getMedias().size() && !hasNewMedias) {
             throw new GlobalException("At least one media file is required in the post", HttpStatus.BAD_REQUEST);
         }
-        
+
         post.setTitle(editPostDto.getTitle());
         post.setDescription(editPostDto.getDescription());
 
@@ -196,8 +202,30 @@ public class PostService {
         return postsPage.map(post -> mapToPostDTO(post, currentUser));
     }
 
+    public LikeResponseDTO postLike(String username, Long postId) {
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new GlobalException("post not found", HttpStatus.NOT_FOUND));
+        Optional<Like> existingLike = likeRepository.findByPost_PostIdAndUser_UserId(postId, currentUser.getUserId());
+        boolean likedByCurrentUser;
+        if (existingLike.isPresent()) {
+            likeRepository.delete(existingLike.get());
+            likedByCurrentUser = false;
+        } else {
+            Like like = new Like();
+            like.setUser(currentUser);
+            like.setPost(post);
+            likeRepository.save(like);
+            likedByCurrentUser = true;
+        }
+        return new LikeResponseDTO(likeRepository.countByPost_PostId(postId), likedByCurrentUser);
+    }
+
     private PostDTO mapToPostDTO(Post post, User currentUser) {
         PostDTO dto = new PostDTO();
+        long totalLikes = likeRepository.countByPost_PostId(post.getPostId());
+        long totalComments = commentRepository.countByPost_PostId(post.getPostId());
         dto.setId(post.getPostId());
         dto.setTitle(post.getTitle());
         dto.setDescription(post.getDescription());
@@ -218,7 +246,8 @@ public class PostService {
 
         dto.setCreatedAt(FormatTimeUtil.formatTimeAgo(post.getCreatedAt()));
         dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
-
+        dto.setLikeCount(totalLikes);
+        dto.setCommentCount(totalComments);
         return dto;
     }
 }
