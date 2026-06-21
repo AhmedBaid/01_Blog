@@ -1,8 +1,166 @@
-<p>heloooooooo</p>
-<p>heloooooooo</p>
-<p>heloooooooo</p>
-<p>heloooooooo</p>
-<p>heloooooooo</p>
-<p>heloooooooo</p>
-<p>heloooooooo</p>
+<div class="split-view-container">
 
+  <div class="left-post-section">
+    @if (isPostLoading()) {
+    <div class="view-loading">
+      <div class="spinner"></div>
+      <span>Loading post details...</span>
+    </div>
+    } @else if (post()) {
+    @let currentPost = post()!;
+    <div class="post-card single-view">
+      <div class="post-header">
+        @if (currentPost.avatar) {
+        <img title="img" class="p-avatar" [src]="currentPost.avatar" [alt]="currentPost.firstname"
+          [routerLink]="['/profile', currentPost.userId]" />
+        } @else {
+        <div class="p-avatar-fb" [routerLink]="['/profile', currentPost.userId]">
+          {{ currentPost.firstname.charAt(0).toUpperCase() }}{{ currentPost.lastname.charAt(0).toUpperCase() }}
+        </div>
+        }
+        <div class="p-author-info">
+          <div class="p-fullname">{{ currentPost.firstname }} {{ currentPost.lastname }}</div>
+          <div class="p-username">{{ currentPost.createdAt }}</div>
+        </div>
+        <button type="button" class="p-menu" aria-label="Post options" (click)="openPostOptions(currentPost)">
+          <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        @if(currentPost.toggleOptions) {
+        @if (currentPost.itsMyPost) {
+        <div class="post-options">
+          <button type="button" class="option-btn" (click)="startEdit(currentPost)">
+            <i class="fa-solid fa-pen"></i>Edit
+          </button>
+          <button type="button" class="option-btn" (click)="confirmDelete(currentPost)">
+            <i class="fa-solid fa-trash"></i>Delete
+          </button>
+        </div>
+        } @else {
+        <div class="post-options">
+          <button type="button" class="option-btn"><i class="fa-solid fa-flag"></i>Report</button>
+        </div>
+        }
+        }
+      </div>
+
+      <h2 class="p-title">{{ currentPost.title }}</h2>
+      <p class="p-desc">{{ currentPost.description }}</p>
+
+      @if (currentPost.mediaUrls && currentPost.mediaUrls.length > 0) {
+      <div class="p-media-slider">
+        @if (currentPost.mediaUrls.length > 1) {
+        <button title="prev" type="button" class="slide-arrow prev" (click)="prevMedia(currentPost)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button title="next" type="button" class="slide-arrow next" (click)="nextMedia(currentPost)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        }
+
+        <div class="slider-content">
+          @let activeUrl = currentPost.mediaUrls[currentPost.currentMediaIndex || 0];
+          @if (isVideo(activeUrl)) {
+          <video [src]="activeUrl" controls class="slider-media"></video>
+          } @else {
+          <img [src]="activeUrl" alt="Post media" class="slider-media" />
+          }
+        </div>
+
+        @if (currentPost.mediaUrls.length > 1) {
+        <div class="slider-indicators">
+          @for (med of currentPost.mediaUrls; track med; let idx = $index) {
+          <span class="dot" [class.active]="(currentPost.currentMediaIndex || 0) === idx"></span>
+          }
+        </div>
+        }
+      </div>
+      }
+
+      <div class="p-actions">
+        <button type="button" class="p-action-btn" [class.liked]="currentPost.likedByCurrentUser"
+          (click)="toggleLike(currentPost)">
+          <i [class]="currentPost.likedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+          <span class="count">{{ currentPost.likeCount }}</span>
+        </button>
+        <button type="button" class="p-action-btn active-comment">
+          <i class="fa-solid fa-comment"></i>
+          <span class="count">{{ currentPost.commentCount }}</span>
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="right-comments-section">
+    <div class="comments-container-box">
+      <h3>Comments ({{ post()?.commentCount || 0 }})</h3>
+
+      <form class="comment-write-form" (ngSubmit)="submitComment()">
+        <input type="text" name="commentInput" placeholder="Write a comment..." [(ngModel)]="newCommentContent"
+          autocomplete="off" required>
+        <button type="submit" class="comment-submit-btn"
+          [disabled]="!newCommentContent.trim() || isCommentSubmitting()">
+          @if (isCommentSubmitting()) {
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          } @else {
+          <i class="fa-solid fa-paper-plane"></i>
+          }
+        </button>
+      </form>
+
+      <hr class="divider-line">
+
+      <div class="comments-list-scroll">
+        @if (isCommentsLoading()) {
+        <div class="comments-loading">
+          <i class="fa-solid fa-circle-notch fa-spin"></i> Loading comments...
+        </div>
+        } @else {
+        @for (comment of comments(); track comment.commentId) {
+        <div class="comment-item-card">
+          @if (comment.avatar) {
+          <img title="avatar" class="c-avatar" [src]="comment.avatar" [alt]="comment.firstname"
+            [routerLink]="['/profile', comment.userId]" />
+          } @else {
+          <div class="c-avatar-fb" [routerLink]="['/profile', comment.userId]">
+            {{ comment.firstname.charAt(0).toUpperCase() }}{{ comment.lastname.charAt(0).toUpperCase() }}
+          </div>
+          }
+          <div class="c-body">
+            <div class="c-meta">
+              <span class="c-fullname">{{ comment.firstname }} {{ comment.lastname }}</span>
+              <span class="c-date">{{ comment.createdAt }}</span>
+            </div>
+            <p class="c-text">{{ comment.content }}</p>
+          </div>
+        </div>
+        } @empty {
+        <div class="no-comments">Be the first to comment on this post!</div>
+        }
+        }
+      </div>
+    </div>
+  </div>
+
+</div>
+
+@if (editingPost) {
+<app-edit-post [post]="editingPost" (close)="onEditClose()" (updated)="onPostUpdated($event)"></app-edit-post>
+}
+
+@if (deletingPost) {
+<div class="confirm-overlay" (click)="cancelDelete()">
+  <div class="confirm-dialog" (click)="$event.stopPropagation()">
+    <div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h3 class="confirm-title">Delete Post?</h3>
+    <p class="confirm-desc">This action cannot be undone.</p>
+    <div class="confirm-actions">
+      <button type="button" class="btn-cancel" (click)="cancelDelete()" [disabled]="isDeleting">Cancel</button>
+      <button type="button" class="btn-delete" (click)="executeDelete()" [disabled]="isDeleting">
+        {{ isDeleting ? 'Deleting...' : 'Delete' }}
+      </button>
+    </div>
+  </div>
+</div>
+}

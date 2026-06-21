@@ -40,6 +40,17 @@ export interface Post {
   likeCount: number;
   commentCount: number;
 }
+export interface Comments {
+  commentId: number;
+  userId: number;
+  content: string;
+  username: string;
+  createdAt: string;
+  firstname: string;
+  lastname: string;
+  avatar: string;
+}
+
 export interface PostsPage {
   content: Post[];
   last: boolean;
