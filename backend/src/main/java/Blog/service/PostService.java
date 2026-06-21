@@ -183,23 +183,31 @@ public class PostService {
     }
 
     public Page<PostDTO> getAllPosts(Pageable pageable) {
-        Page<Post> postsPage = postRepository.findAllPostsWithUser(pageable);
-
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
 
-        return postsPage.map(post -> mapToPostDTO(post, currentUser));
+        Page<PostDTO> postsPage = postRepository.findAllPostsWithStats(currentUser.getUserId(), pageable);
+
+        postsPage.forEach(dto -> {
+            dto.setItsMyPost(dto.getUserId().equals(currentUser.getUserId()));
+        });
+
+        return postsPage;
     }
 
     public Page<PostDTO> getUserPosts(Long userId, Pageable pageable) {
-        Page<Post> postsPage = postRepository.findAllByUser_UserIdOrderByCreatedAtDesc(userId, pageable);
-
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
 
-        return postsPage.map(post -> mapToPostDTO(post, currentUser));
+        Page<PostDTO> postsPage = postRepository.findUserPostsWithStats(userId, currentUser.getUserId(), pageable);
+
+        postsPage.forEach(dto -> {
+            dto.setItsMyPost(dto.getUserId().equals(currentUser.getUserId()));
+        });
+
+        return postsPage;
     }
 
     public LikeResponseDTO postLike(String username, Long postId) {
