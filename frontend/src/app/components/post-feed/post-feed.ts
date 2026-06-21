@@ -122,6 +122,9 @@ export class PostFeed {
   goToProfile(userId: number): void {
     this.router.navigate([`/profile/${userId}`]);
   }
+  goToViewPost(userId: number): void {
+    this.router.navigate([`/post/${userId}`]);
+  }
 
   isVideo(url: string): boolean {
     if (!url) return false;

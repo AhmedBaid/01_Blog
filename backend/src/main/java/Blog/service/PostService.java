@@ -230,6 +230,15 @@ public class PostService {
         return new LikeResponseDTO(likeRepository.countByPost_PostId(postId), likedByCurrentUser);
     }
 
+    public PostDTO getPostDetails(String username, long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new GlobalException("post not found", HttpStatus.NOT_FOUND));
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+        return mapToPostDTO(post, currentUser);
+    }
+
+
     private PostDTO mapToPostDTO(Post post, User currentUser) {
         PostDTO dto = new PostDTO();
         long totalLikes = likeRepository.countByPost_PostId(post.getPostId());

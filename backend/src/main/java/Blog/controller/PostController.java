@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 import org.springframework.data.domain.*;
+
 import Blog.dto.EditPostDto;
 import Blog.dto.LikeResponseDTO;
 import Blog.dto.PostCreateDto;
@@ -67,4 +68,13 @@ public class PostController {
         LikeResponseDTO likeResponse = postService.postLike(username, postId);
         return ResponseEntity.ok(likeResponse);
     }
+
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostDTO> getPostDetails(@PathVariable Long postId, Principal principal) {
+        String username = principal.getName();
+        PostDTO likeResponse = postService.getPostDetails(username, postId);
+        return ResponseEntity.ok(likeResponse);
+    }
+
+
 }

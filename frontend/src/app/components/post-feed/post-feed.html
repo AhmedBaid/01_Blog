@@ -71,7 +71,7 @@
       <i [class]="post.likedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
       <span class="count">{{ post.likeCount }}</span>
     </button>
-    <button type="button" class="p-action-btn">
+    <button type="button" class="p-action-btn" (click)="goToViewPost(post.userId)">
       <i class="fa-regular fa-comment"></i>
       <span class="count">{{ post.commentCount }}</span>
     </button>
