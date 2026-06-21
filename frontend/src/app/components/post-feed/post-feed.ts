@@ -4,6 +4,7 @@ import { PostService } from '../../core/services/post.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { EditPostComponent } from '../edit-post/edit-post';
 import { finalize } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-posts-feed',
@@ -14,6 +15,7 @@ import { finalize } from 'rxjs';
 export class PostFeed {
   private postService = inject(PostService);
   private notificationToast = inject(NotificationService);
+  private router = inject(Router);
 
   @Input() userId: number | null = null;
 
@@ -115,6 +117,10 @@ export class PostFeed {
 
   isLikeSubmitting(postId: number): boolean {
     return this.likingPostIds.has(postId);
+  }
+
+  goToProfile(userId: number): void {
+    this.router.navigate([`/profile/${userId}`]);
   }
 
   isVideo(url: string): boolean {

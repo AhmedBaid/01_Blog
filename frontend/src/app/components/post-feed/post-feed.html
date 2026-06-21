@@ -2,9 +2,9 @@
 <div class="post-card">
   <div class="post-header">
     @if (post.avatar) {
-    <img title="img" class="p-avatar" [src]="post.avatar" [alt]="post.firstname" />
+    <img title="img" class="p-avatar" [src]="post.avatar" [alt]="post.firstname" (click)="goToProfile(post.userId)" />
     } @else {
-    <div class="p-avatar-fb">
+    <div class="p-avatar-fb" (click)="goToProfile(post.userId)">
       {{ post.firstname.charAt(0).toUpperCase() }}{{ post.lastname.charAt(0).toUpperCase() }}
     </div>
     }

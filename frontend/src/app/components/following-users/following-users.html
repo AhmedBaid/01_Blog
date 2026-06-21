@@ -16,7 +16,7 @@
       @for (user of suggestedUsers(); track user.userId) {
         <div class="suggested-user-card">
 
-          <div class="su-avatar-box">
+          <div class="su-avatar-box" (click)="goToProfile(user.userId)">
             @if (user.avatar) {
               <img title="imggg" [src]="user.avatar" [alt]="user.firstname" class="su-avatar">
             } @else {
