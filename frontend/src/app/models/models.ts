@@ -40,7 +40,7 @@ export interface Post {
   likeCount: number;
   commentCount: number;
 }
-export interface Comments {
+export interface Comment {
   commentId: number;
   userId: number;
   content: string;

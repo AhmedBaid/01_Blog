@@ -83,7 +83,7 @@ public class CommentService {
         dto.setUsername(comment.getUser().getUsername());
         dto.setFirstname(comment.getUser().getFirstname());
         dto.setLastname(comment.getUser().getLastname());
-        dto.setAvatar(comment.getUser().getAvatar());
+        dto.setAvatar(comment.getUser().getAvatar() == null ? null : "http://localhost:8080/avatars/" + comment.getUser().getAvatar());
         return dto;
     }
 }
