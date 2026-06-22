@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { SuggestedUser, User } from '../../models/models';
+import { User } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
 import { PostFeed } from '../post-feed/post-feed';
 import { EditProfileComponent } from '../edit-profile/edit-profile';

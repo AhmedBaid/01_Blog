@@ -21,6 +21,7 @@ public class FollowService {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
     }
+
     @Transactional
     public boolean follow(String username, Long followedTo) {
         User follower = userRepository.findByUsername(username)
@@ -34,12 +35,16 @@ public class FollowService {
                 .findByFollower_UserIdAndFollowedTo_UserId(follower.getUserId(), followedToUser.getUserId());
         if (followExist.isPresent()) {
             followRepository.delete(followExist.get());
+            follower.setFollowingCount(Math.max(0, follower.getFollowingCount() - 1));
+            followedToUser.setFollowersCount(Math.max(0, followedToUser.getFollowersCount() - 1));
             return false;
         } else {
             Follower followerEntity = new Follower();
             followerEntity.setFollower(follower);
             followerEntity.setFollowedTo(followedToUser);
             followRepository.save(followerEntity);
+            follower.setFollowingCount(follower.getFollowingCount() + 1);
+            followedToUser.setFollowersCount(followedToUser.getFollowersCount() + 1);
             return true;
         }
     }

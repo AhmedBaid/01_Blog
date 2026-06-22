@@ -77,3 +77,10 @@ export interface FilePreview {
   type: 'image' | 'video';
   name: string;
 }
+export interface followDto {
+  userId: number;
+  avatar: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+}

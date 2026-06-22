@@ -450,8 +450,8 @@ small {
 }
 
 .c-avatar-fb {
-  background: #333;
-  color: #999;
+  background: #ff7800;
+  color: white;
   display: grid;
   place-items: center;
   font-size: 11px;

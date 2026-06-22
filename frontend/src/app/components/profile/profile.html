@@ -73,11 +73,11 @@
         <span class="stat-count">{{ user.postsCount }}</span>
         <span class="stat-label">Posts</span>
       </div>
-      <div class="stat-item fff">
+      <div class="stat-item fff" (click)="showFollowers(user.userId)">
         <span class="stat-count">{{ user.followersCount }}</span>
         <span class="stat-label">Followers</span>
       </div>
-      <div class="stat-item fff">
+      <div class="stat-item fff" (click)="showFollowing(user.userId)">
         <span class="stat-count">{{ user.followingCount }}</span>
         <span class="stat-label">Following</span>
       </div>
