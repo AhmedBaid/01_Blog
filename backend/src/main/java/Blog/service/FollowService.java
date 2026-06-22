@@ -1,0 +1,44 @@
+package Blog.service;
+
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import Blog.entity.Follower;
+import Blog.entity.User;
+import Blog.exception.GlobalException;
+import Blog.repository.FollowRepository;
+import Blog.repository.UserRepository;
+
+@Service
+public class FollowService {
+    private final UserRepository userRepository;
+    private final FollowRepository followRepository;
+
+    public FollowService(UserRepository userRepository, FollowRepository followRepository) {
+        this.userRepository = userRepository;
+        this.followRepository = followRepository;
+    }
+    public boolean follow(String username, Long followedTo) {
+        User follower = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("follower not found", HttpStatus.NOT_FOUND));
+        User followedToUser = userRepository.findByUserId(followedTo)
+                .orElseThrow(() -> new GlobalException("followedTo not found", HttpStatus.NOT_FOUND));
+        if (follower.getUserId().equals(followedToUser.getUserId())) {
+            throw new GlobalException("you can not follow yourself", HttpStatus.BAD_REQUEST);
+        }
+        Optional<Follower> followExist = followRepository
+                .findByFollower_UserIdAndFollowedTo_UserId(follower.getUserId(), followedToUser.getUserId());
+        if (followExist.isPresent()) {
+            followRepository.delete(followExist.get());
+            return false;
+        } else {
+            Follower followerEntity = new Follower();
+            followerEntity.setFollower(follower);
+            followerEntity.setFollowedTo(followedToUser);
+            followRepository.save(followerEntity);
+            return true;
+        }
+    }
+}

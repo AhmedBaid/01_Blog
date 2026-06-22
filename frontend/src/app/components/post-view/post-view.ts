@@ -94,7 +94,6 @@ export class PostDetailsComponent {
       .post<Comment>(`${`${this.apiUrl}`}/${currentPost.id}/comment`, bodyPayload)
       .subscribe({
         next: (newComment) => {
-          console.log(newComment)
           this.comments.update((prev) => [newComment, ...prev]);
           this.post.update((p) => (p ? { ...p, commentCount: p.commentCount + 1 } : null));
           this.isCommentSubmitting.set(false);

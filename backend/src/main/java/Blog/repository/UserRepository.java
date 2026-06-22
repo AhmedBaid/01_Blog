@@ -10,11 +10,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import Blog.entity.User;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     Optional<User> findByEmail(String email);
+
+    Optional<User> findByUserId(Long userId);
 
     Optional<User> findByUsernameOrEmail(String username, String email);
 
@@ -25,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u " +
             "WHERE u.userId <> :currentUserId " +
             "AND u.userId NOT IN (" +
-            "    SELECT f.followedTo.userId FROM Follower f WHERE f.follower.userId = :currentUserId" + 
+            "    SELECT f.followedTo.userId FROM Follower f WHERE f.follower.userId = :currentUserId" +
             ") " +
             "ORDER BY u.createdAt DESC")
     List<User> suggestedUsers(@Param("currentUserId") Long currentUserId, Pageable pageable);
