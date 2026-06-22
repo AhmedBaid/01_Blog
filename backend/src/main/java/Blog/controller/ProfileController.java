@@ -38,7 +38,8 @@ public class ProfileController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserDTO> getUserProfileById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserProfileById(id));
+    public ResponseEntity<UserDTO> getUserProfileById(@PathVariable Long id, Principal principal) {
+        String currentUsername = principal.getName();
+        return ResponseEntity.ok(userService.getUserProfileById(id,currentUsername));
     }
 }

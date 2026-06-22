@@ -18,6 +18,7 @@ import Blog.dto.UserDTO;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
 import Blog.helpers.GetRealMimeType;
+import Blog.repository.FollowRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
 
@@ -32,25 +33,31 @@ public class UserService {
             "image/gif");
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
+
     private final PostRepository postRepository;
     private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, PostRepository postRepository, JwtUtil jwtUtil) {
+    public UserService(UserRepository userRepository, PostRepository postRepository, JwtUtil jwtUtil,
+            FollowRepository followRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.followRepository = followRepository;
         this.jwtUtil = jwtUtil;
     }
 
     public UserDTO getUserProfileByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
-        return mapUserToUserDTO(user);
+        return mapUserToUserMeDTO(user);
     }
 
-    public UserDTO getUserProfileById(Long id) {
+    public UserDTO getUserProfileById(Long id, String currentUsername) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
-        return mapUserToUserDTO(user);
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+        return mapUserToUserDTO(user, currentUser.getUserId(), id);
     }
 
     public UserDTO updateCurrentUserProfile(String username, EditProfileDto editProfileDto) {
@@ -125,7 +132,7 @@ public class UserService {
         };
     }
 
-    public UserDTO mapUserToUserDTO(User user) {
+    public UserDTO mapUserToUserMeDTO(User user) {
         UserDTO userDto = new UserDTO();
         long postCount = postRepository.countByUser_Username(user.getUsername());
         userDto.setUserId(user.getUserId());
@@ -140,7 +147,27 @@ public class UserService {
         userDto.setPostsCount(postCount);
         return userDto;
     }
-        public UserDTO mapUserToUpdatedUserDTO(User user, String newToken) {
+
+    public UserDTO mapUserToUserDTO(User user, Long followerId, Long followedToId) {
+        UserDTO userDto = new UserDTO();
+        boolean isFollowedBycurentUser = followRepository.existsByFollower_UserIdAndFollowedTo_UserId(followerId,
+                followedToId);
+        long postCount = postRepository.countByUser_Username(user.getUsername());
+        userDto.setUserId(user.getUserId());
+        userDto.setUsername(user.getUsername());
+        userDto.setAvatar(user.getAvatar() == null ? null : "http://localhost:8080/avatars/" + user.getAvatar());
+        userDto.setFirstname(user.getFirstname());
+        userDto.setLastname(user.getLastname());
+        userDto.setEmail(user.getEmail());
+        userDto.setBio(user.getBio());
+        userDto.setFollowersCount(user.getFollowersCount());
+        userDto.setFollowingCount(user.getFollowingCount());
+        userDto.setPostsCount(postCount);
+        userDto.setFollowedByCurrentUser(isFollowedBycurentUser);
+        return userDto;
+    }
+
+    public UserDTO mapUserToUpdatedUserDTO(User user, String newToken) {
         UserDTO userDto = new UserDTO();
         long postCount = postRepository.countByUser_Username(user.getUsername());
         userDto.setUserId(user.getUserId());

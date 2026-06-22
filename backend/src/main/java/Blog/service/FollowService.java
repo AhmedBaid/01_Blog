@@ -10,6 +10,7 @@ import Blog.entity.User;
 import Blog.exception.GlobalException;
 import Blog.repository.FollowRepository;
 import Blog.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class FollowService {
@@ -20,6 +21,7 @@ public class FollowService {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
     }
+    @Transactional
     public boolean follow(String username, Long followedTo) {
         User follower = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("follower not found", HttpStatus.NOT_FOUND));

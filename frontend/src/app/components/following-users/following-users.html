@@ -7,51 +7,52 @@
   </div>
 
   @if (isLoading()) {
-    <div class="suggestions-loading">
-      <div class="mini-spinner"></div>
-      <span>Loading suggestions...</span>
-    </div>
+  <div class="suggestions-loading">
+    <div class="mini-spinner"></div>
+    <span>Loading suggestions...</span>
+  </div>
   } @else {
-    <div class="suggestions-list">
-      @for (user of suggestedUsers(); track user.userId) {
-        <div class="suggested-user-card">
+  <div class="suggestions-list">
+    @for (user of suggestedUsers(); track user.userId) {
+    <div class="suggested-user-card">
 
-          <div class="su-avatar-box" (click)="goToProfile(user.userId)">
-            @if (user.avatar) {
-              <img title="imggg" [src]="user.avatar" [alt]="user.firstname" class="su-avatar">
-            } @else {
-              <div class="su-avatar-fallback">
-                {{ user.firstname.charAt(0).toUpperCase() }}{{ user.lastname.charAt(0).toUpperCase() }}
-              </div>
-            }
-          </div>
-
-          <div class="su-info-box">
-            <div class="su-fullname" title="{{ user.firstname }} {{ user.lastname }}">
-              {{ user.firstname }} {{ user.lastname }}
-            </div>
-            @if (user.bio) {
-              <p class="su-bio" title="{{ user.bio }}">{{ user.bio }}</p>
-            }
-          </div>
-
-          <div class="su-action-box">
-            <button
-              type="button"
-              class="su-follow-btn"
-            >
-              @if (user.isFollowed) {
-                <i class="fa-solid fa-user-check"></i> Following
-              } @else {
-                <i class="fa-solid fa-user-plus"></i> Follow
-              }
-            </button>
-          </div>
-
+      <div class="su-avatar-box" (click)="goToProfile(user.userId)">
+        @if (user.avatar) {
+        <img title="imggg" [src]="user.avatar" [alt]="user.firstname" class="su-avatar">
+        } @else {
+        <div class="su-avatar-fallback">
+          {{ user.firstname.charAt(0).toUpperCase() }}{{ user.lastname.charAt(0).toUpperCase() }}
         </div>
-      } @empty {
-        <div class="suggestions-empty">No new suggestions found</div>
-      }
+        }
+      </div>
+
+      <div class="su-info-box">
+        <div class="su-fullname" title="{{ user.firstname }} {{ user.lastname }}">
+          {{ user.firstname }} {{ user.lastname }}
+        </div>
+        @if (user.bio) {
+        <p class="su-bio" title="{{ user.bio }}">{{ user.bio }}</p>
+        }
+      </div>
+
+      <div class="su-action-box">
+        <button type="button" class="su-follow-btn" (click)="toggleFollow(user)">
+          @if (isFollowSubmitting(user.userId)) {
+          <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+          } @else {
+          @if (user.isFollowed) {
+          <i class="fa-solid fa-user-check"></i> Unfollow
+          } @else {
+          <i class="fa-solid fa-user-plus"></i> Follow
+          }
+          }
+        </button>
+      </div>
+
     </div>
+    } @empty {
+    <div class="suggestions-empty">No new suggestions found</div>
+    }
+  </div>
   }
 </div>

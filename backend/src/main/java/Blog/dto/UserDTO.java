@@ -21,4 +21,5 @@ public class UserDTO {
     private Long postsCount;
     private String avatar;
     private String newToken;
+    private boolean FollowedByCurrentUser;
 }

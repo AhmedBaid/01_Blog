@@ -21,6 +21,7 @@ export interface User {
   followersCount: number;
   followingCount: number;
   postsCount: number;
+  FollowedByCurrentUser: boolean;
 }
 export interface Post {
   id: number;
@@ -69,7 +70,7 @@ export interface SuggestedUser {
   followingCount: number | null;
   followersCount: number | null;
   avatar: string | null;
-  isFollowed?: boolean;
+  isFollowed: boolean;
 }
 export interface FilePreview {
   url: string;

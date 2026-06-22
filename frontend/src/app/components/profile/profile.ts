@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../../models/models';
+import { SuggestedUser, User } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
 import { PostFeed } from '../post-feed/post-feed';
 import { EditProfileComponent } from '../edit-profile/edit-profile';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ export class ProfileComponent {
   private router = inject(Router);
   private notification = inject(NotificationService);
   private apiUrl = 'http://localhost:8080/api/users';
+  private followapiUrl = 'http://localhost:8080/api';
   private apime = 'http://localhost:8080/api';
 
   covers: string[] = [
@@ -45,6 +47,7 @@ export class ProfileComponent {
   isLoading = signal<boolean>(true);
   CurrentuserId = signal<number | null>(null);
   isEditProfileOpen = signal<boolean>(false);
+  FollowingIds = new Set<number>();
 
   ngOnInit(): void {
     this.route.url.subscribe(() => {
@@ -110,5 +113,42 @@ export class ProfileComponent {
     this.user.set(updatedUser);
   }
 
-  toggleFollow(): void {}
+  toggleFollow(user: User): void {
+    if (this.FollowingIds.has(user.userId)) return;
+    this.FollowingIds.add(user.userId);
+    this.FollowingIds = new Set(this.FollowingIds);
+
+    this.http
+      .post<boolean>(`${this.followapiUrl}/follow/${user.userId}`, {})
+      .pipe(
+        finalize(() => {
+          this.FollowingIds.delete(user.userId);
+          this.FollowingIds = new Set(this.FollowingIds);
+        }),
+      )
+      .subscribe({
+        next: (isFollowe) => {
+          this.user.update((cuser) => {
+            if (!cuser) return null;
+
+            return {
+              ...cuser,
+              FollowedByCurrentUser: isFollowe,
+            };
+          });
+
+          if (isFollowe) {
+            this.notification.success(`You are now following ${user.firstname}`, 'Success');
+          } else {
+            this.notification.info(`You unfollowed ${user.firstname}`, 'Success');
+          }
+        },
+        error: (err) => {
+          this.notification.error(err.error?.message || 'Could not follow user', 'Error');
+        },
+      });
+  }
+  isFollowSubmitting(userId: number): boolean {
+    return this.FollowingIds.has(userId);
+  }
 }

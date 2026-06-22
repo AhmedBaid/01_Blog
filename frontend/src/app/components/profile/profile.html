@@ -33,10 +33,18 @@
           <i class="fa-solid fa-pen"></i> Edit Profile
         </button>
         } @else {
-        <button type="button" class="option-btn" (click)="toggleFollow()">
+        <button type="button" class="option-btn" (click)="toggleFollow(user)">
+          @if (isFollowSubmitting(user.userId)) {
+          <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+          } @else {
+          @if (user.FollowedByCurrentUser) {
+          <i class="fa-solid fa-user-check"></i> Unfollow
+          } @else {
           <i class="fa-solid fa-user-plus"></i> Follow
+          }
+          }
         </button>
-        <button type="button" class="option-btn" (click)="toggleFollow()">
+        <button type="button" class="option-btn">
           <i class="fa-solid fa-flag"></i>Report
         </button>
         }

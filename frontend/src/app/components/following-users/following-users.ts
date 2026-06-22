@@ -1,8 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-// import { NotificationService } from '../../core/services/notification.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { SuggestedUser } from '../../models/models';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-following-users',
@@ -13,11 +14,12 @@ import { Router } from '@angular/router';
 export class FollowingUsers {
   private http = inject(HttpClient);
   private router = inject(Router);
-  // private notification = inject(NotificationService);
+  private notification = inject(NotificationService);
   private apiUrl = 'http://localhost:8080/api';
 
   suggestedUsers = signal<SuggestedUser[]>([]);
   isLoading = signal<boolean>(false);
+  FollowingIds = new Set<number>();
 
   ngOnInit(): void {
     this.loadSuggestedUsers();
@@ -40,20 +42,27 @@ export class FollowingUsers {
     this.router.navigate([`/profile/${userId}`]);
   }
 
-  // toggleFollow(user: SuggestedUser): void {
-  //   if (user.isFollowed) return;
+  toggleFollow(user: SuggestedUser): void {
+    if (this.FollowingIds.has(user.userId)) return;
+    this.FollowingIds.add(user.userId);
+    this.FollowingIds = new Set(this.FollowingIds);
 
-  //   this.http.post(`${this.apiUrl}/followers/follow/${user.userId}`, {}).subscribe({
-  //     next: () => {
-  //       this.notification.success(`You are now following ${user.firstname}`, 'Success');
-
-  //       this.suggestedUsers.update(users =>
-  //         users.map(u => u.userId === user.userId ? { ...u, isFollowed: true } : u)
-  //       );
-  //     },
-  //     error: (err) => {
-  //       this.notification.error(err.error?.message || 'Could not follow user', 'Error');
-  //     }
-  //   });
-  // }
+    this.http
+      .post<boolean>(`${this.apiUrl}/follow/${user.userId}`, {})
+      .pipe(finalize(() => this.FollowingIds.delete(user.userId)))
+      .subscribe({
+        next: (isFollowe) => {
+          this.notification.success(`You are now following ${user.firstname}`, 'Success');
+          this.suggestedUsers.update((users) =>
+            users.map((u) => (u.userId === user.userId ? { ...u, isFollowed: isFollowe } : u)),
+          );
+        },
+        error: (err) => {
+          this.notification.error(err.error?.message || 'Could not follow user', 'Error');
+        },
+      });
+  }
+  isFollowSubmitting(userId: number): boolean {
+    return this.FollowingIds.has(userId);
+  }
 }

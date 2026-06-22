@@ -1,4 +1,5 @@
 package Blog.repository;
+
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface FollowRepository extends JpaRepository<Follower, Long> {
     Optional<Follower> findByFollower_UserIdAndFollowedTo_UserId(
             Long followerId,
             Long followedToId);
+
+    boolean existsByFollower_UserIdAndFollowedTo_UserId(Long followerId, Long followedToId);
 }

@@ -39,7 +39,7 @@ public class UserController {
 
         UserDTO userDTO = new UserDTO(user.getUserId(), user.getUsername(), user.getEmail(), user.getFirstname(),
                 user.getLastname(),
-                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), postCount, avatarUrl, "");
+                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), postCount, avatarUrl, "", false);
 
         return ResponseEntity.ok(userDTO);
     }
