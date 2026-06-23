@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../../models/models';
+import { followDto, User } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
 import { PostFeed } from '../post-feed/post-feed';
 import { EditProfileComponent } from '../edit-profile/edit-profile';
@@ -20,7 +20,7 @@ export class ProfileComponent {
   private notification = inject(NotificationService);
   private apiUrl = 'http://localhost:8080/api/users';
   private followapiUrl = 'http://localhost:8080/api';
-  private apime = 'http://localhost:8080/api';
+  private api = 'http://localhost:8080/api';
 
   covers: string[] = [
     '1.jpeg',
@@ -45,9 +45,14 @@ export class ProfileComponent {
   user = signal<User | null>(null);
   isMyOwnProfile = signal<boolean>(false);
   isLoading = signal<boolean>(true);
+  isGetFollowersLoading = signal<boolean>(true);
+  isGetFollowingLoading = signal<boolean>(true);
   CurrentuserId = signal<number | null>(null);
   isEditProfileOpen = signal<boolean>(false);
   FollowingIds = new Set<number>();
+  isToggleFollowers = false;
+  isToggleFollowing = false;
+  FollowersOrFollowing = signal<followDto[] | null>(null);
 
   ngOnInit(): void {
     this.route.url.subscribe(() => {
@@ -60,7 +65,7 @@ export class ProfileComponent {
     const userId = this.route.snapshot.paramMap.get('id');
     const isMePath = this.route.snapshot.url.some((segment) => segment.path === 'me');
 
-    this.http.get<User>(`${this.apime}/me`).subscribe({
+    this.http.get<User>(`${this.api}/me`).subscribe({
       next: (currentUser) => {
         this.CurrentuserId.set(currentUser.userId);
 
@@ -150,5 +155,35 @@ export class ProfileComponent {
   }
   isFollowSubmitting(userId: number): boolean {
     return this.FollowingIds.has(userId);
+  }
+  showFollowers(userId: number): void {
+    this.isToggleFollowers = true;
+    this.FollowersOrFollowing.set([]);
+    this.http.get<followDto[]>(`${this.api}/followers/${userId}`).subscribe({
+      next: (data) => {
+        this.FollowersOrFollowing.set(data);
+        this.isGetFollowersLoading.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.notification.error('Could not load your profile details. Please try again later.');
+        this.isGetFollowersLoading.set(false);
+      },
+    });
+  }
+  showFollowing(userId: number): void {
+    this.isToggleFollowing = true;
+    this.FollowersOrFollowing.set([]);
+    this.http.get<followDto[]>(`${this.api}/following/${userId}`).subscribe({
+      next: (data) => {
+        this.FollowersOrFollowing.set(data);
+        this.isGetFollowersLoading.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.notification.error('Could not load your profile details. Please try again later.');
+        this.isGetFollowersLoading.set(false);
+      },
+    });
   }
 }

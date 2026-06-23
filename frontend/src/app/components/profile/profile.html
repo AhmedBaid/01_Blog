@@ -85,6 +85,12 @@
 
   </div>
 </div>
+@if(isToggleFollowers){
+
+}
+@if(isToggleFollowing){
+
+}
 @if (isEditProfileOpen()) {
 <app-edit-profile [user]="user" (close)="closeEditProfile()" (updated)="onProfileUpdated($event)"></app-edit-profile>
 }
