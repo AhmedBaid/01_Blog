@@ -1,15 +1,15 @@
 import { Component, inject, ChangeDetectorRef, signal } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { NotifDto } from '../../models/models';
+import { followDto, NotifDto } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
+import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatIconModule, CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })
@@ -19,13 +19,19 @@ export class NavbarComponent {
   private router = inject(Router);
   private http = inject(HttpClient);
   private notificationToast = inject(NotificationService);
+  private apiNotif = 'http://localhost:8080/api/notifications';
+  private apiSearch = 'http://localhost:8080/api/users/search';
+  private searchSubject = new Subject<string>();
+  private searchSubscription!: Subscription;
   user: any;
   flName: string = '';
   showProfileMenu: boolean = false;
   showNotifMenu: boolean = false;
   notif = signal<NotifDto[]>([]);
-  apiNotif = 'http://localhost:8080/api/notifications';
   isGetNotifLoading = signal<boolean>(false);
+  searchResults = signal<followDto[]>([]);
+  isSearchLoading = signal<boolean>(false);
+  showResultsDropdown = signal<boolean>(false);
   navigateToCreatePost() {
     this.router.navigate(['/home']);
   }
@@ -38,6 +44,31 @@ export class NavbarComponent {
         console.error(err);
       },
     });
+    this.searchSubscription = this.searchSubject
+      .pipe(
+        debounceTime(350),
+        distinctUntilChanged(),
+        switchMap((searchTerm) => {
+          if (!searchTerm.trim()) {
+            this.isSearchLoading.set(false);
+            this.searchResults.set([]);
+            return [[]];
+          }
+          this.isSearchLoading.set(true);
+          return this.http.get<followDto[]>(`${this.apiSearch}/${searchTerm}`);
+        }),
+      )
+      .subscribe({
+        next: (results) => {
+          this.searchResults.set(results);
+          this.isSearchLoading.set(false);
+          this.showResultsDropdown.set(true);
+        },
+        error: (err) => {
+          console.error('Search error:', err);
+          this.isSearchLoading.set(false);
+        },
+      });
     if (!this.authService.getToken()) {
       return;
     }
@@ -97,5 +128,21 @@ export class NavbarComponent {
         this.notificationToast.error(err.error.message, 'Error');
       },
     });
+  }
+  onSearchChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    this.searchSubject.next(inputElement.value);
+  }
+
+  closeSearch(): void {
+    setTimeout(() => {
+      this.showResultsDropdown.set(false);
+    }, 200);
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
   }
 }

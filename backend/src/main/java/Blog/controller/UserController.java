@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import Blog.dto.FollowDTO;
 import Blog.dto.UserDTO;
 import Blog.entity.User;
 import Blog.exception.GlobalException;
@@ -64,5 +66,13 @@ public class UserController {
             dto.setBio(user.getBio());
             return dto;
         }).toList();
+    }
+
+    @GetMapping("users/search/{username}")
+    public ResponseEntity<List<FollowDTO>> searchUsers(@PathVariable String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return ResponseEntity.ok(List.of());
+        }
+        return ResponseEntity.ok(userRepository.searchUsersByUsername(username.trim()));
     }
 }

@@ -6,12 +6,50 @@
     </a>
 
 
-    <div class="nb-search">
-      <svg class="nb-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8" />
-        <path d="m21 21-4.35-4.35" />
-      </svg>
-      <input type="search" placeholder="Search for users..." />
+    <div class="nb-search-container">
+      <div class="nb-search">
+        <svg class="nb-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input type="search" placeholder="Search for users..." (input)="onSearchChange($event)" (blur)="closeSearch()"
+          (focus)="searchResults().length > 0 && showResultsDropdown.set(true)" />
+      </div>
+
+      @if (showResultsDropdown()) {
+      <div class="search-results-dropdown">
+        @if (isSearchLoading()) {
+        <div class="search-utility-box">
+          <i class="fa-solid fa-circle-notch fa-spin"></i> Searching...
+        </div>
+        } @else {
+        @for (u of searchResults(); track u.userId) {
+        <div class="search-result-item" [routerLink]="['/profile', u.userId]">
+
+          <div class="sr-avatar-box">
+            @if (u.avatar) {
+            <img title="avatar" [src]="u.avatar" [alt]="u.firstname" class="sr-img">
+            } @else {
+            <div class="sr-avatar-fb">
+              {{ u.firstname.charAt(0).toUpperCase() }}{{ u.lastname.charAt(0).toUpperCase() }}
+            </div>
+            }
+          </div>
+
+          <div class="sr-meta">
+            <span class="sr-fullname">{{ u.firstname }} {{ u.lastname }}</span>
+            <span class="sr-username">&#64;{{ u.username }}</span>
+          </div>
+
+        </div>
+        } @empty {
+        <div class="search-utility-box empty">
+          No users found matching this username.
+        </div>
+        }
+        }
+      </div>
+      }
     </div>
 
     <div class="nb-actions">
@@ -57,7 +95,6 @@
           </div>
         </div>
         }
-
       </div>
       @if(showNotifMenu){
       <div class="overlay-navbar" (click)="closeNotifMenu()">
