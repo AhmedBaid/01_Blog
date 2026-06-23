@@ -23,13 +23,21 @@ export class NavbarComponent {
   flName: string = '';
   showProfileMenu: boolean = false;
   showNotifMenu: boolean = false;
-  notif: NotifDto[] = [];
+  notif = signal<NotifDto[]>([]);
   apiNotif = 'http://localhost:8080/api/notifications';
   isGetNotifLoading = signal<boolean>(false);
   navigateToCreatePost() {
     this.router.navigate(['/home']);
   }
   ngOnInit() {
+    this.http.get<NotifDto[]>(`${this.apiNotif}`).subscribe({
+      next: (data) => {
+        this.notif.set(data);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
     if (!this.authService.getToken()) {
       return;
     }
@@ -67,7 +75,7 @@ export class NavbarComponent {
     this.isGetNotifLoading.set(true);
     this.http.get<NotifDto[]>(`${this.apiNotif}`).subscribe({
       next: (data) => {
-        this.notif = data;
+        this.notif.set(data);
         this.isGetNotifLoading.set(false);
       },
       error: (err) => {
@@ -78,18 +86,14 @@ export class NavbarComponent {
   }
   closeNotifMenu() {
     this.showNotifMenu = false;
-    this.notif = [];
   }
-  markAsRead(notifId: number, event: Event, userId: number): void {
-    event.stopPropagation();
-
+  markAsRead(notifId: number, userId: number): void {
+    this.closeNotifMenu();
     this.http.put(`${this.apiNotif}/${notifId}/read`, {}).subscribe({
       next: () => {
-        this.closeNotifMenu();
         this.router.navigate([`/profile/${userId}`]);
       },
       error: (err) => {
-        this.closeNotifMenu();
         this.notificationToast.error(err.error.message, 'Error');
       },
     });
