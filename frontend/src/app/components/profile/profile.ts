@@ -45,14 +45,13 @@ export class ProfileComponent {
   user = signal<User | null>(null);
   isMyOwnProfile = signal<boolean>(false);
   isLoading = signal<boolean>(true);
-  isGetFollowersLoading = signal<boolean>(true);
-  isGetFollowingLoading = signal<boolean>(true);
   CurrentuserId = signal<number | null>(null);
   isEditProfileOpen = signal<boolean>(false);
   FollowingIds = new Set<number>();
-  isToggleFollowers = false;
-  isToggleFollowing = false;
-  FollowersOrFollowing = signal<followDto[] | null>(null);
+  activeModalTab = signal<'followers' | 'following' | null>(null);
+  modalTitle = signal<string>('');
+  FollowersOrFollowing = signal<followDto[]>([]);
+  isGetFollowersOrFollowingLoading = signal<boolean>(false);
 
   ngOnInit(): void {
     this.route.url.subscribe(() => {
@@ -153,37 +152,58 @@ export class ProfileComponent {
         },
       });
   }
+
   isFollowSubmitting(userId: number): boolean {
     return this.FollowingIds.has(userId);
   }
+
   showFollowers(userId: number): void {
-    this.isToggleFollowers = true;
+    this.isGetFollowersOrFollowingLoading.set(true);
+    this.activeModalTab.set('followers');
+    this.modalTitle.set('Followers');
     this.FollowersOrFollowing.set([]);
+
     this.http.get<followDto[]>(`${this.api}/followers/${userId}`).subscribe({
       next: (data) => {
         this.FollowersOrFollowing.set(data);
-        this.isGetFollowersLoading.set(false);
+        this.isGetFollowersOrFollowingLoading.set(false);
       },
       error: (err) => {
         console.error(err);
-        this.notification.error('Could not load your profile details. Please try again later.');
-        this.isGetFollowersLoading.set(false);
+        this.notification.error('Could not load followers. Please try again later.');
+        this.isGetFollowersOrFollowingLoading.set(false);
+        this.closeFollowModal();
       },
     });
   }
+
   showFollowing(userId: number): void {
-    this.isToggleFollowing = true;
+    this.isGetFollowersOrFollowingLoading.set(true);
+    this.activeModalTab.set('following');
+    this.modalTitle.set('Following');
     this.FollowersOrFollowing.set([]);
+
     this.http.get<followDto[]>(`${this.api}/following/${userId}`).subscribe({
       next: (data) => {
         this.FollowersOrFollowing.set(data);
-        this.isGetFollowersLoading.set(false);
+        this.isGetFollowersOrFollowingLoading.set(false);
       },
       error: (err) => {
         console.error(err);
-        this.notification.error('Could not load your profile details. Please try again later.');
-        this.isGetFollowersLoading.set(false);
+        this.notification.error('Could not load your following. Please try again later.');
+        this.isGetFollowersOrFollowingLoading.set(false);
+        this.closeFollowModal();
       },
     });
+  }
+
+  closeFollowModal(): void {
+    this.activeModalTab.set(null);
+    this.FollowersOrFollowing.set([]);
+  }
+
+  goToProfile(userId: number): void {
+    this.router.navigate([`/profile/${userId}`]);
+    this.closeFollowModal();
   }
 }

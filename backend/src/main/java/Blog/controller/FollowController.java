@@ -31,12 +31,15 @@ public class FollowController {
         boolean isFollowed = followService.follow(username, followedTo);
         return ResponseEntity.ok(isFollowed);
     }
+
     @GetMapping("followers/{profileUserId}")
-    public List<FollowDTO> getProfileFollowers(Long profileUserId) {
+    public List<FollowDTO> getProfileFollowers(@PathVariable Long profileUserId) {
         return followRepository.findFollowersByUserId(profileUserId);
     }
+
     @GetMapping("following/{profileUserId}")
-    public List<FollowDTO> getProfileFollowing(Long profileUserId) {
+    public List<FollowDTO> getProfileFollowing(@PathVariable Long profileUserId) {
+        System.out.println(profileUserId + "++++++++++++++++++++++");
         return followRepository.findFollowingByUserId(profileUserId);
     }
 }

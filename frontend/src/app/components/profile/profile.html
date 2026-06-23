@@ -85,11 +85,60 @@
 
   </div>
 </div>
-@if(isToggleFollowers){
+@if (activeModalTab()) {
+<div class="follow-modal-overlay" (click)="closeFollowModal()">
+  <div class="follow-modal-box" (click)="$event.stopPropagation()">
 
-}
-@if(isToggleFollowing){
+    <div class="f-modal-header">
+      <h3>{{ modalTitle() }}</h3>
+      <button title="close" type="button" class="f-modal-close-btn" (click)="closeFollowModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
 
+    <div class="f-modal-content-scroll">
+      @if (isGetFollowersOrFollowingLoading()) {
+      <div class="f-modal-loading">
+        <div class="mini-spinner"></div>
+        <span>Loading users...</span>
+      </div>
+      } @else {
+      @for (fUser of FollowersOrFollowing(); track fUser.userId) {
+      <div class="f-user-row-card">
+
+        <div class="f-avatar-box">
+          @if (fUser.avatar) {
+          <img title="av" [src]="fUser.avatar" [alt]="fUser.firstname" class="f-user-avatar">
+          } @else {
+          <div class="f-user-avatar-fb">
+            {{ fUser.firstname.charAt(0).toUpperCase() }}{{ fUser.lastname.charAt(0).toUpperCase() }}
+          </div>
+          }
+        </div>
+
+        <div class="f-user-info">
+          <div class="f-user-fullname">{{ fUser.firstname }} {{ fUser.lastname }}</div>
+          <div class="f-user-username">&#64;{{ fUser.username }}</div>
+        </div>
+
+        <div class="f-user-action">
+          <button type="button" class="f-view-profile-btn" (click)="goToProfile(fUser.userId)">
+            View
+          </button>
+        </div>
+
+      </div>
+      } @empty {
+      <div class="f-modal-empty">
+        <i class="fa-regular fa-user"></i>
+        <p>No {{ modalTitle().toLowerCase() }} found.</p>
+      </div>
+      }
+      }
+    </div>
+
+  </div>
+</div>
 }
 @if (isEditProfileOpen()) {
 <app-edit-profile [user]="user" (close)="closeEditProfile()" (updated)="onProfileUpdated($event)"></app-edit-profile>
