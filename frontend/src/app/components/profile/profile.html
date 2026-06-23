@@ -104,7 +104,7 @@
       </div>
       } @else {
       @for (fUser of FollowersOrFollowing(); track fUser.userId) {
-      <div class="f-user-row-card">
+      <div class="f-user-row-card" (click)="goToProfile(fUser.userId)">
 
         <div class="f-avatar-box">
           @if (fUser.avatar) {
