@@ -1,8 +1,11 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { NotifDto } from '../../models/models';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,12 +14,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.css'],
 })
 export class NavbarComponent {
-  user: any;
   authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private http = inject(HttpClient);
+  private notificationToast = inject(NotificationService);
+  user: any;
   flName: string = '';
   showProfileMenu: boolean = false;
+  showNotifMenu: boolean = false;
+  notif: NotifDto[] = [];
+  apiNotif = 'http://localhost:8080/api/notifications';
+  isGetNotifLoading = signal<boolean>(false);
   navigateToCreatePost() {
     this.router.navigate(['/home']);
   }
@@ -52,5 +61,37 @@ export class NavbarComponent {
   logout() {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
+  }
+  showNotif() {
+    this.showNotifMenu = true;
+    this.isGetNotifLoading.set(true);
+    this.http.get<NotifDto[]>(`${this.apiNotif}`).subscribe({
+      next: (data) => {
+        this.notif = data;
+        this.isGetNotifLoading.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.isGetNotifLoading.set(false);
+      },
+    });
+  }
+  closeNotifMenu() {
+    this.showNotifMenu = false;
+    this.notif = [];
+  }
+  markAsRead(notifId: number, event: Event, userId: number): void {
+    event.stopPropagation();
+
+    this.http.put(`${this.apiNotif}/${notifId}/read`, {}).subscribe({
+      next: () => {
+        this.closeNotifMenu();
+        this.router.navigate([`/profile/${userId}`]);
+      },
+      error: (err) => {
+        this.closeNotifMenu();
+        this.notificationToast.error(err.error.message, 'Error');
+      },
+    });
   }
 }

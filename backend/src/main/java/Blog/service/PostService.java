@@ -46,7 +46,7 @@ public class PostService {
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
     private final NotificationService notificationService;
-    public final FollowRepository followRepository;
+    private final FollowRepository followRepository;
 
     public PostService(PostRepository postRepo, UserRepository userRepo, LikeRepository likeRepository,
             CommentRepository commentRepository, NotificationService notificationService,

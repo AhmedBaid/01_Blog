@@ -84,3 +84,11 @@ export interface followDto {
   lastname: string;
   username: string;
 }
+export interface NotifDto {
+  notifId: number;
+  userId: number;
+  avatar: string;
+  firstname: string;
+  lastname: string;
+  message: string;
+}
