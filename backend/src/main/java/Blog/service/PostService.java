@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import Blog.dto.EditPostDto;
+import Blog.dto.FollowDTO;
 import Blog.dto.LikeResponseDTO;
 import Blog.dto.PostCreateDto;
 import Blog.dto.PostDTO;
@@ -22,9 +23,11 @@ import Blog.exception.GlobalException;
 import Blog.helpers.FormatTimeUtil;
 import Blog.helpers.GetRealMimeType;
 import Blog.repository.CommentRepository;
+import Blog.repository.FollowRepository;
 import Blog.repository.LikeRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PostService {
@@ -42,15 +45,21 @@ public class PostService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
+    private final NotificationService notificationService;
+    public final FollowRepository followRepository;
 
     public PostService(PostRepository postRepo, UserRepository userRepo, LikeRepository likeRepository,
-            CommentRepository commentRepository) {
+            CommentRepository commentRepository, NotificationService notificationService,
+            FollowRepository followRepository) {
         this.postRepository = postRepo;
         this.userRepository = userRepo;
         this.likeRepository = likeRepository;
         this.commentRepository = commentRepository;
+        this.notificationService = notificationService;
+        this.followRepository = followRepository;
     }
 
+    @Transactional
     public PostDTO createPost(PostCreateDto postCreateDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
@@ -68,9 +77,13 @@ public class PostService {
         }
 
         Post savedPost = postRepository.save(post);
+        List<FollowDTO> followers = followRepository.findFollowersByUserId(currentUser.getUserId());
+
+        notificationService.saveNotif(currentUser.getUserId(), followers);
         return mapToPostDTO(savedPost, currentUser);
     }
 
+    @Transactional
     public PostDTO updatePost(Long postId, EditPostDto editPostDto) {
         System.out.println("removed files " + editPostDto.getRemovedMedias());
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -110,6 +123,7 @@ public class PostService {
         return mapToPostDTO(savedPost, currentUser);
     }
 
+    @Transactional
     public void deletePost(Long postId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
@@ -237,7 +251,6 @@ public class PostService {
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
         return mapToPostDTO(post, currentUser);
     }
-
 
     private PostDTO mapToPostDTO(Post post, User currentUser) {
         PostDTO dto = new PostDTO();
