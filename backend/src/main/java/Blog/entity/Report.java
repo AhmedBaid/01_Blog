@@ -24,13 +24,17 @@ public class Report {
     @JoinColumn(name = "reported_user_id", nullable = false)
     private User reportedUser;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reported_post_id", nullable = true)
+    private Post reportedPost;
+
     @Column(nullable = false)
     private String reason;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
-
+    private Status status = Status.PENDING;
+    
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
