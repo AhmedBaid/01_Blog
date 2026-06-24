@@ -24,7 +24,8 @@
     </div>
     } @else {
     <div class="post-options">
-      <button type="button" class="option-btn"><i class="fa-solid fa-flag"></i>Report</button>
+      <button type="button" class="option-btn" (click)="startReport(post)"><i
+          class="fa-solid fa-flag"></i>Report</button>
     </div>
     }
     }
@@ -87,6 +88,9 @@
 
 @if (editingPost) {
 <app-edit-post [post]="editingPost" (close)="onEditClose()" (updated)="onPostUpdated($event)"></app-edit-post>
+}
+@if (reportPost) {
+<app-report-post [reportedPost]="reportPost" (close)="onReportClose()"></app-report-post>
 }
 
 @if (deletingPost) {

@@ -6,10 +6,11 @@ import { NotificationService } from '../../core/services/notification.service';
 import { PostFeed } from '../post-feed/post-feed';
 import { EditProfileComponent } from '../edit-profile/edit-profile';
 import { finalize } from 'rxjs';
+import { ReportModalComponent } from '../report/report';
 
 @Component({
   selector: 'app-profile',
-  imports: [PostFeed, EditProfileComponent],
+  imports: [PostFeed, EditProfileComponent, ReportModalComponent],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css'],
 })
@@ -52,6 +53,8 @@ export class ProfileComponent {
   modalTitle = signal<string>('');
   FollowersOrFollowing = signal<followDto[]>([]);
   isGetFollowersOrFollowingLoading = signal<boolean>(false);
+  reportUser: User | null = null;
+  targetName: String = '';
 
   ngOnInit(): void {
     this.route.url.subscribe(() => {
@@ -205,5 +208,14 @@ export class ProfileComponent {
   goToProfile(userId: number): void {
     this.router.navigate([`/profile/${userId}`]);
     this.closeFollowModal();
+  }
+
+  startReportUser(user: User): void {
+    this.reportUser = user;
+    this.targetName = user.username;
+  }
+  onReportClose(): void {
+    this.reportUser = null;
+    this.targetName = '';
   }
 }

@@ -6,5 +6,5 @@ import lombok.Getter;
 public class ReportRequestDTO {
     private Long reportedUserId;
     private Long reportedPostId;
-    private String raison;
+    private String reason;
 }

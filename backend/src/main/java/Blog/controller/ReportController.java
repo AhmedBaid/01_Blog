@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Blog.dto.ReportRequestDTO;
+import Blog.dto.ResponseDTO;
 import Blog.service.ReportService;
 
 @RestController
@@ -21,10 +22,10 @@ public class ReportController {
     }
 
     @PostMapping("/report")
-    public ResponseEntity<String> makeReport(@RequestBody ReportRequestDTO reporDTO, Principal principal) {
+    public ResponseEntity<ResponseDTO> makeReport(@RequestBody ReportRequestDTO reporDTO, Principal principal) {
         String username = principal.getName();
-        reportService.makeReport(reporDTO.getReportedUserId(), reporDTO.getReportedPostId(), reporDTO.getRaison(),
+        reportService.makeReport(reporDTO.getReportedUserId(), reporDTO.getReportedPostId(), reporDTO.getReason(),
                 username);
-        return ResponseEntity.ok("Report submitted successfully");
+        return ResponseEntity.ok(new ResponseDTO("Report submitted successfully"));
     }
 }

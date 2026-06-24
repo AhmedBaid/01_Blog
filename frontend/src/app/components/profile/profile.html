@@ -44,7 +44,7 @@
           }
           }
         </button>
-        <button type="button" class="option-btn">
+        <button type="button" class="option-btn" (click)="startReportUser(user)">
           <i class="fa-solid fa-flag"></i>Report
         </button>
         }
@@ -142,6 +142,9 @@
 }
 @if (isEditProfileOpen()) {
 <app-edit-profile [user]="user" (close)="closeEditProfile()" (updated)="onProfileUpdated($event)"></app-edit-profile>
+}
+@if (reportUser) {
+<app-report-post [reportedUser]="reportUser" [targetName]="targetName" (close)="onReportClose()"></app-report-post>
 }
 <div class="user-posts-feed">
   @if (user.userId) {

@@ -5,10 +5,11 @@ import { NotificationService } from '../../core/services/notification.service';
 import { EditPostComponent } from '../edit-post/edit-post';
 import { finalize } from 'rxjs';
 import { Router } from '@angular/router';
+import { ReportModalComponent } from '../report/report';
 
 @Component({
   selector: 'app-posts-feed',
-  imports: [EditPostComponent],
+  imports: [EditPostComponent, ReportModalComponent],
   templateUrl: './post-feed.html',
   styleUrls: ['./post-feed.css'],
 })
@@ -26,6 +27,7 @@ export class PostFeed {
   currentMediaIndex = 0;
   toggleOptions = false;
   editingPost: Post | null = null;
+  reportPost: Post | null = null;
   deletingPost: Post | null = null;
   isDeleting = false;
   likedByCurrentUser = false;
@@ -194,5 +196,12 @@ export class PostFeed {
         this.isDeleting = false;
       },
     });
+  }
+  startReport(post: Post): void {
+    post.toggleOptions = false;
+    this.reportPost = post;
+  }
+  onReportClose() {
+    this.reportPost = null;
   }
 }

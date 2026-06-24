@@ -1,0 +1,93 @@
+<div class="report-modal-overlay" (click)="closeModal()">
+  <div class="report-modal-box" (click)="$event.stopPropagation()">
+
+    <div class="rm-header">
+      <h3>Report Content</h3>
+      <button title="close" type="button" class="rm-close-btn" (click)="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="stepper-wrapper">
+      <div class="step-item" [class.active]="currentStep() >= 1">
+        <span class="step-number">1</span>
+        <span class="step-label">Select Reason</span>
+      </div>
+      <div class="step-line" [class.active]="currentStep() === 2"></div>
+      <div class="step-item" [class.active]="currentStep() === 2">
+        <span class="step-number">2</span>
+        <span class="step-label">Confirmation</span>
+      </div>
+    </div>
+
+    <form [formGroup]="reportForm" class="rm-body-content">
+
+      @if (currentStep() === 1) {
+        <div class="step-container animated-step">
+          <label class="rm-input-label">Why are you reporting this? *</label>
+
+          <div class="reasons-radio-group">
+            @for (rs of reasons; track rs) {
+              <label class="reason-radio-card" [class.selected]="reportForm.get('reason')?.value === rs">
+                <input type="radio" formControlName="reason" [value]="rs">
+                <span class="custom-radio-circle"></span>
+                <span class="reason-text">{{ rs }}</span>
+              </label>
+            }
+          </div>
+
+          @if (reportForm.get('reason')?.touched && reportForm.get('reason')?.invalid) {
+            <span class="error-msg"><i class="fa-solid fa-circle-info"></i> Please select a reason to proceed.</span>
+          }
+        </div>
+      }
+
+      @if (currentStep() === 2) {
+        <div class="step-container animated-step">
+          <div class="confirmation-summary-box">
+            <div class="warning-icon-badge">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4>Review Your Report</h4>
+            <p class="summary-desc">You are about to submit a formal report for review. Our team will investigate the content accordingly.</p>
+
+            <div class="summary-details-card">
+              <div class="summary-row">
+                <span class="s-label">Target Object:</span>
+                <span class="s-value font-highlight">{{ reportedPost ? 'Post Content' : 'User Profile' }} {{ targetName ? '(' + targetName + ')' : '' }}</span>
+              </div>
+              <div class="summary-row">
+                <span class="s-label">Selected Reason:</span>
+                <span class="s-value text-orange">{{ reportForm.get('reason')?.value }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+    </form>
+
+    <div class="rm-footer-actions">
+      @if (currentStep() === 1) {
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
+        <button type="button" class="btn-primary" (click)="nextStep()" [disabled]="reportForm.get('reason')?.invalid">
+          Next <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      }
+
+      @if (currentStep() === 2) {
+        <button type="button" class="btn-secondary" (click)="prevStep()" [disabled]="isSubmitting()">
+          <i class="fa-solid fa-arrow-left"></i> Previous
+        </button>
+        <button type="button" class="btn-submit-report" (click)="submitReport()" [disabled]="isSubmitting()">
+          @if (isSubmitting()) {
+            <i class="fa-solid fa-spinner fa-spin"></i> Submitting...
+          } @else {
+            Submit Report <i class="fa-solid fa-paper-plane"></i>
+          }
+        </button>
+      }
+    </div>
+
+  </div>
+</div>
