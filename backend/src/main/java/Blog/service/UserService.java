@@ -145,6 +145,7 @@ public class UserService {
         userDto.setFollowersCount(user.getFollowersCount());
         userDto.setFollowingCount(user.getFollowingCount());
         userDto.setPostsCount(postCount);
+        userDto.setStatus(user.getIsBanned());
         return userDto;
     }
 
@@ -164,6 +165,7 @@ public class UserService {
         userDto.setFollowingCount(user.getFollowingCount());
         userDto.setPostsCount(postCount);
         userDto.setFollowedByCurrentUser(isFollowedBycurentUser);
+        userDto.setStatus(user.getIsBanned());
         return userDto;
     }
 

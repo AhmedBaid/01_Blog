@@ -61,11 +61,21 @@
       </p>
       }
 
-      @if (user.bio) {
-      <p class="profile-bio-text">{{ user.bio }}</p>
-      } @else {
-      <p class="profile-bio-text no-bio">No bio available yet.</p>
-      }
+      <div class="combine-bio-status">
+        @if (user.bio) {
+        <p class="profile-bio-text">{{ user.bio }}</p>
+        } @else {
+        <p class="profile-bio-text no-bio">No bio available yet.</p>
+        }
+        <div> @if (user.status) {
+          <span class="banned"></span>
+          <p class="status">Banned</p>
+          }@else{
+          <span class="active"></span>
+          <p class="status">Active</p>
+          }
+        </div>
+      </div>
     </div>
 
     <div class="profile-counters-row">

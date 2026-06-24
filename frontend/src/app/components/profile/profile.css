@@ -20,6 +20,49 @@
   width: 100%;
   height: 100%;
 }
+.combine-bio-status{
+  display: flex;
+  justify-content: space-between;
+}
+.banned {
+  width: 8px;
+  height: 8px;
+  background-color: #e74c3c;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px #e74c3c, 0 0 15px rgba(231, 76, 60, 0.4);
+  vertical-align: middle;
+}
+
+.banned + p.status {
+  color: #e74c3c;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 4px 0;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.active {
+  width: 8px;
+  height: 8px;
+  background-color: #2ecc71;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px #2ecc71, 0 0 15px rgba(46, 204, 113, 0.4);
+  vertical-align: middle;
+}
+
+.active + p.status {
+  color: #2ecc71;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 4px 0;
+  display: inline-block;
+  margin-left: 6px;
+}
 
 .cover-placeholder {
   width: 100%;
