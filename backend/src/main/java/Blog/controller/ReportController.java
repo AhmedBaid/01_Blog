@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Blog.dto.ReportRequestDTO;
 import Blog.dto.ResponseDTO;
 import Blog.service.ReportService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -22,7 +23,7 @@ public class ReportController {
     }
 
     @PostMapping("/report")
-    public ResponseEntity<ResponseDTO> makeReport(@RequestBody ReportRequestDTO reporDTO, Principal principal) {
+    public ResponseEntity<ResponseDTO> makeReport(@Valid @RequestBody ReportRequestDTO reporDTO, Principal principal) {
         String username = principal.getName();
         reportService.makeReport(reporDTO.getReportedUserId(), reporDTO.getReportedPostId(), reporDTO.getReason(),
                 username);
