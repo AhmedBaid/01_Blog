@@ -86,6 +86,7 @@ export interface followDto {
 }
 export interface NotifDto {
   notifId: number;
+  postId: number;
   userId: number;
   avatar: string;
   firstname: string;

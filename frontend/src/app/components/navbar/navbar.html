@@ -117,7 +117,7 @@
             @for (nt of notif(); track nt.notifId) {
             <div class="notif-item-row">
 
-              <div class="nt-avatar-box">
+              <div class="nt-avatar-box" (click)="goToProfile(nt.userId)">
                 @if (nt.avatar) {
                 <img title="av" [src]="nt.avatar" [alt]="nt.firstname" class="nt-img">
                 } @else {
@@ -136,7 +136,7 @@
 
               <div class="nt-action-box">
                 <button type="button" class="mark-read-btn" title="Mark as read"
-                  (click)="markAsRead(nt.notifId,nt.userId)">
+                  (click)="markAsRead(nt.notifId,nt.postId)">
                   <i class="fa-solid fa-check"></i>
                 </button>
               </div>

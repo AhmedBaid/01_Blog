@@ -16,7 +16,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             "n.sender.firstname, " +
             "n.sender.lastname, " +
             "n.message, " +
-            "n.sender.avatar) " +
+            "n.sender.avatar, " +
+            "n.postId) " +
             "FROM Notification n " +
             "WHERE n.recipient.username = :username AND n.isRead = false " +
             "ORDER BY n.createdAt DESC")

@@ -118,17 +118,23 @@ export class NavbarComponent {
   closeNotifMenu() {
     this.showNotifMenu = false;
   }
-  markAsRead(notifId: number, userId: number): void {
+  markAsRead(notifId: number, postId: number): void {
     this.closeNotifMenu();
     this.http.put(`${this.apiNotif}/${notifId}/read`, {}).subscribe({
       next: () => {
-        this.router.navigate([`/profile/${userId}`]);
+        this.router.navigate([`/post/${postId}`]);
       },
       error: (err) => {
         this.notificationToast.error(err.error.message, 'Error');
       },
     });
   }
+
+  goToProfile(userId: number) {
+    this.closeNotifMenu();
+    this.router.navigate([`/profile/${userId}`]);
+  }
+
   onSearchChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this.searchSubject.next(inputElement.value);

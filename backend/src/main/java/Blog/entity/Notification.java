@@ -26,6 +26,7 @@ public class Notification {
     @Column(nullable = false)
     private String message;
     private boolean isRead;
+    private Long postId;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)

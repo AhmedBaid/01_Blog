@@ -12,13 +12,16 @@ public class NotifDTO {
     private String lastname;
     private String message;
     private String avatar;
+    private Long postId;
 
-    public NotifDTO(Long notifId,Long userId, String firstname, String lastname, String message, String avatar) {
+    public NotifDTO(Long notifId, Long userId, String firstname, String lastname, String message, String avatar,
+            Long postId) {
         this.notifId = notifId;
-        this.userId= userId;
+        this.userId = userId;
         this.firstname = firstname;
         this.lastname = lastname;
         this.message = message;
         this.avatar = avatar == null ? null : "http://localhost:8080/avatars/" + avatar;
+        this.postId = postId;
     }
 }

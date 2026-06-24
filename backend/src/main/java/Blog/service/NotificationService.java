@@ -29,9 +29,10 @@ public class NotificationService {
 
     @Async
     @Transactional
-    public void saveNotif(Long senderId, List<FollowDTO> followers) {
-        if (followers == null || followers.isEmpty())
+    public void saveNotif(Long senderId, List<FollowDTO> followers,Long postId) {
+        if (followers == null || followers.isEmpty()){
             return;
+        }
 
         User sender = userRepository.findByUserId(senderId)
                 .orElseThrow(() -> new GlobalException("Sender not found", HttpStatus.NOT_FOUND));
@@ -43,6 +44,7 @@ public class NotificationService {
             notif.setMessage("created a new post");
             notif.setRead(false);
             notif.setSender(sender);
+            notif.setPostId(postId);
 
             User recipient = new User();
             recipient.setUserId(followerDto.getUserId());

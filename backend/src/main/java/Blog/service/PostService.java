@@ -79,7 +79,7 @@ public class PostService {
         Post savedPost = postRepository.save(post);
         List<FollowDTO> followers = followRepository.findFollowersByUserId(currentUser.getUserId());
 
-        notificationService.saveNotif(currentUser.getUserId(), followers);
+        notificationService.saveNotif(currentUser.getUserId(), followers,savedPost.getPostId());
         return mapToPostDTO(savedPost, currentUser);
     }
 

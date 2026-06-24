@@ -532,6 +532,7 @@
 }
 
 .nt-avatar-box {
+  cursor: pointer;
   flex-shrink: 0;
 }
 
