@@ -15,7 +15,7 @@ import Blog.repository.FollowRepository;
 import Blog.service.FollowService;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 public class FollowController {
     private final FollowService followService;
     private final FollowRepository followRepository;
@@ -25,19 +25,19 @@ public class FollowController {
         this.followRepository = followRepository;
     }
 
-    @PostMapping("follow/{followedTo}")
+    @PostMapping("/follow/{followedTo}")
     public ResponseEntity<Boolean> follow(Principal principal, @PathVariable Long followedTo) {
         String username = principal.getName();
         boolean isFollowed = followService.follow(username, followedTo);
         return ResponseEntity.ok(isFollowed);
     }
 
-    @GetMapping("followers/{profileUserId}")
+    @GetMapping("/followers/{profileUserId}")
     public List<FollowDTO> getProfileFollowers(@PathVariable Long profileUserId) {
         return followRepository.findFollowersByUserId(profileUserId);
     }
 
-    @GetMapping("following/{profileUserId}")
+    @GetMapping("/following/{profileUserId}")
     public List<FollowDTO> getProfileFollowing(@PathVariable Long profileUserId) {
         System.out.println(profileUserId + "++++++++++++++++++++++");
         return followRepository.findFollowingByUserId(profileUserId);
