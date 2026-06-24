@@ -52,7 +52,9 @@ export class FollowingUsers {
       .pipe(finalize(() => this.FollowingIds.delete(user.userId)))
       .subscribe({
         next: (isFollowe) => {
-          this.notification.success(`You are now following ${user.firstname}`, 'Success');
+          isFollowe == true
+            ? this.notification.success(`You are now following ${user.firstname}`, 'Success')
+            : this.notification.info(`You unfollowed ${user.firstname}`, 'Success');
           this.suggestedUsers.update((users) =>
             users.map((u) => (u.userId === user.userId ? { ...u, isFollowed: isFollowe } : u)),
           );
