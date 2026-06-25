@@ -14,29 +14,29 @@ import Blog.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
+        Optional<User> findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+        Optional<User> findByEmail(String email);
 
-    Optional<User> findByUserId(Long userId);
+        Optional<User> findByUserId(Long userId);
 
-    Optional<User> findByUsernameOrEmail(String username, String email);
+        Optional<User> findByUsernameOrEmail(String username, String email);
 
-    boolean existsByUsername(String username);
+        boolean existsByUsername(String username);
 
-    boolean existsByEmail(String email);
+        boolean existsByEmail(String email);
 
-    @Query("SELECT u FROM User u " +
-            "WHERE u.userId <> :currentUserId " +
-            "AND u.userId NOT IN (" +
-            "    SELECT f.followedTo.userId FROM Follower f WHERE f.follower.userId = :currentUserId" +
-            ") " +
-            "ORDER BY u.createdAt DESC")
-    List<User> suggestedUsers(@Param("currentUserId") Long currentUserId, Pageable pageable);
+        @Query("SELECT u FROM User u " +
+                        "WHERE u.userId <> :currentUserId " +
+                        "AND u.userId NOT IN (" +
+                        "    SELECT f.followedTo.userId FROM Follower f WHERE f.follower.userId = :currentUserId" +
+                        ") " +
+                        "ORDER BY u.createdAt DESC")
+        List<User> suggestedUsers(@Param("currentUserId") Long currentUserId, Pageable pageable);
 
-    @Query("SELECT new Blog.dto.FollowDTO(" +
-            "u.userId, u.avatar, u.firstname, u.lastname, u.username) " +
-            "FROM User u " +
-            "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))")
-    List<FollowDTO> searchUsersByUsername(@Param("username") String username);
+        @Query("SELECT new Blog.dto.FollowDTO(" +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username) " +
+                        "FROM User u " +
+                        "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))")
+        List<FollowDTO> searchUsersByUsername(@Param("username") String username);
 }
