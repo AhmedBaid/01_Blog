@@ -29,7 +29,6 @@ public class UserController {
     public UserController(UserRepository userRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
-
     }
 
     @GetMapping("/me")
@@ -41,7 +40,7 @@ public class UserController {
 
         UserDTO userDTO = new UserDTO(user.getUserId(), user.getUsername(), user.getEmail(), user.getFirstname(),
                 user.getLastname(),
-                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), postCount, avatarUrl, "", false,user.getIsBanned());
+                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), postCount, avatarUrl, "", false,user.isBanned());
 
         return ResponseEntity.ok(userDTO);
     }

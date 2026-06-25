@@ -29,7 +29,7 @@ public class User {
     private String avatar;
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
-    private Boolean isBanned = false;
+    private boolean isBanned = false;
     private Long followersCount = 0L;
     private Long followingCount = 0L;
     @CreationTimestamp

@@ -30,7 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .withUsername(user.getUsername())
                 .password(user.getPassword())
                 .roles(role.name())
-                .disabled(Boolean.TRUE.equals(user.getIsBanned()))
+                .disabled(Boolean.TRUE.equals(user.isBanned()))
                 .build();
     }
 }
