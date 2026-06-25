@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import Blog.dto.FollowDTO;
+import Blog.dto.UserDTO;
 import Blog.entity.User;
 
 @Repository
@@ -39,4 +40,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
                         "FROM User u " +
                         "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :username, '%'))")
         List<FollowDTO> searchUsersByUsername(@Param("username") String username);
+
+        @Query("SELECT new Blog.dto.UserDTO(" +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username,u.email,u.role,u.isBanned) " +
+                        "FROM User u" )
+        List<UserDTO> getAllUsersForAdminDashboard();
 }

@@ -1,5 +1,6 @@
 package Blog.dto;
 
+import Blog.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,17 @@ public class UserDTO {
     private String newToken;
     private boolean FollowedByCurrentUser;
     private boolean status;
-    private boolean admin;
+    private boolean isAdmin;
+
+    public UserDTO(Long userId, String avatar, String firstname, String lastname, String username, String email,
+            Role role, boolean status) {
+        this.userId = userId;
+        this.avatar = avatar == null ? null : "http://localhost:8080/avatars/" + avatar;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.email = email;
+        this.isAdmin = role == Role.ADMIN;
+        this.status = status;
+    }
 }

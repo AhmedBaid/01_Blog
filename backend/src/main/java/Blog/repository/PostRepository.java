@@ -1,7 +1,11 @@
 package Blog.repository;
 
+import Blog.dto.PostAdminDTO;
 import Blog.dto.PostDTO;
 import Blog.entity.Post;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -43,4 +47,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                         Pageable pageable);
 
         long countByUser_Username(String username);
+
+        @Query("SELECT new Blog.dto.PostAdminDTO(" +
+                        "p.postId, p.title, p.description, p.isHidden, p.createdAt, " +
+                        "p.user.userId, p.user.avatar, p.user.firstname, p.user.lastname) " +
+                        "FROM Post p ")
+        List<PostAdminDTO> findAllPostsForAdminDashboard();
 }
