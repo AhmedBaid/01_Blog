@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { User, UserData } from '../../models/models';
 import { UserService } from './user.service';
 
@@ -35,5 +35,15 @@ export class AuthService {
   }
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/me`);
+  }
+  isTheUserAdmin(): Observable<boolean> {
+    return this.getCurrentUser().pipe(
+      map((user) => {
+        return user && user.admin;
+      }),
+      catchError(() => {
+        return of(false);
+      }),
+    );
   }
 }
