@@ -3,7 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { followDto, NotifDto } from '../../models/models';
+import { followDto, NotifDto, User } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
 import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
 
@@ -23,7 +23,7 @@ export class NavbarComponent {
   private apiSearch = 'http://localhost:8080/api/users/search';
   private searchSubject = new Subject<string>();
   private searchSubscription!: Subscription;
-  user: any;
+  user!: User;
   flName: string = '';
   showProfileMenu: boolean = false;
   showNotifMenu: boolean = false;
@@ -34,6 +34,10 @@ export class NavbarComponent {
   showResultsDropdown = signal<boolean>(false);
   navigateToCreatePost() {
     this.router.navigate(['/home']);
+  }
+  navigateToDashboard() {
+    this.router.navigate(['/admin/dashboard']);
+    this.showProfileMenu = false;
   }
   ngOnInit() {
     this.http.get<NotifDto[]>(`${this.apiNotif}`).subscribe({

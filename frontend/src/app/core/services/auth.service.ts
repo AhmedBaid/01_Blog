@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { UserData } from '../../models/models';
+import { User, UserData } from '../../models/models';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class AuthService {
   }
   logout(): void {
     localStorage.removeItem('token');
-    this.userService.clearCurrentUser();  
+    this.userService.clearCurrentUser();
   }
   getToken(): string | null {
     return localStorage.getItem('token');
@@ -33,7 +33,7 @@ export class AuthService {
   isUserLoggedIn(): boolean {
     return !!this.getToken();
   }
-  getCurrentUser(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/me`);
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`);
   }
 }

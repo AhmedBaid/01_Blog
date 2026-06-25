@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Blog.dto.FollowDTO;
 import Blog.dto.UserDTO;
 import Blog.entity.User;
+import Blog.enums.Role;
 import Blog.exception.GlobalException;
 import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
@@ -40,7 +41,8 @@ public class UserController {
 
         UserDTO userDTO = new UserDTO(user.getUserId(), user.getUsername(), user.getEmail(), user.getFirstname(),
                 user.getLastname(),
-                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), postCount, avatarUrl, "", false,user.isBanned());
+                user.getBio(), user.getFollowingCount(), user.getFollowersCount(), postCount, avatarUrl, "", false,
+                user.isBanned(), user.getRole() == Role.ADMIN);
 
         return ResponseEntity.ok(userDTO);
     }

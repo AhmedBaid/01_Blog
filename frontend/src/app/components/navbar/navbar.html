@@ -194,6 +194,12 @@
               <i class="fa-solid fa-user"></i>
               Profile
             </button>
+            @if(user.admin){
+            <button class="nb-dropdown-btn profile-btn" (click)="navigateToDashboard()">
+              <i class="fa-solid fa-chart-line"></i>
+              Dashboard
+            </button>
+            }
             <button class="nb-dropdown-btn logout-btn" (click)="logout()">
               <i class="fa-solid fa-arrow-right-from-bracket"></i>
               Logout

@@ -22,5 +22,6 @@ public class UserDTO {
     private String avatar;
     private String newToken;
     private boolean FollowedByCurrentUser;
-    private Boolean status;
+    private boolean status;
+    private boolean admin;
 }

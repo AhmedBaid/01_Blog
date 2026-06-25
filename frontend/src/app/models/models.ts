@@ -23,6 +23,7 @@ export interface User {
   postsCount: number;
   FollowedByCurrentUser: boolean;
   status: boolean;
+  admin: boolean;
 }
 export interface Post {
   id: number;
