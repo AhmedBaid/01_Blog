@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import Blog.dto.FollowDTO;
 import Blog.dto.UserDTO;
 import Blog.entity.User;
+import Blog.enums.Role;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -43,6 +44,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
         @Query("SELECT new Blog.dto.UserDTO(" +
                         "u.userId, u.avatar, u.firstname, u.lastname, u.username,u.email,u.role,u.isBanned) " +
-                        "FROM User u" )
+                        "FROM User u")
         List<UserDTO> getAllUsersForAdminDashboard();
+
+        long countByRole(Role role);
 }

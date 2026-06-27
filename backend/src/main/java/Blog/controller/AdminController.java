@@ -2,6 +2,7 @@ package Blog.controller;
 
 import Blog.dto.PostAdminDTO;
 import Blog.dto.ResponseDTO;
+import Blog.dto.AdminStatsDTO;
 import Blog.dto.UserDTO;
 import Blog.service.AdminService;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,8 @@ public class AdminController {
     }
 
     @PutMapping("/users/{userId}/ban")
-    public ResponseEntity<ResponseDTO> toggleBanUser(@PathVariable Long userId, @RequestParam boolean ban) {
-        adminService.toggleBanStatus(userId, ban);
+    public ResponseEntity<ResponseDTO> toggleBanUser(@PathVariable Long userId) {
+        boolean ban = adminService.toggleBanStatus(userId);
         return ResponseEntity
                 .ok(ban ? new ResponseDTO("User banned successfully") : new ResponseDTO("User unbanned successfully"));
     }
@@ -43,8 +44,8 @@ public class AdminController {
     }
 
     @PutMapping("/posts/{postId}/hide")
-    public ResponseEntity<ResponseDTO> toggleHidePost(@PathVariable Long postId, @RequestParam boolean hide) {
-        adminService.toggleHidePostStatus(postId, hide);
+    public ResponseEntity<ResponseDTO> toggleHidePost(@PathVariable Long postId) {
+        boolean hide = adminService.toggleHidePostStatus(postId);
         return ResponseEntity
                 .ok(hide ? new ResponseDTO("Post hidden from feed") : new ResponseDTO("Post is now visible"));
     }
@@ -53,5 +54,11 @@ public class AdminController {
     public ResponseEntity<ResponseDTO> deletePost(@PathVariable Long postId) {
         adminService.deletePostPermanently(postId);
         return ResponseEntity.ok(new ResponseDTO("Post deleted successfully"));
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<AdminStatsDTO> getStats() {
+        AdminStatsDTO stats = adminService.getStats();
+        return ResponseEntity.ok(stats);
     }
 }
