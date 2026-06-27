@@ -13,10 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import Blog.dto.PostAdminDTO;
 import Blog.dto.AdminStatsDTO;
+import Blog.dto.ReportDTO;
 import Blog.dto.UserDTO;
 import Blog.entity.Post;
+import Blog.entity.Report;
 import Blog.entity.User;
 import Blog.enums.Role;
+import Blog.enums.Status;
 import Blog.exception.GlobalException;
 import Blog.repository.PostRepository;
 import Blog.repository.ReportRepository;
@@ -86,6 +89,24 @@ public class AdminService {
                 .orElseThrow(() -> new GlobalException("post not found", HttpStatus.NOT_FOUND));
         deleteOldMedias(post.getMedias());
         postRepository.delete(post);
+    }
+
+    public List<ReportDTO> getAllReports() {
+        return reportRepository.findAllReportsForAdmin();
+    }
+
+    @Transactional
+    public void reviewReport(Long reportId) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new GlobalException("Report not found", HttpStatus.NOT_FOUND));
+        report.setStatus(Status.REVIEWED);
+    }
+
+    @Transactional
+    public void dismissReport(Long reportId) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new GlobalException("Report not found", HttpStatus.NOT_FOUND));
+        report.setStatus(Status.DISMISSED);
     }
 
     public AdminStatsDTO getStats() {

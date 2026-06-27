@@ -1,6 +1,7 @@
 package Blog.controller;
 
 import Blog.dto.PostAdminDTO;
+import Blog.dto.ReportDTO;
 import Blog.dto.ResponseDTO;
 import Blog.dto.AdminStatsDTO;
 import Blog.dto.UserDTO;
@@ -60,5 +61,22 @@ public class AdminController {
     public ResponseEntity<AdminStatsDTO> getStats() {
         AdminStatsDTO stats = adminService.getStats();
         return ResponseEntity.ok(stats);
+    }
+
+    @GetMapping("/reports")
+    public ResponseEntity<List<ReportDTO>> getAllReports() {
+        return ResponseEntity.ok(adminService.getAllReports());
+    }
+
+    @PutMapping("/reports/{reportId}/review")
+    public ResponseEntity<ResponseDTO> reviewReport(@PathVariable Long reportId) {
+        adminService.reviewReport(reportId);
+        return ResponseEntity.ok(new ResponseDTO("Report reviewed successfully"));
+    }
+
+    @PutMapping("/reports/{reportId}/dismiss")
+    public ResponseEntity<ResponseDTO> dismissReport(@PathVariable Long reportId) {
+        adminService.dismissReport(reportId);
+        return ResponseEntity.ok(new ResponseDTO("Report dismissed successfully"));
     }
 }

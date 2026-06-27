@@ -95,3 +95,61 @@ export interface NotifDto {
   lastname: string;
   message: string;
 }
+export interface Stats {
+  totalUsers: number;
+  totalPosts: number;
+  totalAdmins: number;
+  totalReports: number;
+  newUsersToday: number;
+  newPostsToday: number;
+  bannedUsersCount: number;
+  hiddenPostsCount: number;
+}
+
+export interface UserAdmin {
+  userId: number;
+  username: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  bio: string | null;
+  followingCount: number;
+  followersCount: number;
+  postsCount: number;
+  avatar: string | null;
+  newToken: string | null;
+  followedByCurrentUser: boolean;
+  status: boolean;
+  admin: boolean;
+}
+
+export interface PostAdmin {
+  postId: number;
+  content: string;
+  description: string;
+  hidden: boolean;
+  createdAt: string;
+  userId: number;
+  avatar: string | null;
+  firstname: string;
+  lastname: string;
+}
+
+export interface ReportAdmin {
+  reportId: number;
+  reason: string;
+  status: 'PENDING' | 'REVIEWED' | 'DISMISSED';
+  createdAt: string;
+  reporterId: number;
+  reporterUsername: string;
+  reporterFirstname: string;
+  reporterLastname: string;
+  reporterAvatar: string | null;
+  reportedUserId: number;
+  reportedUsername: string;
+  reportedFirstname: string;
+  reportedLastname: string;
+  reportedAvatar: string | null;
+  reportedPostId: number | null;
+  reportedPostTitle: string | null;
+}
