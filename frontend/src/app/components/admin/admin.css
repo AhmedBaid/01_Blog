@@ -1,7 +1,8 @@
 /* ========== Layout ========== */
 .admin-layout {
+  margin-top: 80px;
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   background: #141414;
   font-family: 'DM Sans', sans-serif;
 }
@@ -9,14 +10,16 @@
 /* ========== Sidebar ========== */
 .sidebar {
   width: 250px;
-  min-height: 100vh;
+  height: calc(100vh - 80px);
   background: #141414;
   border-right: 1px solid #1e1e1e;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  position: sticky;
-  top: 0;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  z-index: 50;
 }
 
 .sidebar-brand {
@@ -29,6 +32,7 @@
   font-weight: 700;
   color: #ece7df;
   border-bottom: 1px solid #1e1e1e;
+  flex-shrink: 0;
 }
 
 .sidebar-brand i {
@@ -40,8 +44,9 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  justify-content: center;
   padding: 12px 10px;
-  gap: 16px;
+  gap: 24px;
 }
 
 .nav-section {
@@ -132,14 +137,28 @@
 
 /* ========== Main Content ========== */
 .main-content {
-  flex: 1;
-  padding: 28px 32px;
+  margin-left: 250px;
+  padding: 28px 36px;
+  height: calc(100vh - 80px);
   overflow-y: auto;
-  min-width: 0;
+  width: calc(100% - 250px);
+}
+
+.main-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 4px;
 }
 
 .tab-content {
-  max-width: 1400px;
+  max-width: 1200px;
 }
 
 .content-header {
@@ -569,24 +588,31 @@
 @media (max-width: 768px) {
   .admin-layout {
     flex-direction: column;
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
   }
 
   .sidebar {
     width: 100%;
-    position: static;
+    height: auto;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    z-index: 50;
     border-right: none;
     border-bottom: 1px solid #1e1e1e;
   }
 
   .sidebar-brand {
-    padding: 14px 16px;
+    padding: 12px 14px;
   }
 
   .sidebar-nav {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 8px;
-    padding: 10px;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px;
   }
 
   .nav-section {
@@ -598,12 +624,13 @@
   .nav-section-title {
     width: 100%;
     padding: 4px 4px;
+    text-align: center;
   }
 
   .nav-item {
     width: auto;
-    font-size: 0.78rem;
-    padding: 7px 10px;
+    font-size: 0.75rem;
+    padding: 6px 10px;
   }
 
   .nav-item.nav-item-logout {
@@ -611,7 +638,13 @@
   }
 
   .main-content {
+    margin-left: 0;
+    margin-top: 110px;
     padding: 16px;
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 170px);
+    overflow-y: visible;
   }
 
   .stats-grid {
