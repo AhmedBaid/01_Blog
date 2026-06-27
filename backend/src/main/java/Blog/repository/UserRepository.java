@@ -1,5 +1,6 @@
 package Blog.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,4 +49,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
         List<UserDTO> getAllUsersForAdminDashboard();
 
         long countByRole(Role role);
+
+        long countByCreatedAtGreaterThanEqual(LocalDateTime sevenDaysAgo);
+
+        long countByIsBannedTrue();
 }

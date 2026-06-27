@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -88,15 +89,26 @@ public class AdminService {
     }
 
     public AdminStatsDTO getStats() {
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
         long totalUsers = userRepository.count();
-
         long totalPosts = postRepository.count();
-
         long totalReports = reportRepository.count();
-
         long totalAdmins = userRepository.countByRole(Role.ADMIN);
 
-        return new AdminStatsDTO(totalUsers, totalPosts, totalAdmins, totalReports);
+        long newUsersThisWeek = userRepository.countByCreatedAtGreaterThanEqual(sevenDaysAgo);
+        long newPostsThisWeek = postRepository.countByCreatedAtGreaterThanEqual(sevenDaysAgo);
+        long bannedUsersCount = userRepository.countByIsBannedTrue();
+        long hiddenPostsCount = postRepository.countByIsHiddenTrue();
+
+        return new AdminStatsDTO(
+                totalUsers,
+                totalPosts,
+                totalAdmins,
+                totalReports,
+                newUsersThisWeek,
+                newPostsThisWeek,
+                bannedUsersCount,
+                hiddenPostsCount);
     }
 
     private void deleteOldMedias(List<String> mediaNames) {

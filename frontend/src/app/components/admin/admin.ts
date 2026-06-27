@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
   templateUrl: './admin.html',
   styleUrls: ['./admin.css'],
 })
-export class AdminComponent {}
+export class AdminComponent {
+  onLogout(){
+    
+  }
+}

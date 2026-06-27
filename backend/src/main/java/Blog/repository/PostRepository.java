@@ -4,6 +4,7 @@ import Blog.dto.PostAdminDTO;
 import Blog.dto.PostDTO;
 import Blog.entity.Post;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -53,4 +54,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                         "p.user.userId, p.user.avatar, p.user.firstname, p.user.lastname) " +
                         "FROM Post p ")
         List<PostAdminDTO> findAllPostsForAdminDashboard();
+
+        long countByCreatedAtGreaterThanEqual(LocalDateTime sevenDaysAgo);
+
+        long countByIsHiddenTrue();
 }

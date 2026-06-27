@@ -1,8 +1,23 @@
-<p>admin</p>
-<p>admin</p>
-<p>admin</p>
-<p>admin</p>
-<p>admin</p>
-<p>admin</p>
-<p>admin</p>
+<div class="admin-section">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <p class="section-title">Management</p>
+      <button class="a-button"><i class="fa-solid fa-chart-line"></i> Dashboard</button>
+      <button class="a-button"><i class="fa-solid fa-users"></i> Users</button>
+      <button class="a-button"><i class="fa-brands fa-blogger"></i> Posts</button>
+      <button class="a-button"><i class="fa-solid fa-flag"></i> Reports</button>
+    </div>
 
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-section">
+      <p class="section-title">Application</p>
+      <button class="app-button"><i class="fa-solid fa-house"></i> Main Feed</button>
+      <button class="app-button"><i class="fa-solid fa-circle-user"></i> My Profile</button>
+      <button class="app-button-delete" (click)="onLogout()" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+    </div>
+  </div>
+  <div class="content">
+    
+  </div>
+</div>
