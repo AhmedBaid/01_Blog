@@ -103,22 +103,15 @@ public class AdminService {
             throw new GlobalException("You cannot delete an administrator account", HttpStatus.FORBIDDEN);
         }
 
-        // Delete likes by this user (no FK to posts needed)
+        // Delete child records manually (safety net for existing DBs where
+        // ON DELETE CASCADE has not been applied yet via @OnDelete annotations)
         likeRepository.deleteByUser(user);
-
-        // Delete comments by this user
         commentRepository.deleteByUser(user);
-
-        // Delete notifications involving this user (sender or recipient)
         notificationRepository.deleteBySenderOrRecipient(user);
-
-        // Delete reports involving this user (reporter or reported)
         reportRepository.deleteByReporterOrReportedUser(user);
-
-        // Delete follow relationships involving this user
         followRepository.deleteByFollowerOrFollowedTo(user);
 
-        // Delete all posts by this user (cascade their likes, comments, reports, media)
+        // Delete user's posts (clean up media files + cascade likes/comments/reports on posts)
         List<Post> userPosts = postRepository.findByUser(user);
         for (Post post : userPosts) {
             likeRepository.deleteByPost(post);
@@ -128,7 +121,6 @@ public class AdminService {
             postRepository.delete(post);
         }
 
-        // Finally delete the user
         userRepository.delete(user);
     }
 

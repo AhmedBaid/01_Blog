@@ -3,6 +3,8 @@ package Blog.entity;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import Blog.enums.Status;
 import jakarta.persistence.*;
@@ -18,14 +20,17 @@ public class Report {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "reporter_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User reporter;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "reported_user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User reportedUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reported_post_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post reportedPost;
 
     @Column(nullable = false)

@@ -3,6 +3,8 @@ package Blog.entity;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,10 +22,12 @@ public class Follower {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "follower_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User follower;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "followed_to_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User followedTo;
 
     @CreationTimestamp
