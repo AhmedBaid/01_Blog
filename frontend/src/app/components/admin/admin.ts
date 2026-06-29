@@ -3,7 +3,6 @@ import { AuthService } from '../../core/services/auth.service';
 import { AdminService } from '../../core/services/admin.service';
 import { Router } from '@angular/router';
 import { PostAdmin, ReportAdmin, Stats, UserAdmin } from '../../models/models';
-import { DatePipe } from '@angular/common';
 
 interface ConfirmDialog {
   type: 'ban' | 'unban' | 'deleteUser' | 'hide' | 'show' | 'deletePost';
@@ -18,7 +17,7 @@ interface ConfirmDialog {
 
 @Component({
   selector: 'app-admin',
-  imports: [DatePipe],
+  imports: [],
   templateUrl: './admin.html',
   styleUrls: ['./admin.css'],
 })
@@ -344,5 +343,9 @@ export class AdminComponent {
   onLogout() {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
+  }
+
+  navigateToProfile(userId: number) {
+    this.router.navigate(['/profile', userId]);
   }
 }

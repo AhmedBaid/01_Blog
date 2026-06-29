@@ -57,12 +57,6 @@
         <h2>Dashboard Overview</h2>
       </header>
 
-      @if (loading()) {
-      <div class="loading-spinner">
-        <i class="fa-solid fa-spinner fa-spin"></i> Loading...
-      </div>
-      }
-
       @if (stats(); as s) {
       <div class="stats-grid">
         <div class="stat-card">
@@ -189,10 +183,16 @@
           </div>
 
           <div class="chart-legends">
-            <div class="legend-item"><span class="bullet active-bullet"></span> Active ({{ activeUsersPercentage }}%)</div>
-            <div class="legend-item"><span class="bullet banned-bullet"></span> Banned ({{ bannedUsersPercentage }}%)</div>
+            <div class="legend-item"><span class="bullet active-bullet"></span> Active ({{ activeUsersPercentage }}%)
+            </div>
+            <div class="legend-item"><span class="bullet banned-bullet"></span> Banned ({{ bannedUsersPercentage }}%)
+            </div>
           </div>
         </div>
+      </div>
+      }@else{
+      <div class="loading-spinner">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading...
       </div>
       }
     </div>
@@ -236,7 +236,7 @@
             @for (user of users(); track user.userId) {
             <tr>
               <td>
-                <div class="user-cell">
+                <div class="user-cell clickable" (click)="navigateToProfile(user.userId)" title="View profile">
                   <img
                     [src]="user.avatar || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=ff7800&color=fff'"
                     alt="" class="avatar-sm" />
@@ -331,7 +331,7 @@
                 </div>
               </td>
               <td>
-                <div class="user-cell">
+                <div class="user-cell clickable" (click)="navigateToProfile(post.userId)" title="View profile">
                   <img
                     [src]="post.avatar || 'https://ui-avatars.com/api/?name=' + post.firstname + '+' + post.lastname + '&background=ff7800&color=fff'"
                     alt="" class="avatar-sm" />
@@ -411,7 +411,7 @@
                 <span class="report-reason">{{ report.reason }}</span>
               </td>
               <td>
-                <div class="user-cell">
+                <div class="user-cell clickable" (click)="navigateToProfile(report.reporterId)" title="View profile">
                   <img
                     [src]="report.reporterAvatar || 'https://ui-avatars.com/api/?name=' + report.reporterFirstname + '+' + report.reporterLastname + '&background=ff7800&color=fff'"
                     alt="" class="avatar-sm" />
@@ -422,7 +422,7 @@
                 </div>
               </td>
               <td>
-                <div class="user-cell">
+                <div class="user-cell clickable" (click)="navigateToProfile(report.reportedUserId)" title="View profile">
                   <img
                     [src]="report.reportedAvatar || 'https://ui-avatars.com/api/?name=' + report.reportedFirstname + '+' + report.reportedLastname + '&background=ff7800&color=fff'"
                     alt="" class="avatar-sm" />
@@ -458,8 +458,6 @@
                     <i class="fa-solid fa-circle-check"></i>
                     }
                   </button>
-                  }
-                  @if (report.status !== 'DISMISSED') {
                   <button type="button" class="btn-action btn-danger" [disabled]="actionLoading() === report.reportId"
                     (click)="dismissReport(report)" title="Dismiss report">
                     @if (actionLoading() === report.reportId) {

@@ -105,6 +105,12 @@ public class AdminService {
     public void reviewReport(Long reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new GlobalException("Report not found", HttpStatus.NOT_FOUND));
+
+        if (report.getStatus() != Status.PENDING) {
+            throw new GlobalException("Report is already processed (Status: " + report.getStatus() + ")",
+                    HttpStatus.FORBIDDEN);
+        }
+
         report.setStatus(Status.REVIEWED);
     }
 
@@ -112,6 +118,12 @@ public class AdminService {
     public void dismissReport(Long reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new GlobalException("Report not found", HttpStatus.NOT_FOUND));
+
+        if (report.getStatus() != Status.PENDING) {
+            throw new GlobalException("Report is already processed (Status: " + report.getStatus() + ")",
+                    HttpStatus.FORBIDDEN);
+        }
+
         report.setStatus(Status.DISMISSED);
     }
 

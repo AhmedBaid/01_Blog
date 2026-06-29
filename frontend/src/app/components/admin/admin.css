@@ -1,15 +1,16 @@
 .admin-layout {
   margin-top: 80px;
   display: flex;
-  min-height: calc(100vh - 80px);
+  height: calc(100vh - 80px);
+  overflow: hidden;
   font-family: 'DM Sans', sans-serif;
 }
 
 .sidebar-toggle {
   display: none;
   position: fixed;
-  top: 90px;
-  left: 14px;
+  top: 70px;
+  right: 30px;
   z-index: 200;
   width: 38px;
   height: 38px;
@@ -41,14 +42,14 @@
 
 .sidebar {
   width: 250px;
-  height: calc(100vh - 200px);
+  height: 90vh;
   background: #141414;
   border: 1px solid #1e1e1e;
   display: flex;
   flex-direction: column;
   position: fixed;
-  top: 80px;
   left: 10px;
+  bottom: 0;
   z-index: 100;
   border-radius: 12px;
   transition: left 0.3s ease;
@@ -171,26 +172,88 @@
 .main-content {
   margin-left: 250px;
   padding: 28px 36px;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
   width: calc(100% - 250px);
-}
-
-.main-content::-webkit-scrollbar {
-  width: 5px;
-}
-
-.main-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.main-content::-webkit-scrollbar-thumb {
-  background: #222;
-  border-radius: 4px;
+  height: 100%;
+  overflow: hidden;
 }
 
 .tab-content {
+  height: 100%;
+  overflow-y: auto;
   max-width: 1200px;
+}
+
+/* ── Custom scrollbar — tab content ── */
+.tab-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tab-content::-webkit-scrollbar-track {
+  background: #141414;
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
+.tab-content::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 1px solid #1e1e1e;
+  transition: background 0.2s ease;
+}
+
+.tab-content::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+.tab-content::-webkit-scrollbar-thumb:active {
+  background: #ff7800;
+}
+
+.tab-content::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+.tab-content {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2a #141414;
+}
+
+/* ── Custom scrollbar — table container ── */
+.table-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #141414;
+  border-radius: 8px;
+  margin: 4px 0;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 1px solid #1e1e1e;
+  transition: background 0.2s ease;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
+}
+
+.table-container::-webkit-scrollbar-thumb:active {
+  background: #ff7800;
+}
+
+.table-container::-webkit-scrollbar-corner {
+  background: #141414;
+}
+
+/* Firefox */
+.table-container {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2a #141414;
 }
 
 .content-header {
@@ -245,8 +308,8 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -277,14 +340,45 @@
   flex-shrink: 0;
 }
 
-.stat-icon-users     { background: rgba(59, 130, 246, 0.12);  color: #60a5fa; }
-.stat-icon-posts     { background: rgba(34, 197, 94, 0.12);   color: #4ade80; }
-.stat-icon-reports   { background: rgba(239, 68, 68, 0.12);   color: #f87171; }
-.stat-icon-admins    { background: rgba(168, 85, 247, 0.12);  color: #c084fc; }
-.stat-icon-newusers  { background: rgba(20, 184, 166, 0.12);  color: #2dd4bf; }
-.stat-icon-newposts  { background: rgba(255, 120, 0, 0.12);   color: #ff7800; }
-.stat-icon-banned    { background: rgba(239, 68, 68, 0.12);   color: #ef4444; }
-.stat-icon-hidden    { background: rgba(148, 163, 184, 0.12); color: #94a3b8; }
+.stat-icon-users {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+}
+
+.stat-icon-posts {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+
+.stat-icon-reports {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+
+.stat-icon-admins {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+}
+
+.stat-icon-newusers {
+  background: rgba(20, 184, 166, 0.12);
+  color: #2dd4bf;
+}
+
+.stat-icon-newposts {
+  background: rgba(255, 120, 0, 0.12);
+  color: #ff7800;
+}
+
+.stat-icon-banned {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+.stat-icon-hidden {
+  background: rgba(148, 163, 184, 0.12);
+  color: #94a3b8;
+}
 
 .stat-info {
   display: flex;
@@ -320,6 +414,7 @@
   padding: 22px;
   display: flex;
   flex-direction: column;
+  height: 450px;
 }
 
 .card-header {
@@ -441,10 +536,8 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background: conic-gradient(
-    #4ade80 0% var(--active-pct),
-    #ef4444 var(--active-pct) 100%
-  );
+  background: conic-gradient(#4ade80 0% var(--active-pct),
+      #ef4444 var(--active-pct) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -506,14 +599,20 @@
   flex-shrink: 0;
 }
 
-.active-bullet  { background: #4ade80; }
-.banned-bullet { background: #ef4444; }
+.active-bullet {
+  background: #4ade80;
+}
+
+.banned-bullet {
+  background: #ef4444;
+}
 
 .table-container {
+  max-height: calc(100% - 70px);
+  overflow: auto;
   background: #141414;
   border: 1px solid #1e1e1e;
   border-radius: 14px;
-  overflow: hidden;
 }
 
 .data-table {
@@ -559,6 +658,19 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.user-cell.clickable {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.user-cell.clickable:hover {
+  opacity: 0.8;
+}
+
+.user-cell.clickable:hover .avatar-sm {
+  border-color: #ff7800;
 }
 
 .user-cell-info {
@@ -741,8 +853,13 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .confirm-dialog {
@@ -757,8 +874,15 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .confirm-icon {
@@ -889,7 +1013,8 @@
 @media (max-width: 1000px) {
   .admin-layout {
     margin-top: 60px;
-    min-height: calc(100vh - 60px);
+    height: calc(100vh - 60px);
+    overflow: hidden;
   }
 
   .sidebar-toggle {
@@ -919,13 +1044,18 @@
     margin-left: 0;
     padding: 16px;
     width: 100%;
-    height: auto;
-    min-height: calc(100vh - 60px);
-    overflow-y: visible;
+    height: 100%;
+    overflow: hidden;
   }
 
   .tab-content {
     max-width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .table-container {
+    max-height: calc(100% - 70px);
   }
 
   .charts-row {
@@ -979,12 +1109,13 @@
 @media (max-width: 480px) {
   .admin-layout {
     margin-top: 50px;
-    min-height: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+    overflow: hidden;
   }
 
   .sidebar-toggle {
-    top: 58px;
-    left: 8px;
+    top: 68px;
+    right: 20px;
     width: 34px;
     height: 34px;
   }
@@ -1002,10 +1133,21 @@
 
   .main-content {
     padding: 10px 8px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .tab-content {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .table-container {
+    max-height: calc(100% - 60px);
   }
 
   .content-header h2 {
-    font-size: 1.2rem;
+    margin-top: 12px;
   }
 
   .stats-grid {
