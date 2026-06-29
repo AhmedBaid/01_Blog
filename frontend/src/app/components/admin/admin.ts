@@ -28,6 +28,7 @@ export class AdminComponent {
   router = inject(Router);
 
   activeTab = signal<'dashboard' | 'users' | 'posts' | 'reports'>('dashboard');
+  sidebarOpen = signal(false);
 
   stats = signal<Stats | null>(null);
   users = signal<UserAdmin[]>([]);
@@ -42,8 +43,13 @@ export class AdminComponent {
     this.loadStats();
   }
 
+  toggleSidebar() {
+    this.sidebarOpen.update((v) => !v);
+  }
+
   setActiveTab(tab: 'dashboard' | 'users' | 'posts' | 'reports') {
     this.activeTab.set(tab);
+    this.sidebarOpen.set(false);
     switch (tab) {
       case 'dashboard':
         this.loadStats();
@@ -104,8 +110,6 @@ export class AdminComponent {
     });
   }
 
-  // ── Confirmation dialog ──
-
   openConfirmDialog(
     type: ConfirmDialog['type'],
     item: UserAdmin | PostAdmin,
@@ -145,8 +149,6 @@ export class AdminComponent {
     }
     this.confirmDialog.set(null);
   }
-
-  // ── User actions ──
 
   requestToggleBan(user: UserAdmin) {
     if (user.admin) return;
@@ -204,8 +206,6 @@ export class AdminComponent {
     });
   }
 
-  // ── Post actions ──
-
   requestToggleHide(post: PostAdmin) {
     const action = post.hidden ? 'show' : 'hide';
     const label = post.hidden ? 'Show' : 'Hide';
@@ -260,8 +260,6 @@ export class AdminComponent {
     });
   }
 
-  // ── Report actions ──
-
   reviewReport(report: ReportAdmin) {
     this.actionLoading.set(report.reportId);
     this.adminService.reviewReport(report.reportId).subscribe({
@@ -288,8 +286,6 @@ export class AdminComponent {
     });
   }
 
-  // ── Computed ──
-
   get activePercentage(): number {
     const s = this.stats();
     if (!s || s.totalPosts === 0) return 0;
@@ -306,6 +302,30 @@ export class AdminComponent {
     const s = this.stats();
     if (!s || s.totalPosts === 0) return 0;
     return Math.round((s.totalReports / s.totalPosts) * 100);
+  }
+
+  get newUsersPercentage(): number {
+    const s = this.stats();
+    if (!s || s.totalUsers === 0) return 0;
+    return Math.min(100, Math.round((s.newUsersToday / s.totalUsers) * 100));
+  }
+
+  get newPostsPercentage(): number {
+    const s = this.stats();
+    if (!s || s.totalPosts === 0) return 0;
+    return Math.min(100, Math.round((s.newPostsToday / s.totalPosts) * 100));
+  }
+
+  get activeUsersPercentage(): number {
+    const s = this.stats();
+    if (!s || s.totalUsers === 0) return 100;
+    return Math.round(((s.totalUsers - s.bannedUsersCount) / s.totalUsers) * 100);
+  }
+
+  get bannedUsersPercentage(): number {
+    const s = this.stats();
+    if (!s || s.totalUsers === 0) return 0;
+    return Math.round((s.bannedUsersCount / s.totalUsers) * 100);
   }
 
   getStatusClass(status: string): string {

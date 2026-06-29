@@ -1,6 +1,11 @@
 <div class="admin-layout">
-  <!-- Sidebar -->
-  <aside class="sidebar">
+  <button type="button" class="sidebar-toggle" (click)="toggleSidebar()" title="Toggle sidebar">
+    <i class="fa-solid" [class.fa-bars]="!sidebarOpen()" [class.fa-xmark]="sidebarOpen()"></i>
+  </button>
+
+  <div class="sidebar-overlay" [class.open]="sidebarOpen()" (click)="toggleSidebar()"></div>
+
+  <aside class="sidebar" [class.open]="sidebarOpen()">
     <div class="sidebar-brand">
       <i class="fa-solid fa-shield-halved"></i>
       <span>Admin Panel</span>
@@ -9,7 +14,8 @@
     <nav class="sidebar-nav">
       <div class="nav-section">
         <span class="nav-section-title">Management</span>
-        <button type="button" class="nav-item" [class.active]="activeTab() === 'dashboard'" (click)="setActiveTab('dashboard')">
+        <button type="button" class="nav-item" [class.active]="activeTab() === 'dashboard'"
+          (click)="setActiveTab('dashboard')">
           <i class="fa-solid fa-chart-pie"></i> Dashboard
         </button>
         <button type="button" class="nav-item" [class.active]="activeTab() === 'users'" (click)="setActiveTab('users')">
@@ -18,12 +24,13 @@
         <button type="button" class="nav-item" [class.active]="activeTab() === 'posts'" (click)="setActiveTab('posts')">
           <i class="fa-solid fa-newspaper"></i> Posts
         </button>
-        <button type="button" class="nav-item" [class.active]="activeTab() === 'reports'" (click)="setActiveTab('reports')">
+        <button type="button" class="nav-item" [class.active]="activeTab() === 'reports'"
+          (click)="setActiveTab('reports')">
           <i class="fa-solid fa-flag"></i> Reports
           @if (stats(); as s) {
-            @if (s.totalReports > 0) {
-              <span class="nav-badge">{{ s.totalReports }}</span>
-            }
+          @if (s.totalReports > 0) {
+          <span class="nav-badge">{{ s.totalReports }}</span>
+          }
           }
         </button>
       </div>
@@ -31,10 +38,10 @@
       <div class="nav-section">
         <span class="nav-section-title">Application</span>
         <button type="button" class="nav-item nav-item-app" (click)="router.navigate(['/home'])">
-          <i class="fa-solid fa-house"></i> Main Feed
+          <i class="fa-solid fa-house"></i> Home
         </button>
         <button type="button" class="nav-item nav-item-app" (click)="router.navigate(['/profile/me'])">
-          <i class="fa-solid fa-circle-user"></i> My Profile
+          <i class="fa-solid fa-circle-user"></i> Profile
         </button>
         <button type="button" class="nav-item nav-item-logout" (click)="onLogout()">
           <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
@@ -43,465 +50,458 @@
     </nav>
   </aside>
 
-  <!-- Main Content -->
   <main class="main-content">
-    <!-- Dashboard Tab -->
     @if (activeTab() === 'dashboard') {
-      <div class="tab-content">
-        <header class="content-header">
-          <h2>Dashboard Overview</h2>
-          <p class="text-muted">Your blog platform at a glance</p>
-        </header>
+    <div class="tab-content">
+      <header class="content-header">
+        <h2>Dashboard Overview</h2>
+      </header>
 
-        @if (loading()) {
-          <div class="loading-spinner">
-            <i class="fa-solid fa-spinner fa-spin"></i> Loading...
-          </div>
-        }
-
-        @if (stats(); as s) {
-          <!-- Stat Cards -->
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-users">
-                <i class="fa-solid fa-users"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.totalUsers }}</span>
-                <span class="stat-label">Total Users</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-posts">
-                <i class="fa-solid fa-newspaper"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.totalPosts }}</span>
-                <span class="stat-label">Total Posts</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-reports">
-                <i class="fa-solid fa-flag"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.totalReports }}</span>
-                <span class="stat-label">Total Reports</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-admins">
-                <i class="fa-solid fa-user-shield"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.totalAdmins }}</span>
-                <span class="stat-label">Admins</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-newusers">
-                <i class="fa-solid fa-user-plus"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.newUsersToday }}</span>
-                <span class="stat-label">New Users (7 days)</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-newposts">
-                <i class="fa-solid fa-file-circle-plus"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.newPostsToday }}</span>
-                <span class="stat-label">New Posts (7 days)</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-banned">
-                <i class="fa-solid fa-ban"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.bannedUsersCount }}</span>
-                <span class="stat-label">Banned Users</span>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon stat-icon-hidden">
-                <i class="fa-solid fa-eye-slash"></i>
-              </div>
-              <div class="stat-info">
-                <span class="stat-value">{{ s.hiddenPostsCount }}</span>
-                <span class="stat-label">Hidden Posts</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Chart -->
-          <div class="chart-card">
-            <h3 class="chart-title">Posts Progress Analytics</h3>
-            <div class="bar-chart">
-              <div class="chart-group">
-                <div class="bar-wrapper">
-                  <div class="bar bar-active" [style.height.%]="activePercentage">
-                    <span class="bar-value">{{ activePercentage }}%</span>
-                  </div>
-                </div>
-                <span class="bar-label">Active Posts</span>
-              </div>
-
-              <div class="chart-group">
-                <div class="bar-wrapper">
-                  <div class="bar bar-hidden" [style.height.%]="hiddenPercentage">
-                    <span class="bar-value">{{ hiddenPercentage }}%</span>
-                  </div>
-                </div>
-                <span class="bar-label">Hidden Posts</span>
-              </div>
-
-              <div class="chart-group">
-                <div class="bar-wrapper">
-                  <div class="bar bar-reported" [style.height.%]="reportedPercentage">
-                    <span class="bar-value">{{ reportedPercentage }}%</span>
-                  </div>
-                </div>
-                <span class="bar-label">Reported</span>
-              </div>
-            </div>
-          </div>
-        }
+      @if (loading()) {
+      <div class="loading-spinner">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading...
       </div>
-    }
+      }
 
-    <!-- Users Tab -->
-    @if (activeTab() === 'users') {
-      <div class="tab-content">
-        <header class="content-header">
-          <h2>Users Management</h2>
-          <p class="text-muted">{{ users().length }} registered users</p>
-        </header>
-
-        @if (loading()) {
-          <div class="loading-spinner">
-            <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+      @if (stats(); as s) {
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-users">
+            <i class="fa-solid fa-users"></i>
           </div>
-        }
-
-        @if (!loading() && users().length === 0) {
-          <div class="empty-state">
-            <i class="fa-solid fa-users-slash"></i>
-            <p>No users found</p>
+          <div class="stat-info">
+            <span class="stat-value">{{ s.totalUsers }}</span>
+            <span class="stat-label">Total Users</span>
           </div>
-        }
+        </div>
 
-        @if (!loading() && users().length > 0) {
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Posts</th>
-                  <th>Followers</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (user of users(); track user.userId) {
-                  <tr>
-                    <td>
-                      <div class="user-cell">
-                        <img [src]="user.avatar || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=ff7800&color=fff'" alt="" class="avatar-sm" />
-                        <div class="user-cell-info">
-                          <span class="user-name">{{ user.firstname }} {{ user.lastname }}</span>
-                          <span class="user-username">&#64;{{ user.username }}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                      <span class="badge" [class.badge-admin]="user.admin" [class.badge-user]="!user.admin">
-                        {{ user.admin ? 'Admin' : 'User' }}
-                      </span>
-                    </td>
-                    <td>
-                      <span class="badge" [class.badge-active]="!user.status" [class.badge-banned]="user.status">
-                        {{ user.status ? 'Banned' : 'Active' }}
-                      </span>
-                    </td>
-                    <td>{{ user.postsCount }}</td>
-                    <td>{{ user.followersCount }}</td>
-                    <td>
-                      <div class="action-btns">
-                        <button type="button"
-                          class="btn-action"
-                          [class.btn-warning]="!user.status"
-                          [class.btn-success]="user.status"
-                          [disabled]="actionLoading() === user.userId || user.admin"
-                          (click)="requestToggleBan(user)"
-                          [title]="user.admin ? 'Cannot ban admin users' : (user.status ? 'Unban user' : 'Ban user')"
-                        >
-                          @if (actionLoading() === user.userId) {
-                            <i class="fa-solid fa-spinner fa-spin"></i>
-                          } @else {
-                            <i [class.fa-ban]="!user.status" [class.fa-circle-check]="user.status" class="fa-solid"></i>
-                          }
-                        </button>
-                        <button title="delete" type="button"
-                          class="btn-action btn-danger"
-                          [disabled]="actionLoading() === user.userId || user.admin"
-                          (click)="requestDeleteUser(user)"
-                          [title]="user.admin ? 'Cannot delete admin users' : 'Delete user permanently'"
-                        >
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        }
-      </div>
-    }
-
-    <!-- Posts Tab -->
-    @if (activeTab() === 'posts') {
-      <div class="tab-content">
-        <header class="content-header">
-          <h2>Posts Management</h2>
-          <p class="text-muted">{{ posts().length }} total posts</p>
-        </header>
-
-        @if (loading()) {
-          <div class="loading-spinner">
-            <i class="fa-solid fa-spinner fa-spin"></i> Loading...
-          </div>
-        }
-
-        @if (!loading() && posts().length === 0) {
-          <div class="empty-state">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-posts">
             <i class="fa-solid fa-newspaper"></i>
-            <p>No posts found</p>
           </div>
-        }
+          <div class="stat-info">
+            <span class="stat-value">{{ s.totalPosts }}</span>
+            <span class="stat-label">Total Posts</span>
+          </div>
+        </div>
 
-        @if (!loading() && posts().length > 0) {
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Post</th>
-                  <th>Author</th>
-                  <th>Visibility</th>
-                  <th>Created</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (post of posts(); track post.postId) {
-                  <tr>
-                    <td>
-                      <div class="post-cell">
-                        <span class="post-title">{{ post.content }}</span>
-                        @if (post.description) {
-                          <span class="post-desc">{{ post.description.length > 80 ? post.description.slice(0, 80) + '...' : post.description }}</span>
-                        }
-                      </div>
-                    </td>
-                    <td>
-                      <div class="user-cell">
-                        <img [src]="post.avatar || 'https://ui-avatars.com/api/?name=' + post.firstname + '+' + post.lastname + '&background=ff7800&color=fff'" alt="" class="avatar-sm" />
-                        <span class="user-name">{{ post.firstname }} {{ post.lastname }}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="badge" [class.badge-active]="!post.hidden" [class.badge-hidden]="post.hidden">
-                        {{ post.hidden ? 'Hidden' : 'Visible' }}
-                      </span>
-                    </td>
-                    <td>{{ post.createdAt }}</td>
-                    <td>
-                      <div class="action-btns">
-                        <button type="button"
-                          class="btn-action"
-                          [class.btn-warning]="!post.hidden"
-                          [class.btn-success]="post.hidden"
-                          [disabled]="actionLoading() === post.postId"
-                          (click)="requestToggleHide(post)"
-                          [title]="post.hidden ? 'Show post' : 'Hide post'"
-                        >
-                          @if (actionLoading() === post.postId) {
-                            <i class="fa-solid fa-spinner fa-spin"></i>
-                          } @else {
-                            <i [class.fa-eye-slash]="!post.hidden" [class.fa-eye]="post.hidden" class="fa-solid"></i>
-                          }
-                        </button>
-                        <button type="button"
-                          class="btn-action btn-danger"
-                          [disabled]="actionLoading() === post.postId"
-                          (click)="requestDeletePost(post)"
-                          title="Delete post permanently"
-                        >
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-reports">
+            <i class="fa-solid fa-flag"></i>
           </div>
-        }
+          <div class="stat-info">
+            <span class="stat-value">{{ s.totalReports }}</span>
+            <span class="stat-label">Total Reports</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-admins">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ s.totalAdmins }}</span>
+            <span class="stat-label">Admins</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-newusers">
+            <i class="fa-solid fa-user-plus"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ s.newUsersToday }}</span>
+            <span class="stat-label">New Users (7 days)</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-newposts">
+            <i class="fa-solid fa-file-circle-plus"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ s.newPostsToday }}</span>
+            <span class="stat-label">New Posts (7 days)</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-banned">
+            <i class="fa-solid fa-ban"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ s.bannedUsersCount }}</span>
+            <span class="stat-label">Banned Users</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-hidden">
+            <i class="fa-solid fa-eye-slash"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ s.hiddenPostsCount }}</span>
+            <span class="stat-label">Hidden Posts</span>
+          </div>
+        </div>
       </div>
+
+      <div class="charts-row">
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3>Weekly Growth Analytics</h3>
+            <span class="time-range">Last 7 Days</span>
+          </div>
+
+          <div class="bars-container">
+            <div class="bar-group">
+              <div class="bar-track">
+                <div class="bar-fill users-fill" [style.height.%]="newUsersPercentage">
+                  <span class="bar-value">{{ newUsersPercentage }}</span>
+                </div>
+              </div>
+              <span class="bar-label"><i class="fa-solid fa-users"></i> New Users</span>
+            </div>
+
+            <div class="bar-group">
+              <div class="bar-track">
+                <div class="bar-fill posts-fill" [style.height.%]="newPostsPercentage">
+                  <span class="bar-value">{{ newPostsPercentage }}</span>
+                </div>
+              </div>
+              <span class="bar-label"><i class="fa-solid fa-file-alt"></i> New Posts</span>
+            </div>
+          </div>
+        </div>
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3>Platform Moderation Health</h3>
+            <span class="status-badge-active">Live Status</span>
+          </div>
+
+          <div class="donut-wrapper">
+            <div class="donut-chart" [style.--active-pct]="activeUsersPercentage + '%'">
+              <div class="donut-center">
+                <span class="center-number">{{ activeUsersPercentage }}%</span>
+                <span class="center-text">Active Users</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-legends">
+            <div class="legend-item"><span class="bullet active-bullet"></span> Active ({{ activeUsersPercentage }}%)</div>
+            <div class="legend-item"><span class="bullet banned-bullet"></span> Banned ({{ bannedUsersPercentage }}%)</div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
     }
 
-    <!-- Reports Tab -->
-    @if (activeTab() === 'reports') {
-      <div class="tab-content">
-        <header class="content-header">
-          <h2>Reports Management</h2>
-          <p class="text-muted">{{ reports().length }} reports</p>
-        </header>
+    @if (activeTab() === 'users') {
+    <div class="tab-content">
+      <header class="content-header">
+        <h2>Users Management</h2>
+        <p class="text-muted">{{ users().length }} registered users</p>
+      </header>
 
-        @if (loading()) {
-          <div class="loading-spinner">
-            <i class="fa-solid fa-spinner fa-spin"></i> Loading...
-          </div>
-        }
-
-        @if (!loading() && reports().length === 0) {
-          <div class="empty-state">
-            <i class="fa-solid fa-flag-checkered"></i>
-            <p>No reports to review</p>
-          </div>
-        }
-
-        @if (!loading() && reports().length > 0) {
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Reason</th>
-                  <th>Reporter</th>
-                  <th>Reported User</th>
-                  <th>Reported Post</th>
-                  <th>Status</th>
-                  <th>Date</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (report of reports(); track report.reportId) {
-                  <tr>
-                    <td>
-                      <span class="report-reason">{{ report.reason }}</span>
-                    </td>
-                    <td>
-                      <div class="user-cell">
-                        <img [src]="report.reporterAvatar || 'https://ui-avatars.com/api/?name=' + report.reporterFirstname + '+' + report.reporterLastname + '&background=ff7800&color=fff'" alt="" class="avatar-sm" />
-                        <div class="user-cell-info">
-                          <span class="user-name">{{ report.reporterFirstname }} {{ report.reporterLastname }}</span>
-                          <span class="user-username">&#64;{{ report.reporterUsername }}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="user-cell">
-                        <img [src]="report.reportedAvatar || 'https://ui-avatars.com/api/?name=' + report.reportedFirstname + '+' + report.reportedLastname + '&background=ff7800&color=fff'" alt="" class="avatar-sm" />
-                        <div class="user-cell-info">
-                          <span class="user-name">{{ report.reportedFirstname }} {{ report.reportedLastname }}</span>
-                          <span class="user-username">&#64;{{ report.reportedUsername }}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      @if (report.reportedPostId) {
-                        <span class="post-link">{{ report.reportedPostTitle || 'Post #' + report.reportedPostId }}</span>
-                      } @else {
-                        <span class="text-muted">—</span>
-                      }
-                    </td>
-                    <td>
-                      <span class="badge" [class.badge-pending]="report.status === 'PENDING'" [class.badge-reviewed]="report.status === 'REVIEWED'" [class.badge-dismissed]="report.status === 'DISMISSED'">
-                        {{ report.status }}
-                      </span>
-                    </td>
-                    <td>{{ report.createdAt }}</td>
-                    <td>
-                      <div class="action-btns">
-                        @if (report.status === 'PENDING') {
-                          <button type="button"
-                            class="btn-action btn-success"
-                            [disabled]="actionLoading() === report.reportId"
-                            (click)="reviewReport(report)"
-                            title="Mark as reviewed"
-                          >
-                            @if (actionLoading() === report.reportId) {
-                              <i class="fa-solid fa-spinner fa-spin"></i>
-                            } @else {
-                              <i class="fa-solid fa-circle-check"></i>
-                            }
-                          </button>
-                        }
-                        @if (report.status !== 'DISMISSED') {
-                          <button type="button"
-                            class="btn-action btn-danger"
-                            [disabled]="actionLoading() === report.reportId"
-                            (click)="dismissReport(report)"
-                            title="Dismiss report"
-                          >
-                            @if (actionLoading() === report.reportId) {
-                              <i class="fa-solid fa-spinner fa-spin"></i>
-                            } @else {
-                              <i class="fa-solid fa-xmark"></i>
-                            }
-                          </button>
-                        }
-                      </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        }
+      @if (loading()) {
+      <div class="loading-spinner">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading...
       </div>
+      }
+
+      @if (!loading() && users().length === 0) {
+      <div class="empty-state">
+        <i class="fa-solid fa-users-slash"></i>
+        <p>No users found</p>
+      </div>
+      }
+
+      @if (!loading() && users().length > 0) {
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Posts</th>
+              <th>Followers</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users(); track user.userId) {
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <img
+                    [src]="user.avatar || 'https://ui-avatars.com/api/?name=' + user.firstname + '+' + user.lastname + '&background=ff7800&color=fff'"
+                    alt="" class="avatar-sm" />
+                  <div class="user-cell-info">
+                    <span class="user-name">{{ user.firstname }} {{ user.lastname }}</span>
+                    <span class="user-username">&#64;{{ user.username }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>{{ user.email }}</td>
+              <td>
+                <span class="badge" [class.badge-admin]="user.admin" [class.badge-user]="!user.admin">
+                  {{ user.admin ? 'Admin' : 'User' }}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [class.badge-active]="!user.status" [class.badge-banned]="user.status">
+                  {{ user.status ? 'Banned' : 'Active' }}
+                </span>
+              </td>
+              <td>{{ user.postsCount }}</td>
+              <td>{{ user.followersCount }}</td>
+              <td>
+                <div class="action-btns">
+                  <button type="button" class="btn-action" [class.btn-warning]="!user.status"
+                    [class.btn-success]="user.status" [disabled]="actionLoading() === user.userId || user.admin"
+                    (click)="requestToggleBan(user)"
+                    [title]="user.admin ? 'Cannot ban admin users' : (user.status ? 'Unban user' : 'Ban user')">
+                    @if (actionLoading() === user.userId) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
+                    <i [class.fa-ban]="!user.status" [class.fa-circle-check]="user.status" class="fa-solid"></i>
+                    }
+                  </button>
+                  <button title="delete" type="button" class="btn-action btn-danger"
+                    [disabled]="actionLoading() === user.userId || user.admin" (click)="requestDeleteUser(user)"
+                    [title]="user.admin ? 'Cannot delete admin users' : 'Delete user permanently'">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </div>
+    }
+    @if (activeTab() === 'posts') {
+    <div class="tab-content">
+      <header class="content-header">
+        <h2>Posts Management</h2>
+        <p class="text-muted">{{ posts().length }} total posts</p>
+      </header>
+
+      @if (loading()) {
+      <div class="loading-spinner">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+      </div>
+      }
+
+      @if (!loading() && posts().length === 0) {
+      <div class="empty-state">
+        <i class="fa-solid fa-newspaper"></i>
+        <p>No posts found</p>
+      </div>
+      }
+
+      @if (!loading() && posts().length > 0) {
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Post</th>
+              <th>Author</th>
+              <th>Visibility</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (post of posts(); track post.postId) {
+            <tr>
+              <td>
+                <div class="post-cell">
+                  <span class="post-title">{{ post.content }}</span>
+                  @if (post.description) {
+                  <span class="post-desc">{{ post.description.length > 80 ? post.description.slice(0, 80) + '...' :
+                    post.description }}</span>
+                  }
+                </div>
+              </td>
+              <td>
+                <div class="user-cell">
+                  <img
+                    [src]="post.avatar || 'https://ui-avatars.com/api/?name=' + post.firstname + '+' + post.lastname + '&background=ff7800&color=fff'"
+                    alt="" class="avatar-sm" />
+                  <span class="user-name">{{ post.firstname }} {{ post.lastname }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="badge" [class.badge-active]="!post.hidden" [class.badge-hidden]="post.hidden">
+                  {{ post.hidden ? 'Hidden' : 'Visible' }}
+                </span>
+              </td>
+              <td>{{ post.createdAt }}</td>
+              <td>
+                <div class="action-btns">
+                  <button type="button" class="btn-action" [class.btn-warning]="!post.hidden"
+                    [class.btn-success]="post.hidden" [disabled]="actionLoading() === post.postId"
+                    (click)="requestToggleHide(post)" [title]="post.hidden ? 'Show post' : 'Hide post'">
+                    @if (actionLoading() === post.postId) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
+                    <i [class.fa-eye-slash]="!post.hidden" [class.fa-eye]="post.hidden" class="fa-solid"></i>
+                    }
+                  </button>
+                  <button type="button" class="btn-action btn-danger" [disabled]="actionLoading() === post.postId"
+                    (click)="requestDeletePost(post)" title="Delete post permanently">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </div>
+    }
+
+    @if (activeTab() === 'reports') {
+    <div class="tab-content">
+      <header class="content-header">
+        <h2>Reports Management</h2>
+        <p class="text-muted">{{ reports().length }} reports</p>
+      </header>
+
+      @if (loading()) {
+      <div class="loading-spinner">
+        <i class="fa-solid fa-spinner fa-spin"></i> Loading...
+      </div>
+      }
+
+      @if (!loading() && reports().length === 0) {
+      <div class="empty-state">
+        <i class="fa-solid fa-flag-checkered"></i>
+        <p>No reports to review</p>
+      </div>
+      }
+
+      @if (!loading() && reports().length > 0) {
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Reason</th>
+              <th>Reporter</th>
+              <th>Reported User</th>
+              <th>Reported Post</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (report of reports(); track report.reportId) {
+            <tr>
+              <td>
+                <span class="report-reason">{{ report.reason }}</span>
+              </td>
+              <td>
+                <div class="user-cell">
+                  <img
+                    [src]="report.reporterAvatar || 'https://ui-avatars.com/api/?name=' + report.reporterFirstname + '+' + report.reporterLastname + '&background=ff7800&color=fff'"
+                    alt="" class="avatar-sm" />
+                  <div class="user-cell-info">
+                    <span class="user-name">{{ report.reporterFirstname }} {{ report.reporterLastname }}</span>
+                    <span class="user-username">&#64;{{ report.reporterUsername }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="user-cell">
+                  <img
+                    [src]="report.reportedAvatar || 'https://ui-avatars.com/api/?name=' + report.reportedFirstname + '+' + report.reportedLastname + '&background=ff7800&color=fff'"
+                    alt="" class="avatar-sm" />
+                  <div class="user-cell-info">
+                    <span class="user-name">{{ report.reportedFirstname }} {{ report.reportedLastname }}</span>
+                    <span class="user-username">&#64;{{ report.reportedUsername }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                @if (report.reportedPostId) {
+                <span class="post-link">{{ report.reportedPostTitle || 'Post #' + report.reportedPostId }}</span>
+                } @else {
+                <span class="text-muted">—</span>
+                }
+              </td>
+              <td>
+                <span class="badge" [class.badge-pending]="report.status === 'PENDING'"
+                  [class.badge-reviewed]="report.status === 'REVIEWED'"
+                  [class.badge-dismissed]="report.status === 'DISMISSED'">
+                  {{ report.status }}
+                </span>
+              </td>
+              <td>{{ report.createdAt }}</td>
+              <td>
+                <div class="action-btns">
+                  @if (report.status === 'PENDING') {
+                  <button type="button" class="btn-action btn-success" [disabled]="actionLoading() === report.reportId"
+                    (click)="reviewReport(report)" title="Mark as reviewed">
+                    @if (actionLoading() === report.reportId) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
+                    <i class="fa-solid fa-circle-check"></i>
+                    }
+                  </button>
+                  }
+                  @if (report.status !== 'DISMISSED') {
+                  <button type="button" class="btn-action btn-danger" [disabled]="actionLoading() === report.reportId"
+                    (click)="dismissReport(report)" title="Dismiss report">
+                    @if (actionLoading() === report.reportId) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
+                    <i class="fa-solid fa-xmark"></i>
+                    }
+                  </button>
+                  }
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </div>
     }
   </main>
 
-  <!-- Confirmation Dialog -->
   @if (confirmDialog(); as dialog) {
-    <div class="confirm-overlay" (click)="closeConfirmDialog()">
-      <div class="confirm-dialog" (click)="$event.stopPropagation()">
-        <div class="confirm-icon" [style.background]="dialog.iconBg">
-          <i class="fa-solid" [class]="dialog.icon"></i>
-        </div>
-        <h3 class="confirm-title">{{ dialog.title }}</h3>
-        <p class="confirm-desc">{{ dialog.message }}</p>
-        <div class="confirm-actions">
-          <button type="button" class="btn-cancel" (click)="closeConfirmDialog()">
-            Cancel
-          </button>
-          <button type="button"
-            class="btn-confirm"
-            [class.confirm-action-danger]="dialog.actionClass === 'confirm-action-danger'"
-            [class.confirm-action-warning]="dialog.actionClass === 'confirm-action-warning'"
-            [class.confirm-action-success]="dialog.actionClass === 'confirm-action-success'"
-            (click)="performConfirmedAction()">
-            {{ dialog.actionLabel }}
-          </button>
-        </div>
+  <div class="confirm-overlay" (click)="closeConfirmDialog()">
+    <div class="confirm-dialog" (click)="$event.stopPropagation()">
+      <div class="confirm-icon" [style.background]="dialog.iconBg">
+        <i class="fa-solid" [class]="dialog.icon"></i>
+      </div>
+      <h3 class="confirm-title">{{ dialog.title }}</h3>
+      <p class="confirm-desc">{{ dialog.message }}</p>
+      <div class="confirm-actions">
+        <button type="button" class="btn-cancel" (click)="closeConfirmDialog()">
+          Cancel
+        </button>
+        <button type="button" class="btn-confirm"
+          [class.confirm-action-danger]="dialog.actionClass === 'confirm-action-danger'"
+          [class.confirm-action-warning]="dialog.actionClass === 'confirm-action-warning'"
+          [class.confirm-action-success]="dialog.actionClass === 'confirm-action-success'"
+          (click)="performConfirmedAction()">
+          {{ dialog.actionLabel }}
+        </button>
       </div>
     </div>
+  </div>
   }
 </div>

@@ -54,6 +54,9 @@ public class AdminService {
     public boolean toggleBanStatus(Long userId) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new GlobalException("user not found", HttpStatus.NOT_FOUND));
+        if (user.getRole() == Role.ADMIN) {
+            throw new GlobalException("You cannot ban an administrator account", HttpStatus.FORBIDDEN);
+        }
         if (user.isBanned()) {
             user.setBanned(false);
             return false;
@@ -80,6 +83,9 @@ public class AdminService {
     public void deleteUserPermanently(Long userId) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new GlobalException("user not found", HttpStatus.NOT_FOUND));
+        if (user.getRole() == Role.ADMIN) {
+            throw new GlobalException("You cannot delete an administrator account", HttpStatus.FORBIDDEN);
+        }
         userRepository.delete(user);
     }
 

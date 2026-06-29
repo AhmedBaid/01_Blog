@@ -201,7 +201,7 @@ public class PostService {
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
 
-        Page<PostDTO> postsPage = postRepository.findAllPostsWithStats(currentUser.getUserId(), pageable);
+        Page<PostDTO> postsPage = postRepository.findFollowingPostsWithStats(currentUser.getUserId(), pageable);
 
         postsPage.forEach(dto -> {
             dto.setItsMyPost(dto.getUserId().equals(currentUser.getUserId()));
