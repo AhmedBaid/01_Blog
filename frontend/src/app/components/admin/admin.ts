@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { PostAdmin, ReportAdmin, Stats, UserAdmin } from '../../models/models';
 
 interface ConfirmDialog {
-  type: 'ban' | 'unban' | 'deleteUser' | 'hide' | 'show' | 'deletePost';
-  item: UserAdmin | PostAdmin;
+  type: 'ban' | 'unban' | 'deleteUser' | 'hide' | 'show' | 'deletePost' | 'review' | 'dismiss';
+  item: UserAdmin | PostAdmin | ReportAdmin;
   title: string;
   message: string;
   actionLabel: string;
@@ -111,7 +111,7 @@ export class AdminComponent {
 
   openConfirmDialog(
     type: ConfirmDialog['type'],
-    item: UserAdmin | PostAdmin,
+    item: UserAdmin | PostAdmin | ReportAdmin,
     title: string,
     message: string,
     actionLabel: string,
@@ -144,6 +144,12 @@ export class AdminComponent {
         break;
       case 'deletePost':
         this.executeDeletePost(dialog.item as PostAdmin);
+        break;
+      case 'review':
+        this.executeReviewReport(dialog.item as ReportAdmin);
+        break;
+      case 'dismiss':
+        this.executeDismissReport(dialog.item as ReportAdmin);
         break;
     }
     this.confirmDialog.set(null);
@@ -259,7 +265,33 @@ export class AdminComponent {
     });
   }
 
-  reviewReport(report: ReportAdmin) {
+  requestReviewReport(report: ReportAdmin) {
+    this.openConfirmDialog(
+      'review',
+      report,
+      'Review Report',
+      `Mark this report by "${report.reporterUsername}" as reviewed? The report will be resolved.`,
+      'Review',
+      'confirm-action-success',
+      'fa-circle-check',
+      'rgba(34,197,94,0.12)',
+    );
+  }
+
+  requestDismissReport(report: ReportAdmin) {
+    this.openConfirmDialog(
+      'dismiss',
+      report,
+      'Dismiss Report',
+      `Dismiss this report by "${report.reporterUsername}"? The report will be discarded.`,
+      'Dismiss',
+      'confirm-action-danger',
+      'fa-xmark',
+      'rgba(255,68,0,0.12)',
+    );
+  }
+
+  private executeReviewReport(report: ReportAdmin) {
     this.actionLoading.set(report.reportId);
     this.adminService.reviewReport(report.reportId).subscribe({
       next: () => {
@@ -272,7 +304,7 @@ export class AdminComponent {
     });
   }
 
-  dismissReport(report: ReportAdmin) {
+  private executeDismissReport(report: ReportAdmin) {
     this.actionLoading.set(report.reportId);
     this.adminService.dismissReport(report.reportId).subscribe({
       next: () => {

@@ -359,6 +359,10 @@
                     (click)="requestDeletePost(post)" title="Delete post permanently">
                     <i class="fa-solid fa-trash"></i>
                   </button>
+                  <button type="button" class="btn-action" (click)="router.navigate(['/post', post.postId])"
+                    title="View post">
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </button>
                 </div>
               </td>
             </tr>
@@ -422,7 +426,8 @@
                 </div>
               </td>
               <td>
-                <div class="user-cell clickable" (click)="navigateToProfile(report.reportedUserId)" title="View profile">
+                <div class="user-cell clickable" (click)="navigateToProfile(report.reportedUserId)"
+                  title="View profile">
                   <img
                     [src]="report.reportedAvatar || 'https://ui-avatars.com/api/?name=' + report.reportedFirstname + '+' + report.reportedLastname + '&background=ff7800&color=fff'"
                     alt="" class="avatar-sm" />
@@ -451,7 +456,7 @@
                 <div class="action-btns">
                   @if (report.status === 'PENDING') {
                   <button type="button" class="btn-action btn-success" [disabled]="actionLoading() === report.reportId"
-                    (click)="reviewReport(report)" title="Mark as reviewed">
+                    (click)="requestReviewReport(report)" title="Mark as reviewed">
                     @if (actionLoading() === report.reportId) {
                     <i class="fa-solid fa-spinner fa-spin"></i>
                     } @else {
@@ -459,7 +464,7 @@
                     }
                   </button>
                   <button type="button" class="btn-action btn-danger" [disabled]="actionLoading() === report.reportId"
-                    (click)="dismissReport(report)" title="Dismiss report">
+                    (click)="requestDismissReport(report)" title="Dismiss report">
                     @if (actionLoading() === report.reportId) {
                     <i class="fa-solid fa-spinner fa-spin"></i>
                     } @else {

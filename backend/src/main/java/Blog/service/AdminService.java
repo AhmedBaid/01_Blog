@@ -21,10 +21,6 @@ import Blog.entity.User;
 import Blog.enums.Role;
 import Blog.enums.Status;
 import Blog.exception.GlobalException;
-import Blog.repository.CommentRepository;
-import Blog.repository.FollowRepository;
-import Blog.repository.LikeRepository;
-import Blog.repository.NotificationRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.ReportRepository;
 import Blog.repository.UserRepository;
@@ -34,26 +30,14 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ReportRepository reportRepository;
-    private final CommentRepository commentRepository;
-    private final LikeRepository likeRepository;
-    private final NotificationRepository notificationRepository;
-    private final FollowRepository followRepository;
     private static final Path MEDIA_UPLOAD_DIR = Paths.get("data", "posts");
 
     public AdminService(UserRepository userRepository,
             PostRepository postRepository,
-            ReportRepository reportRepository,
-            CommentRepository commentRepository,
-            LikeRepository likeRepository,
-            NotificationRepository notificationRepository,
-            FollowRepository followRepository) {
+            ReportRepository reportRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.reportRepository = reportRepository;
-        this.commentRepository = commentRepository;
-        this.likeRepository = likeRepository;
-        this.notificationRepository = notificationRepository;
-        this.followRepository = followRepository;
     }
 
     public List<UserDTO> getAllUsersForAdmin() {
@@ -103,22 +87,11 @@ public class AdminService {
             throw new GlobalException("You cannot delete an administrator account", HttpStatus.FORBIDDEN);
         }
 
-        // Delete child records manually (safety net for existing DBs where
-        // ON DELETE CASCADE has not been applied yet via @OnDelete annotations)
-        likeRepository.deleteByUser(user);
-        commentRepository.deleteByUser(user);
-        notificationRepository.deleteBySenderOrRecipient(user);
-        reportRepository.deleteByReporterOrReportedUser(user);
-        followRepository.deleteByFollowerOrFollowedTo(user);
-
-        // Delete user's posts (clean up media files + cascade likes/comments/reports on posts)
         List<Post> userPosts = postRepository.findByUser(user);
         for (Post post : userPosts) {
-            likeRepository.deleteByPost(post);
-            commentRepository.deleteByPost(post);
-            reportRepository.deleteByReportedPost(post);
-            deleteOldMedias(post.getMedias());
-            postRepository.delete(post);
+            if (post.getMedias() != null) {
+                deleteOldMedias(post.getMedias());
+            }
         }
 
         userRepository.delete(user);
@@ -128,9 +101,6 @@ public class AdminService {
     public void deletePostPermanently(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GlobalException("post not found", HttpStatus.NOT_FOUND));
-        likeRepository.deleteByPost(post);
-        commentRepository.deleteByPost(post);
-        reportRepository.deleteByReportedPost(post);
         deleteOldMedias(post.getMedias());
         postRepository.delete(post);
     }
