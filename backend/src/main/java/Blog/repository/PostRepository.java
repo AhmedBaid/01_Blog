@@ -3,6 +3,7 @@ package Blog.repository;
 import Blog.dto.PostAdminDTO;
 import Blog.dto.PostDTO;
 import Blog.entity.Post;
+import Blog.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,4 +62,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         long countByCreatedAtGreaterThanEqual(LocalDateTime sevenDaysAgo);
 
         long countByIsHiddenTrue();
+
+        List<Post> findByUser(User user);
 }

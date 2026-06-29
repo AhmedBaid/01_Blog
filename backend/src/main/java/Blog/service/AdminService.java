@@ -21,6 +21,10 @@ import Blog.entity.User;
 import Blog.enums.Role;
 import Blog.enums.Status;
 import Blog.exception.GlobalException;
+import Blog.repository.CommentRepository;
+import Blog.repository.FollowRepository;
+import Blog.repository.LikeRepository;
+import Blog.repository.NotificationRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.ReportRepository;
 import Blog.repository.UserRepository;
@@ -30,14 +34,26 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ReportRepository reportRepository;
+    private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
+    private final NotificationRepository notificationRepository;
+    private final FollowRepository followRepository;
     private static final Path MEDIA_UPLOAD_DIR = Paths.get("data", "posts");
 
     public AdminService(UserRepository userRepository,
             PostRepository postRepository,
-            ReportRepository reportRepository) {
+            ReportRepository reportRepository,
+            CommentRepository commentRepository,
+            LikeRepository likeRepository,
+            NotificationRepository notificationRepository,
+            FollowRepository followRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.reportRepository = reportRepository;
+        this.commentRepository = commentRepository;
+        this.likeRepository = likeRepository;
+        this.notificationRepository = notificationRepository;
+        this.followRepository = followRepository;
     }
 
     public List<UserDTO> getAllUsersForAdmin() {
@@ -86,6 +102,33 @@ public class AdminService {
         if (user.getRole() == Role.ADMIN) {
             throw new GlobalException("You cannot delete an administrator account", HttpStatus.FORBIDDEN);
         }
+
+        // Delete likes by this user (no FK to posts needed)
+        likeRepository.deleteByUser(user);
+
+        // Delete comments by this user
+        commentRepository.deleteByUser(user);
+
+        // Delete notifications involving this user (sender or recipient)
+        notificationRepository.deleteBySenderOrRecipient(user);
+
+        // Delete reports involving this user (reporter or reported)
+        reportRepository.deleteByReporterOrReportedUser(user);
+
+        // Delete follow relationships involving this user
+        followRepository.deleteByFollowerOrFollowedTo(user);
+
+        // Delete all posts by this user (cascade their likes, comments, reports, media)
+        List<Post> userPosts = postRepository.findByUser(user);
+        for (Post post : userPosts) {
+            likeRepository.deleteByPost(post);
+            commentRepository.deleteByPost(post);
+            reportRepository.deleteByReportedPost(post);
+            deleteOldMedias(post.getMedias());
+            postRepository.delete(post);
+        }
+
+        // Finally delete the user
         userRepository.delete(user);
     }
 
@@ -93,6 +136,9 @@ public class AdminService {
     public void deletePostPermanently(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GlobalException("post not found", HttpStatus.NOT_FOUND));
+        likeRepository.deleteByPost(post);
+        commentRepository.deleteByPost(post);
+        reportRepository.deleteByReportedPost(post);
         deleteOldMedias(post.getMedias());
         postRepository.delete(post);
     }

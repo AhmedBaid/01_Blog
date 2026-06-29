@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import Blog.entity.Like;
+import Blog.entity.Post;
+import Blog.entity.User;
+
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
     boolean existsByPost_PostIdAndUser_UserId(Long postId, Long userId);
@@ -13,4 +16,8 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByPost_PostIdAndUser_UserId(Long postId, Long userId);
 
     long countByPost_PostId(Long postId);
+
+    void deleteByUser(User user);
+
+    void deleteByPost(Post post);
 }
