@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -41,7 +40,7 @@ public interface FollowRepository extends JpaRepository<Follower, Long> {
                         "WHERE f.follower.userId = :profileUserId")
         List<FollowDTO> findFollowingByUserId(@Param("profileUserId") Long profileUserId);
 
-        @Modifying
-        @Query("DELETE FROM Follower f WHERE f.follower = :user OR f.followedTo = :user")
-        void deleteByFollowerOrFollowedTo(@Param("user") User user);
+        List<Follower> findByFollower(User follower);
+
+        List<Follower> findByFollowedTo(User followedTo);
 }

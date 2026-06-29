@@ -15,12 +15,14 @@ import Blog.dto.PostAdminDTO;
 import Blog.dto.AdminStatsDTO;
 import Blog.dto.ReportDTO;
 import Blog.dto.UserDTO;
+import Blog.entity.Follower;
 import Blog.entity.Post;
 import Blog.entity.Report;
 import Blog.entity.User;
 import Blog.enums.Role;
 import Blog.enums.Status;
 import Blog.exception.GlobalException;
+import Blog.repository.FollowRepository;
 import Blog.repository.PostRepository;
 import Blog.repository.ReportRepository;
 import Blog.repository.UserRepository;
@@ -30,14 +32,17 @@ public class AdminService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ReportRepository reportRepository;
+    private final FollowRepository followRepository;
     private static final Path MEDIA_UPLOAD_DIR = Paths.get("data", "posts");
 
     public AdminService(UserRepository userRepository,
             PostRepository postRepository,
-            ReportRepository reportRepository) {
+            ReportRepository reportRepository,
+            FollowRepository followRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.reportRepository = reportRepository;
+        this.followRepository = followRepository;
     }
 
     public List<UserDTO> getAllUsersForAdmin() {
@@ -86,6 +91,19 @@ public class AdminService {
         if (user.getRole() == Role.ADMIN) {
             throw new GlobalException("You cannot delete an administrator account", HttpStatus.FORBIDDEN);
         }
+
+        List<Follower> followersOfUser = followRepository.findByFollowedTo(user);
+        for (Follower f : followersOfUser) {
+            User follower = f.getFollower();
+            follower.setFollowingCount(Math.max(0, follower.getFollowingCount() - 1));
+        }
+
+        List<Follower> followedByUser = followRepository.findByFollower(user);
+        for (Follower f : followedByUser) {
+            User followedTo = f.getFollowedTo();
+            followedTo.setFollowersCount(Math.max(0, followedTo.getFollowersCount() - 1));
+        }
+
 
         List<Post> userPosts = postRepository.findByUser(user);
         for (Post post : userPosts) {
