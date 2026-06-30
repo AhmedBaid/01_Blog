@@ -174,7 +174,8 @@ export class EditPostComponent {
           this.notificationToast.success('Post updated successfully', 'Success');
         },
         error: (err) => {
-          this.notificationToast.error(err.error.message, 'Error');
+          const errorMessage = err.error?.message || 'An error occurred during editing of post';
+          this.notificationToast.error(errorMessage, 'Error');
         },
       });
   }

@@ -18,7 +18,7 @@ export class PostDetailsComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private notification = inject(NotificationService)
+  private notification = inject(NotificationService);
   private apiUrl = 'http://localhost:8080/api/posts';
 
   post = signal<Post | null>(null);
@@ -98,12 +98,12 @@ export class PostDetailsComponent {
           this.post.update((p) => (p ? { ...p, commentCount: p.commentCount + 1 } : null));
           this.isCommentSubmitting.set(false);
           this.createCommentForm.reset();
-          this.notification.success("comment created successfully","Success")
+          this.notification.success('comment created successfully', 'Success');
         },
         error: (err) => {
           console.error(err);
           this.isCommentSubmitting.set(false);
-          this.notification.error("could not create the comment","Error")
+          this.notification.error(err.error?.message || 'could not create the comment', 'Error');
         },
       });
   }

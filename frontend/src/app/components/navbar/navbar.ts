@@ -129,7 +129,7 @@ export class NavbarComponent {
         this.router.navigate([`/post/${postId}`]);
       },
       error: (err) => {
-        this.notificationToast.error(err.error.message, 'Error');
+          this.notificationToast.error(err.error?.message || 'Could not read the notif', 'Error');
       },
     });
   }

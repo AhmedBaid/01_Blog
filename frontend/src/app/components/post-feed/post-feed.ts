@@ -112,6 +112,7 @@ export class PostFeed {
                 : p,
             ),
           );
+          this.notificationToast.error(err.error?.message || 'Could not process like action', 'Error');
         },
       });
   }

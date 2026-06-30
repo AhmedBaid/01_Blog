@@ -36,6 +36,7 @@ export interface Post {
   avatar: string | null;
   likedByCurrentUser: boolean;
   itsMyPost: boolean;
+  hidden: boolean;
   mediaUrls: string[];
   currentMediaIndex?: number;
   toggleOptions: boolean;

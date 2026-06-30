@@ -26,8 +26,9 @@ public class PostDTO {
     private String createdAt;
     private Long likeCount;
     private Long commentCount;
+    private boolean hidden;
 
-    public PostDTO(Post post, long likeCount, long commentCount, boolean likedByCurrentUser) {
+    public PostDTO(Post post, long likeCount, long commentCount, boolean likedByCurrentUser, boolean hidden) {
         this.id = post.getPostId();
         this.title = post.getTitle();
         this.description = post.getDescription();
@@ -43,5 +44,6 @@ public class PostDTO {
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.likedByCurrentUser = likedByCurrentUser;
+        this.hidden = hidden;
     }
 }

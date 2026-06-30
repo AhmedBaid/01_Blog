@@ -1,5 +1,11 @@
 @for (post of posts(); track post.id) {
-<div class="post-card">
+<div class="post-card" [class.is-hidden-post]="post.hidden">
+  @if (post.hidden) {
+  <div class="hidden-post-banner">
+    <i class="fa-solid fa-eye-slash"></i>
+    <span>This post is hidden — only you can see it</span>
+  </div>
+  }
   <div class="post-header">
     @if (post.avatar) {
     <img title="img" class="p-avatar" [src]="post.avatar" [alt]="post.firstname" (click)="goToProfile(post.userId)" />

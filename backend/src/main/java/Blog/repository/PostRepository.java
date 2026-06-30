@@ -21,13 +21,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                         "p, " +
                         "COUNT(DISTINCT l.likeId), " +
                         "COUNT(DISTINCT c.commentId), " +
-                        "CASE WHEN COUNT(DISTINCT l2.likeId) > 0 THEN true ELSE false END) " +
+                        "CASE WHEN COUNT(DISTINCT l2.likeId) > 0 THEN true ELSE false END, " +
+                        "p.isHidden) " +
                         "FROM Post p " +
                         "JOIN FETCH p.user u " +
                         "LEFT JOIN Like l ON l.post.postId = p.postId " +
                         "LEFT JOIN Comment c ON c.post.postId = p.postId " +
                         "LEFT JOIN Like l2 ON l2.post.postId = p.postId AND l2.user.userId = :currentUserId " +
-                        "WHERE u.userId IN (SELECT f.followedTo.userId FROM Follower f WHERE f.follower.userId = :currentUserId) AND p.isHidden = false"
+                        "WHERE u.userId IN (SELECT f.followedTo.userId FROM Follower f WHERE f.follower.userId = :currentUserId) AND p.isHidden = false "
                         +
                         "GROUP BY p.postId, u.userId " +
                         "ORDER BY p.createdAt DESC")
@@ -37,7 +38,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                         "p, " +
                         "COUNT(DISTINCT l.likeId), " +
                         "COUNT(DISTINCT c.commentId), " +
-                        "CASE WHEN COUNT(DISTINCT l2.likeId) > 0 THEN true ELSE false END) " +
+                        "CASE WHEN COUNT(DISTINCT l2.likeId) > 0 THEN true ELSE false END, " +
+                        "p.isHidden) " +
                         "FROM Post p " +
                         "JOIN FETCH p.user u " +
                         "LEFT JOIN Like l ON l.post.postId = p.postId " +

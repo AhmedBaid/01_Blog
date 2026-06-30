@@ -215,11 +215,21 @@ public class PostService {
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
 
+        boolean isOwnProfile = userId.equals(currentUser.getUserId());
+
         Page<PostDTO> postsPage = postRepository.findUserPostsWithStats(userId, currentUser.getUserId(), pageable);
 
         postsPage.forEach(dto -> {
             dto.setItsMyPost(dto.getUserId().equals(currentUser.getUserId()));
         });
+
+        // If viewing another user's profile, filter out hidden posts
+        if (!isOwnProfile) {
+            java.util.List<PostDTO> visiblePosts = postsPage.getContent().stream()
+                    .filter(dto -> !dto.isHidden())
+                    .toList();
+            postsPage = new org.springframework.data.domain.PageImpl<>(visiblePosts, pageable, visiblePosts.size());
+        }
 
         return postsPage;
     }
@@ -252,6 +262,11 @@ public class PostService {
                 .orElseThrow(() -> new GlobalException("post not found", HttpStatus.NOT_FOUND));
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        if (post.isHidden() && !post.getUser().getUserId().equals(currentUser.getUserId())) {
+            throw new GlobalException("post not found", HttpStatus.NOT_FOUND);
+        }
+
         return mapToPostDTO(post, currentUser);
     }
 
@@ -281,6 +296,7 @@ public class PostService {
         dto.setMediaUrls(post.getMedias().stream().map(media -> "http://localhost:8080/posts/" + media).toList());
         dto.setLikeCount(totalLikes);
         dto.setCommentCount(totalComments);
+        dto.setHidden(post.isHidden());
         return dto;
     }
 }

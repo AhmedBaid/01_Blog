@@ -83,7 +83,7 @@ export class RegisterComponent {
   goToLogin(): void {
     this.router.navigate(['/auth/login']);
   }
-  
+
   onSubmit(): void {
     if (this.isSubmitting) {
       return;
@@ -125,7 +125,9 @@ export class RegisterComponent {
           this.router.navigate(['/auth/login']);
         },
         error: (err) => {
-          this.notificationToast.error(err.error.message, 'Error');
+          const errorMessage =
+            err.error?.message || 'An error occurred during register. Please try again.';
+          this.notificationToast.error(errorMessage, 'Register Failed');
         },
       });
   }

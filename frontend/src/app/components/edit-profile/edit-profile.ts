@@ -145,8 +145,8 @@ export class EditProfileComponent {
           this.notificationToast.success('Profile updated successfully', 'Success');
         },
         error: (err) => {
-          console.log(err);
-          this.notificationToast.error(err.error.message, 'Error');
+          const errorMessage = err.error?.message || 'An error occurred during editing of profile';
+          this.notificationToast.error(errorMessage, 'Error');
         },
       });
   }

@@ -8,6 +8,30 @@
   position: relative;
 }
 
+.is-hidden-post {
+  border-color: #2a2a2a;
+  opacity: 0.85;
+}
+
+.hidden-post-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255, 68, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 68, 0, 0.15);
+  color: #ff6b4a;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.hidden-post-banner i {
+  font-size: 0.85rem;
+}
+
 .post-header {
   display: flex;
   align-items: center;
@@ -315,6 +339,16 @@
     margin-top: 8px;
   }
 
+  .hidden-post-banner {
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    gap: 6px;
+  }
+
+  .hidden-post-banner i {
+    font-size: 0.78rem;
+  }
+
   .post-header {
     padding: 10px 12px 8px;
     gap: 8px;
@@ -396,6 +430,16 @@
   .post-card {
     border-radius: 8px;
     margin-top: 6px;
+  }
+
+  .hidden-post-banner {
+    padding: 5px 10px;
+    font-size: 0.68rem;
+    gap: 5px;
+  }
+
+  .hidden-post-banner i {
+    font-size: 0.72rem;
   }
 
   .post-header {

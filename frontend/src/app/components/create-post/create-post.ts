@@ -143,7 +143,8 @@ export class CreatePost {
           this.notificationToast.success('Post Created successfully', 'Success');
         },
         error: (err) => {
-          this.notificationToast.error(err.error.message, 'Error');
+          const errorMessage = err.error?.message || 'An error occurred during creating of post';
+          this.notificationToast.error(errorMessage, 'Error');
         },
       });
   }
