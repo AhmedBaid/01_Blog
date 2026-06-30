@@ -36,6 +36,7 @@ export class AdminComponent {
 
   loading = signal(false);
   actionLoading = signal<number | null>(null);
+  deleteLoading = signal<number | null>(null);
   confirmDialog = signal<ConfirmDialog | null>(null);
 
   ngOnInit() {
@@ -73,6 +74,12 @@ export class AdminComponent {
         this.loading.set(false);
       },
       error: () => this.loading.set(false),
+    });
+  }
+
+  private refreshStatsSilent() {
+    this.adminService.getStats().subscribe({
+      next: (data) => this.stats.set(data),
     });
   }
 
@@ -193,21 +200,21 @@ export class AdminComponent {
           list.map((u) => (u.userId === user.userId ? { ...u, status: !u.status } : u)),
         );
         this.actionLoading.set(null);
-        this.loadStats();
+        this.refreshStatsSilent();
       },
       error: () => this.actionLoading.set(null),
     });
   }
 
   private executeDeleteUser(user: UserAdmin) {
-    this.actionLoading.set(user.userId);
+    this.deleteLoading.set(user.userId);
     this.adminService.deleteUser(user.userId).subscribe({
       next: () => {
         this.users.update((list) => list.filter((u) => u.userId !== user.userId));
-        this.actionLoading.set(null);
-        this.loadStats();
+        this.deleteLoading.set(null);
+        this.refreshStatsSilent();
       },
-      error: () => this.actionLoading.set(null),
+      error: () => this.deleteLoading.set(null),
     });
   }
 
@@ -247,21 +254,21 @@ export class AdminComponent {
           list.map((p) => (p.postId === post.postId ? { ...p, hidden: !p.hidden } : p)),
         );
         this.actionLoading.set(null);
-        this.loadStats();
+        this.refreshStatsSilent();
       },
       error: () => this.actionLoading.set(null),
     });
   }
 
   private executeDeletePost(post: PostAdmin) {
-    this.actionLoading.set(post.postId);
+    this.deleteLoading.set(post.postId);
     this.adminService.deletePost(post.postId).subscribe({
       next: () => {
         this.posts.update((list) => list.filter((p) => p.postId !== post.postId));
-        this.actionLoading.set(null);
-        this.loadStats();
+        this.deleteLoading.set(null);
+        this.refreshStatsSilent();
       },
-      error: () => this.actionLoading.set(null),
+      error: () => this.deleteLoading.set(null),
     });
   }
 

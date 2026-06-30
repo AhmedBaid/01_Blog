@@ -271,10 +271,14 @@
                     <i [class.fa-ban]="!user.status" [class.fa-circle-check]="user.status" class="fa-solid"></i>
                     }
                   </button>
-                  <button title="delete" type="button" class="btn-action btn-danger"
-                    [disabled]="actionLoading() === user.userId || user.admin" (click)="requestDeleteUser(user)"
+                  <button type="button" class="btn-action btn-danger"
+                    [disabled]="deleteLoading() === user.userId || user.admin" (click)="requestDeleteUser(user)"
                     [title]="user.admin ? 'Cannot delete admin users' : 'Delete user permanently'">
+                    @if (deleteLoading() === user.userId) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
                     <i class="fa-solid fa-trash"></i>
+                    }
                   </button>
                 </div>
               </td>
@@ -355,9 +359,13 @@
                     <i [class.fa-eye-slash]="!post.hidden" [class.fa-eye]="post.hidden" class="fa-solid"></i>
                     }
                   </button>
-                  <button type="button" class="btn-action btn-danger" [disabled]="actionLoading() === post.postId"
+                  <button type="button" class="btn-action btn-danger" [disabled]="deleteLoading() === post.postId"
                     (click)="requestDeletePost(post)" title="Delete post permanently">
+                    @if (deleteLoading() === post.postId) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
                     <i class="fa-solid fa-trash"></i>
+                    }
                   </button>
                   <button type="button" class="btn-action" (click)="router.navigate(['/post', post.postId])"
                     title="View post">
