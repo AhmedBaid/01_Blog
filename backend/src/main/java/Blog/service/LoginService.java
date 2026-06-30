@@ -26,6 +26,9 @@ public class LoginService {
 
     public LoginResponseDTO login(@Valid LoginDTO loginData) {
         User user = findUser(loginData.getEmailOrUsername());
+        if (user.isBanned()) {
+            throw new GlobalException("your account is banned", HttpStatus.FORBIDDEN);
+        }
 
         if (!passwordEncoder.matches(loginData.getPassword(), user.getPassword())) {
             throw new GlobalException("Invalid email/username or password", HttpStatus.UNAUTHORIZED);

@@ -79,7 +79,7 @@ public class PostService {
         Post savedPost = postRepository.save(post);
         List<FollowDTO> followers = followRepository.findFollowersByUserId(currentUser.getUserId());
 
-        notificationService.saveNotif(currentUser.getUserId(), followers,savedPost.getPostId());
+        notificationService.saveNotif(currentUser.getUserId(), followers, savedPost.getPostId());
         return mapToPostDTO(savedPost, currentUser);
     }
 
@@ -229,6 +229,9 @@ public class PostService {
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GlobalException("post not found", HttpStatus.NOT_FOUND));
+        if (post.isHidden()) {
+            throw new GlobalException("This post is hidden by admin", HttpStatus.FORBIDDEN);
+        }
         Optional<Like> existingLike = likeRepository.findByPost_PostIdAndUser_UserId(postId, currentUser.getUserId());
         boolean likedByCurrentUser;
         if (existingLike.isPresent()) {

@@ -4,7 +4,7 @@
   border-radius: 14px;
   overflow: hidden;
   width: 100%;
-  max-width: 680px;
+  max-width: 700px;
   margin: 80px auto 0 auto;
   box-sizing: border-box;
 }
@@ -299,7 +299,7 @@
 
 .user-posts-feed {
   width: 100%;
-  max-width: 680px;
+  max-width: 700px;
   margin: 15px auto 0 auto;
 }
 .follow-modal-overlay {

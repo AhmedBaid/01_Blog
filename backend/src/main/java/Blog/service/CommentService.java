@@ -63,6 +63,9 @@ public class CommentService {
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new GlobalException("Post not found", HttpStatus.NOT_FOUND));
+        if (post.isHidden()) {
+            throw new GlobalException("This post is hidden by admin", HttpStatus.FORBIDDEN);
+        }
 
         Comment comment = new Comment();
         comment.setUser(currentUser);
@@ -83,7 +86,8 @@ public class CommentService {
         dto.setUsername(comment.getUser().getUsername());
         dto.setFirstname(comment.getUser().getFirstname());
         dto.setLastname(comment.getUser().getLastname());
-        dto.setAvatar(comment.getUser().getAvatar() == null ? null : "http://localhost:8080/avatars/" + comment.getUser().getAvatar());
+        dto.setAvatar(comment.getUser().getAvatar() == null ? null
+                : "http://localhost:8080/avatars/" + comment.getUser().getAvatar());
         return dto;
     }
 }

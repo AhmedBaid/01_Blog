@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import Blog.exception.GlobalException;
+import Blog.entity.User;
+import Blog.repository.UserRepository;
+
 import java.io.IOException;
 
 @Component
@@ -22,12 +27,14 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final HandlerExceptionResolver handlerExceptionResolver;
+    private final UserRepository userRepository;
 
     public JwtFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService,
-            HandlerExceptionResolver handlerExceptionResolver) {
+            HandlerExceptionResolver handlerExceptionResolver, UserRepository userRepository) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.handlerExceptionResolver = handlerExceptionResolver;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -35,12 +42,10 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
-        System.out.println("Authorization header: " + authHeader);
         final String jwt;
         final String username;
-        System.out.println("Received request: ");
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("No JWT token found in request headers");
             filterChain.doFilter(request, response);
             return;
         }
@@ -54,6 +59,15 @@ public class JwtFilter extends OncePerRequestFilter {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 if (jwtUtil.isTokenValid(jwt, userDetails)) {
+
+                    User user = userRepository.findByUsername(username)
+                            .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+                    if (user.isBanned()) {
+                        throw new GlobalException("Your account is banned. You cannot perform this action.",
+                                HttpStatus.FORBIDDEN);
+                    }
+
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,

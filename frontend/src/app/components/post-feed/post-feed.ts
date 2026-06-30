@@ -112,7 +112,6 @@ export class PostFeed {
                 : p,
             ),
           );
-          this.notificationToast.error('Could not process like action', 'Error');
         },
       });
   }

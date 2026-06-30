@@ -38,7 +38,7 @@ public class ReportService {
             throw new GlobalException("You must specify either a reported post ID or a reported user ID",
                     HttpStatus.BAD_REQUEST);
         }
-        
+
         if (reportedPostId != null && reportedUserId != null) {
             throw new GlobalException("You must specify just one (reportedUserId or reportedPostId)",
                     HttpStatus.BAD_REQUEST);
@@ -47,6 +47,9 @@ public class ReportService {
         if (reportedPostId != null) {
             Post post = postRepository.findById(reportedPostId)
                     .orElseThrow(() -> new GlobalException("Post not found", HttpStatus.NOT_FOUND));
+            if (post.isHidden()) {
+                throw new GlobalException("This post is hidden by admin", HttpStatus.FORBIDDEN);
+            }
 
             report.setReportedPost(post);
             report.setReportedUser(post.getUser());
