@@ -1,4 +1,5 @@
 package Blog.exception;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,13 +23,12 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorResponseDTO> buildResponse(HttpStatus status, String message, WebRequest request) {
         ErrorResponseDTO error = new ErrorResponseDTO(
-            LocalDateTime.now(),
-            status.value(),
-            status.getReasonPhrase(),
-            message,
-            getPath(request),
-            null
-        );
+                LocalDateTime.now(),
+                status.value(),
+                status.getReasonPhrase(),
+                message,
+                getPath(request),
+                null);
         return new ResponseEntity<>(error, status);
     }
 
@@ -43,7 +43,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleNotFound(jakarta.persistence.EntityNotFoundException ex, WebRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleNotFound(jakarta.persistence.EntityNotFoundException ex,
+            WebRequest request) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
@@ -53,20 +54,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex, WebRequest request) {
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex,
+            WebRequest request) {
         Map<String, String> validationErrors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-            validationErrors.put(error.getField(), error.getDefaultMessage())
-        );
+        ex.getBindingResult().getFieldErrors()
+                .forEach(error -> validationErrors.put(error.getField(), error.getDefaultMessage()));
 
         ErrorResponseDTO error = new ErrorResponseDTO(
-            LocalDateTime.now(),
-            HttpStatus.BAD_REQUEST.value(),
-            HttpStatus.BAD_REQUEST.getReasonPhrase(),
-            "Validation failed",
-            getPath(request),
-            validationErrors
-        );
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "Validation failed",
+                getPath(request),
+                validationErrors);
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -78,14 +78,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleUnexpectedException(Exception ex, WebRequest request) {
-        System.out.println("Unexpected error: " + ex.getMessage());
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred", request);
     }
 
-    @ExceptionHandler({JwtException.class, UsernameNotFoundException.class})
+    @ExceptionHandler({ JwtException.class, UsernameNotFoundException.class })
     public ResponseEntity<ErrorResponseDTO> handleUnauthorized(Exception ex, WebRequest request) {
-        return buildResponse(HttpStatus.UNAUTHORIZED, "An unexpected error occurred", request);
+        return buildResponse(HttpStatus.UNAUTHORIZED, "you are not authorized to do this", request);
     }
+
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponseDTO> handleMethodNotAllowed(Exception ex, WebRequest request) {
         return buildResponse(HttpStatus.METHOD_NOT_ALLOWED, "Method not allowed", request);
