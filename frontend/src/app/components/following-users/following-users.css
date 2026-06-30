@@ -190,9 +190,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
 
-/* Tablet: when stacked below feed, remove sticky */
 @media (max-width: 868px) {
   .suggestions-wrapper {
     position: static;
@@ -213,7 +211,6 @@
   }
 }
 
-/* Small tablet / large phone */
 @media (max-width: 600px) {
   .suggestions-wrapper {
     padding: 12px;
@@ -275,7 +272,6 @@
   }
 }
 
-/* Small phones */
 @media (max-width: 480px) {
   .suggestions-wrapper {
     padding: 10px;

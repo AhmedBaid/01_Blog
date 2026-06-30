@@ -543,9 +543,7 @@ small {
 
 
 
-/* ── Responsive ─────────────────────────────────────────────── */
 
-/* Tablet & below: stack the two-panel layout vertically */
 @media (max-width: 868px) {
   .split-view-container {
     margin-top: 80px;
@@ -576,7 +574,6 @@ small {
   }
 }
 
-/* Small tablet / large phone */
 @media (max-width: 600px) {
   .split-view-container {
     padding: 0 10px;
@@ -676,7 +673,6 @@ small {
   }
 }
 
-/* Small phones */
 @media (max-width: 480px) {
   .split-view-container {
     padding: 0 6px;

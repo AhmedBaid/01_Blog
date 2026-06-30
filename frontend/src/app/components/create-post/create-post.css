@@ -38,7 +38,9 @@ small {
   font-family: 'Syne', sans-serif;
 }
 
-.post-input-wrapper { flex: 1; }
+.post-input-wrapper {
+  flex: 1;
+}
 
 .post-input {
   width: 100%;
@@ -58,6 +60,7 @@ small {
   border-color: #3a3a3a;
   background: #1e1e1e;
 }
+
 .create-post-header i {
   font-size: 22px;
   color: #c97d3a;
@@ -79,8 +82,13 @@ small {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
@@ -94,8 +102,15 @@ small {
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header {
@@ -175,17 +190,18 @@ small {
   font-family: 'Syne', sans-serif;
 }
 
-.modal-content > label,
-.modal-content > input,
-.modal-content > textarea,
-.modal-content > .field,
-.modal-content > button:last-child,
-.modal-content > .preview {
+.modal-content>label,
+.modal-content>input,
+.modal-content>textarea,
+.modal-content>.field,
+.modal-content>button:last-child,
+.modal-content>.preview {
   display: block;
   margin: 0 20px;
 }
 
-.modal-content > label ,.modal-content > .field {
+.modal-content>label,
+.modal-content>.field {
   font-size: 11px;
   font-weight: 600;
   color: #555;
@@ -195,7 +211,7 @@ small {
   margin-bottom: 5px;
 }
 
-.modal-content > input[type="text"] {
+.modal-content>input[type="text"] {
   width: calc(100% - 40px);
   padding: 10px 14px;
   background: #1a1a1a;
@@ -210,7 +226,7 @@ small {
   margin-bottom: 15px;
 }
 
-.modal-content > textarea {
+.modal-content>textarea {
   width: calc(100% - 40px);
   padding: 10px 14px;
   background: #1a1a1a;
@@ -227,17 +243,21 @@ small {
   -webkit-appearance: none;
 }
 
-.modal-content > input[type="text"]::placeholder,
-.modal-content > textarea::placeholder { color: #444; }
+.modal-content>input[type="text"]::placeholder,
+.modal-content>textarea::placeholder {
+  color: #444;
+}
 
-.modal-content > input[type="text"]:focus,
-.modal-content > textarea:focus {
+.modal-content>input[type="text"]:focus,
+.modal-content>textarea:focus {
   border-color: #ff7800;
   background: #1f1a15;
   box-shadow: 0 0 0 3px rgba(255, 120, 0, 0.1);
 }
 
-.field { margin-top: 4px; }
+.field {
+  margin-top: 4px;
+}
 
 .avatar-label {
   display: flex;
@@ -291,7 +311,9 @@ small {
   color: #ccc;
 }
 
-.avatar-text-main span { color: #ff8a1f; }
+.avatar-text-main span {
+  color: #ff8a1f;
+}
 
 .avatar-text-sub {
   font-size: 11px;
@@ -306,7 +328,7 @@ small {
   min-height: 14px;
 }
 
-.modal-content > button:last-child {
+.modal-content>button:last-child {
   width: calc(100% - 40px);
   padding: 12px;
   margin-top: 14px;
@@ -323,12 +345,21 @@ small {
   letter-spacing: 0.02em;
 }
 
-.modal-content > button:last-child:hover { background: #e86d00; }
-.modal-content > button:last-child:active { transform: scale(0.99); }
+.modal-content>button:last-child:hover {
+  background: #e86d00;
+}
 
-/* ── Responsive ─────────────────────────────────────────────── */
+.modal-content>button:last-child:active {
+  transform: scale(0.99);
+}
 
-/* Small tablet / large phone */
+
+@media (min-width: 1200px) {
+  .create-post-wrapper{
+    width: 700px;
+  }
+}
+
 @media (max-width: 600px) {
   .create-post-header {
     padding: 8px 10px;
@@ -365,18 +396,18 @@ small {
     max-width: 100%;
   }
 
-  .modal-content > label,
-  .modal-content > input,
-  .modal-content > textarea,
-  .modal-content > .field,
-  .modal-content > button:last-child,
-  .modal-content > .preview {
+  .modal-content>label,
+  .modal-content>input,
+  .modal-content>textarea,
+  .modal-content>.field,
+  .modal-content>button:last-child,
+  .modal-content>.preview {
     margin: 0 16px;
   }
 
-  .modal-content > input[type="text"],
-  .modal-content > textarea,
-  .modal-content > button:last-child {
+  .modal-content>input[type="text"],
+  .modal-content>textarea,
+  .modal-content>button:last-child {
     width: calc(100% - 32px);
   }
 
@@ -392,7 +423,6 @@ small {
   }
 }
 
-/* Small phones */
 @media (max-width: 480px) {
   .create-post-header {
     padding: 6px 8px;
@@ -462,41 +492,41 @@ small {
     font-size: 13px;
   }
 
-  .modal-content > label,
-  .modal-content > input,
-  .modal-content > textarea,
-  .modal-content > .field,
-  .modal-content > button:last-child,
-  .modal-content > .preview {
+  .modal-content>label,
+  .modal-content>input,
+  .modal-content>textarea,
+  .modal-content>.field,
+  .modal-content>button:last-child,
+  .modal-content>.preview {
     margin: 0 12px;
   }
 
-  .modal-content > input[type="text"],
-  .modal-content > textarea,
-  .modal-content > button:last-child {
+  .modal-content>input[type="text"],
+  .modal-content>textarea,
+  .modal-content>button:last-child {
     width: calc(100% - 24px);
   }
 
-  .modal-content > label,
-  .modal-content > .field {
+  .modal-content>label,
+  .modal-content>.field {
     font-size: 10px;
     margin-top: 10px;
     margin-bottom: 4px;
   }
 
-  .modal-content > input[type="text"],
-  .modal-content > textarea {
+  .modal-content>input[type="text"],
+  .modal-content>textarea {
     font-size: 12px;
     padding: 8px 12px;
     border-radius: 8px;
     margin-bottom: 12px;
   }
 
-  .modal-content > textarea {
+  .modal-content>textarea {
     height: 70px;
   }
 
-  .modal-content > button:last-child {
+  .modal-content>button:last-child {
     padding: 10px;
     margin-top: 12px;
     margin-bottom: 16px;
@@ -555,6 +585,7 @@ small {
     font-size: 10px;
   }
 }
+
 .preview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));

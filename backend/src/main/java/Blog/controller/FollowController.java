@@ -39,7 +39,6 @@ public class FollowController {
 
     @GetMapping("/following/{profileUserId}")
     public List<FollowDTO> getProfileFollowing(@PathVariable Long profileUserId) {
-        System.out.println(profileUserId + "++++++++++++++++++++++");
         return followRepository.findFollowingByUserId(profileUserId);
     }
 }

@@ -17,12 +17,10 @@
   flex-shrink: 0;
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
 
-/* Tablet: stack sidebar below feed */
 @media (max-width: 868px) {
   .home-component {
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 20px;
     padding: 0 16px;
   }
@@ -36,7 +34,6 @@
   }
 }
 
-/* Small tablet / large phone */
 @media (max-width: 600px) {
   .home-component {
     padding: 0 10px;
@@ -45,7 +42,6 @@
   }
 }
 
-/* Small phones */
 @media (max-width: 480px) {
   .home-component {
     padding: 0 6px;

@@ -303,9 +303,12 @@
   font-size: 12px;
 }
 
-/* ── Responsive ─────────────────────────────────────────────── */
 
-/* Small tablet / large phone */
+@media (min-width: 1200px) {
+  .post-card{
+    width: 700px;
+  }
+}
 @media (max-width: 600px) {
   .post-card {
     border-radius: 10px;
@@ -389,7 +392,6 @@
   }
 }
 
-/* Small phones */
 @media (max-width: 480px) {
   .post-card {
     border-radius: 8px;
@@ -546,7 +548,6 @@
   }
 }
 
-/* Delete confirmation dialog */
 .confirm-overlay {
   position: fixed;
   inset: 0;

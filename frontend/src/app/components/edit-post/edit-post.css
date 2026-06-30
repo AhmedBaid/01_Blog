@@ -328,7 +328,6 @@ small {
   background: #ff7800;
 }
 
-/* Button row */
 .btn-row {
   display: flex;
   gap: 10px;
