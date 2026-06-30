@@ -1,6 +1,7 @@
 .split-view-container {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,6 +16,7 @@
   flex: 1.4;
   min-width: 0;
   max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
   overflow: visible;
 }
 
@@ -33,6 +35,7 @@ small {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   min-width: 0;
   max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
   display: flex;
   flex-direction: column;
   height: 600px;
@@ -540,13 +543,315 @@ small {
 
 
 
+/* ── Responsive ─────────────────────────────────────────────── */
+
+/* Tablet & below: stack the two-panel layout vertically */
 @media (max-width: 868px) {
   .split-view-container {
+    margin-top: 80px;
     flex-direction: column;
     align-items: stretch;
+    height: auto;
+    min-height: 100vh;
+    gap: 20px;
+    padding: 0 16px;
+    max-width: 100%;
+  }
+
+  .left-post-section {
+    max-height: none;
+    flex: none;
   }
 
   .right-comments-section {
     position: static;
+    max-height: none;
+    height: auto;
+    min-height: 400px;
+    flex: none;
+  }
+
+  .comments-list-scroll {
+    max-height: 360px;
+  }
+}
+
+/* Small tablet / large phone */
+@media (max-width: 600px) {
+  .split-view-container {
+    padding: 0 10px;
+    gap: 14px;
+  }
+
+  .post-header {
+    padding: 10px 12px 8px;
+  }
+
+  .p-title {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .p-desc {
+    font-size: 12px;
+    padding: 0 12px 10px;
+  }
+
+  .p-actions {
+    padding: 8px 10px;
+  }
+
+  .p-action-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .p-action-btn i {
+    font-size: 15px;
+  }
+
+  .right-comments-section {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .comments-container-box h3 {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .comment-write-form {
+    gap: 8px;
+    padding: 4px 10px;
+  }
+
+  .comment-write-form input {
+    font-size: 12px;
+  }
+
+  .comment-submit-btn {
+    font-size: 13px;
+  }
+
+  .comments-list-scroll {
+    max-height: 300px;
+    gap: 10px;
+  }
+
+  .comment-item-card {
+    gap: 10px;
+  }
+
+  .c-body {
+    padding: 8px 12px;
+  }
+
+  .c-text {
+    font-size: 12px;
+  }
+
+  .p-media-slider {
+    aspect-ratio: 4 / 3;
+  }
+
+  .slide-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .p-avatar,
+  .p-avatar-fb {
+    width: 32px;
+    height: 32px;
+  }
+
+  .p-avatar-fb {
+    font-size: 11px;
+  }
+
+  .view-loading {
+    margin-top: 100px;
+    padding: 40px 0;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .split-view-container {
+    padding: 0 6px;
+    gap: 10px;
+  }
+
+  .post-card.single-view {
+    border-radius: 10px;
+  }
+
+  .post-header {
+    padding: 8px 10px 6px;
+    gap: 8px;
+  }
+
+  .p-fullname {
+    font-size: 12px;
+  }
+
+  .p-username {
+    font-size: 10px;
+  }
+
+  .p-title {
+    font-size: 13px;
+    padding: 4px 10px;
+    line-height: 1.25;
+  }
+
+  .p-desc {
+    font-size: 11.5px;
+    padding: 0 10px 8px;
+  }
+
+  .p-actions {
+    padding: 6px 8px;
+    gap: 2px;
+  }
+
+  .p-action-btn {
+    padding: 6px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .p-action-btn .count {
+    display: none;
+  }
+
+  .p-action-btn i {
+    font-size: 14px;
+  }
+
+  .right-comments-section {
+    padding: 12px;
+    border-radius: 10px;
+    min-height: 350px;
+  }
+
+  .comments-container-box h3 {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .comment-write-form {
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 10px;
+  }
+
+  .comment-write-form input {
+    font-size: 11.5px;
+  }
+
+  .comment-submit-btn {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  .error-msg {
+    font-size: 10px;
+  }
+
+  .comments-list-scroll {
+    max-height: 260px;
+    gap: 8px;
+    padding-right: 4px;
+  }
+
+  .comment-item-card {
+    gap: 8px;
+  }
+
+  .c-avatar,
+  .c-avatar-fb {
+    width: 28px;
+    height: 28px;
+  }
+
+  .c-avatar-fb {
+    font-size: 10px;
+  }
+
+  .c-body {
+    padding: 6px 10px;
+    border-radius: 10px;
+  }
+
+  .c-fullname {
+    font-size: 11px;
+  }
+
+  .c-date {
+    font-size: 9px;
+  }
+
+  .c-text {
+    font-size: 11px;
+  }
+
+  .no-comments {
+    font-size: 12px;
+    padding: 20px 0;
+  }
+
+  .p-media-slider {
+    aspect-ratio: 1 / 1;
+  }
+
+  .slide-arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+
+  .slide-arrow.prev {
+    left: 6px;
+  }
+
+  .slide-arrow.next {
+    right: 6px;
+  }
+
+  .slider-indicators {
+    bottom: 8px;
+    gap: 4px;
+    padding: 3px 6px;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .dot.active {
+    width: 11px;
+  }
+
+  .p-avatar,
+  .p-avatar-fb {
+    width: 30px;
+    height: 30px;
+  }
+
+  .p-avatar-fb {
+    font-size: 10px;
+  }
+
+  .view-loading {
+    margin-top: 80px;
+    padding: 30px 0;
+    gap: 8px;
+  }
+
+  .view-loading span {
+    font-size: 12px;
   }
 }

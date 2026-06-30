@@ -189,3 +189,167 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+/* Tablet: when stacked below feed, remove sticky */
+@media (max-width: 868px) {
+  .suggestions-wrapper {
+    position: static;
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .suggestions-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+  }
+
+  .suggested-user-card {
+    padding: 10px;
+    border: 1px solid #1e1e1e;
+    border-radius: 12px;
+  }
+}
+
+/* Small tablet / large phone */
+@media (max-width: 600px) {
+  .suggestions-wrapper {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .suggestions-header {
+    margin-bottom: 12px;
+  }
+
+  .suggestions-header h3 {
+    font-size: 13px;
+  }
+
+  .refresh-btn {
+    font-size: 11px;
+    gap: 4px;
+    padding: 3px 6px;
+  }
+
+  .suggestions-list {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 6px;
+  }
+
+  .suggested-user-card {
+    padding: 8px;
+    gap: 10px;
+  }
+
+  .su-avatar,
+  .su-avatar-fallback {
+    width: 32px;
+    height: 32px;
+  }
+
+  .su-avatar-fallback {
+    font-size: 11px;
+  }
+
+  .su-fullname {
+    font-size: 12px;
+  }
+
+  .su-bio {
+    font-size: 11px;
+  }
+
+  .su-follow-btn {
+    font-size: 11px;
+    padding: 5px 12px;
+    gap: 4px;
+  }
+
+  .suggestions-loading,
+  .suggestions-empty {
+    font-size: 12px;
+    padding: 20px 0;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .suggestions-wrapper {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .suggestions-header {
+    margin-bottom: 10px;
+    padding: 0 2px;
+  }
+
+  .suggestions-header h3 {
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  .refresh-btn span {
+    display: none;
+  }
+
+  .refresh-btn {
+    font-size: 0;
+    padding: 4px 6px;
+  }
+
+  .refresh-btn i {
+    font-size: 13px;
+  }
+
+  .suggestions-list {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .suggested-user-card {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .su-avatar,
+  .su-avatar-fallback {
+    width: 36px;
+    height: 36px;
+  }
+
+  .su-avatar-fallback {
+    font-size: 12px;
+  }
+
+  .su-fullname {
+    font-size: 12px;
+  }
+
+  .su-username {
+    font-size: 10px;
+  }
+
+  .su-bio {
+    font-size: 10.5px;
+  }
+
+  .su-follow-btn {
+    font-size: 10.5px;
+    padding: 5px 10px;
+    gap: 4px;
+  }
+
+  .su-follow-btn i {
+    font-size: 10px;
+  }
+
+  .suggestions-loading,
+  .suggestions-empty {
+    font-size: 11px;
+    padding: 16px 0;
+  }
+}

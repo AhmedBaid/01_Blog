@@ -326,16 +326,234 @@ small {
 .modal-content > button:last-child:hover { background: #e86d00; }
 .modal-content > button:last-child:active { transform: scale(0.99); }
 
-@media (max-width: 540px) {
-  .create-post-modal { padding: 12px; align-items: flex-end; }
+/* ── Responsive ─────────────────────────────────────────────── */
+
+/* Small tablet / large phone */
+@media (max-width: 600px) {
+  .create-post-header {
+    padding: 8px 10px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+
+  .post-icon img,
+  .post-icon .avatar-fallback {
+    width: 34px;
+    height: 34px;
+  }
+
+  .post-icon .avatar-fallback {
+    font-size: 11px;
+  }
+
+  .post-input {
+    font-size: 12.5px;
+    padding: 8px 14px;
+  }
+
+  .create-post-header i {
+    font-size: 20px;
+  }
+
+  .create-post-modal {
+    padding: 12px;
+    align-items: flex-end;
+  }
 
   .modal-content {
     border-radius: 20px 20px 0 0;
     max-width: 100%;
   }
 
-  .action-button span { display: none; }
-  .action-button { padding: 9px; }
+  .modal-content > label,
+  .modal-content > input,
+  .modal-content > textarea,
+  .modal-content > .field,
+  .modal-content > button:last-child,
+  .modal-content > .preview {
+    margin: 0 16px;
+  }
+
+  .modal-content > input[type="text"],
+  .modal-content > textarea,
+  .modal-content > button:last-child {
+    width: calc(100% - 32px);
+  }
+
+  .header h2 {
+    font-size: 14px;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    padding: 10px;
+    max-height: 250px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .create-post-header {
+    padding: 6px 8px;
+    gap: 8px;
+    border-radius: 14px;
+  }
+
+  .post-icon img,
+  .post-icon .avatar-fallback {
+    width: 30px;
+    height: 30px;
+  }
+
+  .post-icon .avatar-fallback {
+    font-size: 10px;
+  }
+
+  .post-input {
+    font-size: 11.5px;
+    padding: 7px 12px;
+    border-radius: 18px;
+  }
+
+  .create-post-header i {
+    font-size: 18px;
+  }
+
+  .create-post-modal {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    border-radius: 18px 18px 0 0;
+    max-width: 100%;
+  }
+
+  .header {
+    padding: 10px 14px;
+  }
+
+  .header h2 {
+    font-size: 13px;
+  }
+
+  .header button {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+  }
+
+  .user-info {
+    gap: 8px;
+  }
+
+  .user-info img,
+  .user-info .avatar-fallback {
+    width: 32px;
+    height: 32px;
+  }
+
+  .user-info .avatar-fallback {
+    font-size: 11px;
+  }
+
+  .user-info div:last-child {
+    font-size: 13px;
+  }
+
+  .modal-content > label,
+  .modal-content > input,
+  .modal-content > textarea,
+  .modal-content > .field,
+  .modal-content > button:last-child,
+  .modal-content > .preview {
+    margin: 0 12px;
+  }
+
+  .modal-content > input[type="text"],
+  .modal-content > textarea,
+  .modal-content > button:last-child {
+    width: calc(100% - 24px);
+  }
+
+  .modal-content > label,
+  .modal-content > .field {
+    font-size: 10px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+
+  .modal-content > input[type="text"],
+  .modal-content > textarea {
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .modal-content > textarea {
+    height: 70px;
+  }
+
+  .modal-content > button:last-child {
+    padding: 10px;
+    margin-top: 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .avatar-label {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .avatar-circle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .avatar-circle svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .avatar-text-main {
+    font-size: 12px;
+  }
+
+  .avatar-text-sub {
+    font-size: 10px;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 6px;
+    padding: 8px;
+    max-height: 220px;
+    margin: 12px 0;
+  }
+
+  .preview-item {
+    border-radius: 10px;
+    aspect-ratio: 3 / 2;
+  }
+
+  .remove-preview-btn {
+    width: 24px;
+    height: 24px;
+    top: 6px;
+    right: 6px;
+  }
+
+  .remove-preview-btn i {
+    font-size: 12px;
+  }
+
+  .file-name-tag {
+    font-size: 10px;
+  }
 }
 .preview-grid {
   display: grid;

@@ -303,13 +303,208 @@
   font-size: 12px;
 }
 
-@media (max-width: 480px) {
+/* ── Responsive ─────────────────────────────────────────────── */
+
+/* Small tablet / large phone */
+@media (max-width: 600px) {
+  .post-card {
+    border-radius: 10px;
+    margin-top: 8px;
+  }
+
+  .post-header {
+    padding: 10px 12px 8px;
+    gap: 8px;
+  }
+
+  .p-fullname {
+    font-size: 12px;
+  }
+
+  .p-username {
+    font-size: 10px;
+  }
+
   .p-title {
     font-size: 14px;
+    padding: 0 12px 4px;
+  }
+
+  .p-desc {
+    font-size: 12px;
+    padding: 0 12px 8px;
+  }
+
+  .p-actions {
+    padding: 6px 8px;
+  }
+
+  .p-action-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .p-action-btn i {
+    font-size: 15px;
+  }
+
+  .p-media-slider {
+    aspect-ratio: 4 / 3;
+  }
+
+  .slide-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .p-avatar,
+  .p-avatar-fb {
+    width: 32px;
+    height: 32px;
+  }
+
+  .p-avatar-fb {
+    font-size: 11px;
+  }
+
+  .p-menu {
+    font-size: 13px;
+    padding: 4px 6px;
+  }
+
+  .option-btn {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .loading-spinner {
+    padding: 30px 0;
+    margin: 8px auto;
+    gap: 10px;
+  }
+
+  .loading-spinner span {
+    font-size: 12px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .post-card {
+    border-radius: 8px;
+    margin-top: 6px;
+  }
+
+  .post-header {
+    padding: 8px 10px 6px;
+    gap: 6px;
+  }
+
+  .p-fullname {
+    font-size: 11.5px;
+  }
+
+  .p-username {
+    font-size: 10px;
+  }
+
+  .p-title {
+    font-size: 13px;
+    padding: 0 10px 4px;
+    line-height: 1.25;
+  }
+
+  .p-desc {
+    font-size: 11px;
+    padding: 0 10px 6px;
+  }
+
+  .p-actions {
+    padding: 5px 6px;
+    gap: 1px;
+  }
+
+  .p-action-btn {
+    padding: 5px 8px;
+    font-size: 11px;
+    gap: 4px;
   }
 
   .p-action-btn .count {
     display: none;
+  }
+
+  .p-action-btn i {
+    font-size: 14px;
+  }
+
+  .p-media-slider {
+    aspect-ratio: 1 / 1;
+  }
+
+  .slide-arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+
+  .slide-arrow.prev {
+    left: 6px;
+  }
+
+  .slide-arrow.next {
+    right: 6px;
+  }
+
+  .slider-indicators {
+    bottom: 8px;
+    gap: 4px;
+    padding: 3px 6px;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .dot.active {
+    width: 11px;
+  }
+
+  .p-avatar,
+  .p-avatar-fb {
+    width: 30px;
+    height: 30px;
+  }
+
+  .p-avatar-fb {
+    font-size: 10px;
+  }
+
+  .p-menu {
+    font-size: 12px;
+    padding: 3px 5px;
+  }
+
+  .option-btn {
+    font-size: 11px;
+    padding: 7px 10px;
+  }
+
+  .no-posts-message {
+    font-size: 13px;
+    padding: 30px 0;
+    gap: 8px;
+  }
+
+  .loading-spinner {
+    padding: 25px 0;
+    gap: 8px;
+  }
+
+  .loading-spinner span {
+    font-size: 11px;
   }
 }
 

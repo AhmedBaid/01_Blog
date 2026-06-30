@@ -1,14 +1,55 @@
 .home-component {
   display: flex;
-  gap: 250px;
+  gap: 28px;
   margin: 80px auto 0 auto;
   max-width: 1300px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .first-section {
-  width: 70%;
+  flex: 1;
+  min-width: 0;
 }
 
 .second-section {
-  width: 30%;
+  width: 320px;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+/* Tablet: stack sidebar below feed */
+@media (max-width: 868px) {
+  .home-component {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 16px;
+  }
+
+  .first-section {
+    width: 100%;
+  }
+
+  .second-section {
+    width: 100%;
+  }
+}
+
+/* Small tablet / large phone */
+@media (max-width: 600px) {
+  .home-component {
+    padding: 0 10px;
+    gap: 14px;
+    margin-top: 70px;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .home-component {
+    padding: 0 6px;
+    gap: 10px;
+    margin-top: 64px;
+  }
 }
