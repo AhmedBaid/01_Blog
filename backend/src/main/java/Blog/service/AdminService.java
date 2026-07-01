@@ -47,6 +47,10 @@ public class AdminService {
 
     public List<UserDTO> getAllUsersForAdmin() {
         List<UserDTO> users = userRepository.getAllUsersForAdminDashboard();
+        for (UserDTO user : users) {
+            long postCount = postRepository.countByUser_Username(user.getUsername());
+            user.setPostsCount(postCount);
+        }
         return users;
     }
 

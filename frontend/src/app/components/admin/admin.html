@@ -229,6 +229,7 @@
               <th>Status</th>
               <th>Posts</th>
               <th>Followers</th>
+              <th>Following</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -259,6 +260,7 @@
               </td>
               <td>{{ user.postsCount }}</td>
               <td>{{ user.followersCount }}</td>
+              <td>{{ user.followingCount }}</td>
               <td>
                 <div class="action-btns">
                   <button type="button" class="btn-action" [class.btn-warning]="!user.status"
@@ -279,6 +281,10 @@
                     } @else {
                     <i class="fa-solid fa-trash"></i>
                     }
+                  </button>
+                  <button type="button" class="btn-action" (click)="router.navigate(['/profile', user.userId])"
+                    title="View profile">
+                    <i class="fa-solid fa-arrow-right"></i>
                   </button>
                 </div>
               </td>

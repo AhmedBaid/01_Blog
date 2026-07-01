@@ -44,7 +44,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         List<FollowDTO> searchUsersByUsername(@Param("username") String username);
 
         @Query("SELECT new Blog.dto.UserDTO(" +
-                        "u.userId, u.avatar, u.firstname, u.lastname, u.username,u.email,u.role,u.isBanned) " +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
                         "FROM User u")
         List<UserDTO> getAllUsersForAdminDashboard();
 
