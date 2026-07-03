@@ -264,7 +264,7 @@ public class PostService {
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
 
         if (post.isHidden() && !post.getUser().getUserId().equals(currentUser.getUserId())) {
-            throw new GlobalException("post not found", HttpStatus.NOT_FOUND);
+            throw new GlobalException("post is hidden", HttpStatus.NOT_FOUND);
         }
 
         return mapToPostDTO(post, currentUser);

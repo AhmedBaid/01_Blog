@@ -81,7 +81,7 @@ export class ProfileComponent {
             error: (err) => {
               console.error(err);
               this.notification.error(
-                'Could not load your profile details. Please try again later.',
+                'Could not load your profile details. Please try again later.',"Error"
               );
               this.isLoading.set(false);
             },
@@ -95,6 +95,7 @@ export class ProfileComponent {
             },
             error: (err) => {
               console.error(err);
+              this.notification.error('Profile not found. Please try again later.', 'Error');
               this.router.navigate(['/home']);
               this.isLoading.set(false);
             },

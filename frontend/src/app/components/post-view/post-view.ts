@@ -55,6 +55,7 @@ export class PostDetailsComponent {
       },
       error: (err) => {
         console.error(err);
+        this.notification.error(err.error?.message || 'could not fetch the post', 'Error');
         this.router.navigate(['/home']);
         this.isPostLoading.set(false);
       },
@@ -69,6 +70,7 @@ export class PostDetailsComponent {
       },
       error: (err) => {
         console.error(err);
+        this.notification.error(err.error?.message || 'could not fetch the comments', 'Error');
         this.isCommentsLoading.set(false);
       },
     });
