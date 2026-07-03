@@ -18,27 +18,35 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private notificationToast = inject(NotificationService);
+
   loginForm = this.fb.group({
     login: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
+
   isSubmitting = false;
+
   goToRegister(): void {
     this.router.navigate(['/auth/register']);
   }
+
   onSubmit(): void {
     if (this.isSubmitting) {
       return;
     }
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
+
     this.isSubmitting = true;
+
     const userData: UserData = {
       emailOrUsername: this.loginForm.value.login || '',
       password: this.loginForm.value.password || '',
     };
+
     this.authService
       .login(userData)
       .pipe(

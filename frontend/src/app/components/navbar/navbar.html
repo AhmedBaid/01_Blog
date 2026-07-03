@@ -1,10 +1,9 @@
-<div class="navbar-container">
-  <nav class="navbar">
+<nav class="navbar navbar-expand fixed-top py-2 px-5">
+  <div class="container-fluid p-0">
 
-    <a class="nb-brand" (click)="navigateToCreatePost()">
+    <a class="navbar-brand nb-brand m-0 p-0 d-flex align-items-center" (click)="navigateToCreatePost()">
       <h1 class="nb-brand-name"><span>01</span>Blog</h1>
     </a>
-
 
     <div class="nb-search-container">
       <div class="nb-search">
@@ -25,7 +24,6 @@
         } @else {
         @for (u of searchResults(); track u.userId) {
         <div class="search-result-item" [routerLink]="['/profile', u.userId]">
-
           <div class="sr-avatar-box">
             @if (u.avatar) {
             <img title="avatar" [src]="u.avatar" [alt]="u.firstname" class="sr-img">
@@ -35,12 +33,10 @@
             </div>
             }
           </div>
-
           <div class="sr-meta">
             <span class="sr-fullname">{{ u.firstname }} {{ u.lastname }}</span>
             <span class="sr-username">&#64;{{ u.username }}</span>
           </div>
-
         </div>
         } @empty {
         <div class="search-utility-box empty">
@@ -58,9 +54,7 @@
           <line x1="12" y1="5" x2="12" y2="19" />
           <line x1="5" y1="12" x2="19" y2="12" />
         </svg>
-        <span class="nb-create-text">
-          Create post
-        </span>
+        <span class="nb-create-text">Create post</span>
       </button>
 
       <button class="nb-btn nb-notif-wrap" aria-label="Notifications" (click)="showNotif()">
@@ -73,7 +67,6 @@
         }
       </button>
 
-
       <div class="nb-profile" (click)="toggleProfileMenu()">
         @if (user) {
         @if (user.avatar) {
@@ -81,32 +74,26 @@
         } @else {
         <div class="nb-avatar">{{ flName }}</div>
         }
-
         <div class="nb-profile-info">
-          <div class="nb-profile-name">
-            {{ user.firstname }} {{ user.lastname }}
-          </div>
+          <div class="nb-profile-name">{{ user.firstname }} {{ user.lastname }}</div>
         </div>
         }@else{
         <img class="nb-avatar-img" [src]="'http://localhost:8080/avatars/default.jpeg'" alt="Profile" />
         <div class="nb-profile-info">
-          <div class="nb-profile-name">
-            ahmed baid
-          </div>
+          <div class="nb-profile-name">ahmed baid</div>
         </div>
         }
       </div>
+
       @if(showNotifMenu){
       <div class="overlay-navbar" (click)="closeNotifMenu()">
         <div class="nb-profile-dropdown notif-dropdown" (click)="$event.stopPropagation()">
-
           <div class="notif-header">
             <h4>Notifications</h4>
             @if (notif().length > 0) {
             <span class="notif-badge-count">{{ notif().length }} new</span>
             }
           </div>
-
           <div class="notif-body-scroll">
             @if (isGetNotifLoading()) {
             <div class="notif-loading">
@@ -116,7 +103,6 @@
             } @else {
             @for (nt of notif(); track nt.notifId) {
             <div class="notif-item-row">
-
               <div class="nt-avatar-box" (click)="goToProfile(nt.userId)">
                 @if (nt.avatar) {
                 <img title="av" [src]="nt.avatar" [alt]="nt.firstname" class="nt-img">
@@ -126,21 +112,18 @@
                 </div>
                 }
               </div>
-
               <div class="nt-info-text">
                 <p class="nt-message">
                   <span class="nt-user-name">{{ nt.firstname }} {{ nt.lastname }}</span>
                   {{ nt.message }}
                 </p>
               </div>
-
               <div class="nt-action-box">
                 <button type="button" class="mark-read-btn" title="Mark as read"
                   (click)="markAsRead(nt.notifId,nt.postId)">
                   <i class="fa-solid fa-check"></i>
                 </button>
               </div>
-
             </div>
             } @empty {
             <div class="notif-empty-box">
@@ -150,7 +133,6 @@
             }
             }
           </div>
-
         </div>
       </div>
       }
@@ -158,17 +140,12 @@
       @if (showProfileMenu) {
       <div class="overlay-navbar" (click)="toggleProfileMenu()">
         <div class="nb-profile-dropdown" (click)="$event.stopPropagation()">
-
           <div class="nb-dropdown-header">
-
             @if (user.avatar) {
             <img class="nb-dropdown-avatar" [src]="user.avatar" alt="Profile" />
             } @else {
-            <div class="nb-dropdown-avatar-fallback">
-              {{ flName }}
-            </div>
+            <div class="nb-dropdown-avatar-fallback">{{ flName }}</div>
             }
-
             <div class="nb-dropdown-user-info">
               <i class="fa-solid fa-xmark" (click)="toggleProfileMenu()"></i>
               <h3>{{ user.firstname }} {{ user.lastname }}</h3>
@@ -176,38 +153,27 @@
             </div>
           </div>
           <div class="nb-follow-stats">
-            <span>
-              <strong>{{ user.postsCount }}</strong>
-              Posts
-            </span>
-            <span>
-              <strong>{{ user.followersCount }}</strong>
-              Followers
-            </span>
-            <span>
-              <strong>{{ user.followingCount }}</strong>
-              Following
-            </span>
+            <span><strong>{{ user.postsCount }}</strong> Posts</span>
+            <span><strong>{{ user.followersCount }}</strong> Followers</span>
+            <span><strong>{{ user.followingCount }}</strong> Following</span>
           </div>
           <div class="nb-dropdown-actions">
             <button class="nb-dropdown-btn profile-btn" (click)="navigateToProfile()">
-              <i class="fa-solid fa-user"></i>
-              Profile
+              <i class="fa-solid fa-user"></i> Profile
             </button>
             @if(user.admin){
             <button class="nb-dropdown-btn profile-btn" (click)="navigateToDashboard()">
-              <i class="fa-solid fa-chart-line"></i>
-              Dashboard
+              <i class="fa-solid fa-chart-line"></i> Dashboard
             </button>
             }
             <button class="nb-dropdown-btn logout-btn" (click)="logout()">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              Logout
+              <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
             </button>
           </div>
         </div>
       </div>
       }
     </div>
-  </nav>
-</div>
+
+  </div>
+</nav>
