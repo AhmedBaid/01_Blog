@@ -28,6 +28,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (error.status === 403 && router.url.startsWith('/admin')) {
+        notif.error('You are not authorized to access this page', 'Unauthorized');
         router.navigate(['/home']);
       }
 
