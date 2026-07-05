@@ -366,18 +366,6 @@ export class AdminComponent {
     return Math.round((s.bannedUsersCount / s.totalUsers) * 100);
   }
 
-  getStatusClass(status: string): string {
-    switch (status) {
-      case 'PENDING':
-        return 'badge-pending';
-      case 'REVIEWED':
-        return 'badge-reviewed';
-      case 'DISMISSED':
-        return 'badge-dismissed';
-      default:
-        return '';
-    }
-  }
 
   onLogout() {
     this.authService.logout();

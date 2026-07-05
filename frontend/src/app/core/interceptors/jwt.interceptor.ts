@@ -27,6 +27,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
         router.navigate(['/auth/login']);
       }
 
+      if (error.status === 403 && router.url.startsWith('/admin')) {
+        router.navigate(['/home']);
+      }
+
       if (error.status === 403) {
         const errorMessage = error.error?.message || '';
 
