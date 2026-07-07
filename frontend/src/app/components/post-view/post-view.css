@@ -20,6 +20,20 @@
   overflow: visible;
 }
 
+.delete-btn {
+  position: absolute;
+  bottom: 2px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: #ff4400;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
 small {
   display: block;
   color: #ff6f00;
@@ -336,7 +350,126 @@ small {
   color: #ff7800;
 }
 
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: 20px;
+  animation: fadeIn 0.12s ease;
+}
 
+.confirm-dialog {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 380px;
+  padding: 28px 24px 20px;
+  text-align: center;
+  animation: slideUp 0.15s ease;
+}
+
+.confirm-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 68, 0, 0.12);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+}
+
+.confirm-icon i {
+  font-size: 24px;
+  color: #ff4400;
+}
+
+.confirm-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #ece7df;
+  margin: 0 0 8px;
+}
+
+.confirm-desc {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 20px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.confirm-actions .btn-cancel {
+  flex: 1;
+  padding: 11px 16px;
+  background: #1e1e1e;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  color: #888;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.confirm-actions .btn-cancel:hover:not(:disabled) {
+  background: #252525;
+  color: #ccc;
+}
+
+.confirm-actions .btn-delete {
+  flex: 1.5;
+  padding: 11px 16px;
+  background: #dc2626;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.confirm-actions .btn-delete:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.confirm-actions .btn-delete:disabled,
+.confirm-actions .btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.confirm-actions .btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spinBtn 0.6s linear infinite;
+}
+
+@keyframes spinBtn {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .comments-container-box h3 {
   font-family: 'Syne', sans-serif;
@@ -463,6 +596,7 @@ small {
 }
 
 .c-body {
+  position: relative;
   flex: 1;
   background: #1a1a1a;
   border: 1px solid #222;

@@ -29,6 +29,8 @@ export class PostDetailsComponent {
   isCommentSubmitting = signal<boolean>(false);
   likingPostIds = new Set<number>();
   createCommentForm: FormGroup;
+  deletingComment = signal<Comment | null>(null);
+  isDeleting = false;
 
   constructor() {
     this.createCommentForm = this.fb.group({
@@ -136,5 +138,31 @@ export class PostDetailsComponent {
     } else {
       post.currentMediaIndex = post.mediaUrls.length - 1;
     }
+  }
+
+  confirmDeleteComment(comment: Comment): void {
+    this.deletingComment.set(comment);
+  }
+
+  cancelDelete(): void {
+    this.deletingComment.set(null);
+  }
+  executeDelete(): void {
+    const deletingComment = this.deletingComment();
+    if (!deletingComment || this.isDeleting) return;
+    const commentId = deletingComment.commentId;
+    this.isDeleting = true;
+    this.http.delete(`http://localhost:8080/api/comments/${commentId}`).subscribe({
+      next: () => {
+        this.comments.update((prev) => prev.filter((c) => c.commentId !== commentId));
+        this.deletingComment.set(null);
+        this.notification.success('comment deleted successfully', 'Success');
+      },
+      error: (err) => {
+        console.error(err);
+        this.deletingComment.set(null);
+        this.notification.error(err.error?.message || 'could not delete the comment', 'Error');
+      },
+    });
   }
 }

@@ -1,8 +1,10 @@
 package Blog.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Blog.dto.CommentDTO;
 import Blog.dto.CommentRequestDTO;
+import Blog.dto.ResponseDTO;
 import Blog.service.CommentService;
 import jakarta.validation.Valid;
 
@@ -35,5 +38,12 @@ public class CommentController {
             @Valid @RequestBody CommentRequestDTO commentRequest) {
 
         return ResponseEntity.ok(commentService.addComment(postId, commentRequest));
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<ResponseDTO> deleteComment(Principal principal, @PathVariable Long commentId) {
+        String username = principal.getName();
+        commentService.deleteComment(username, commentId);
+        return ResponseEntity.ok(new ResponseDTO("Comment deleted successfully"));
     }
 }

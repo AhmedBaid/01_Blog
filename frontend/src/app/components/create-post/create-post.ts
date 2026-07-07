@@ -118,6 +118,10 @@ export class CreatePost {
       this.createPostForm.markAllAsTouched();
       return;
     }
+    if (this.selectedFiles.length == 0) {
+      this.notificationToast.error('Please select at least one file to upload.');
+      return;
+    }
 
     this.isSubmitting = true;
     const formData = new FormData();

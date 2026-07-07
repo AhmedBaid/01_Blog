@@ -77,6 +77,18 @@ public class CommentService {
         return mapToCommentDTO(savedComment);
     }
 
+    @Transactional
+    public void deleteComment(String username, Long commentId) {
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new GlobalException("Comment not found", HttpStatus.NOT_FOUND));
+        if (!comment.getUser().getUsername().equals(currentUser.getUsername())) {
+            throw new GlobalException("You are not the owner of this comment", HttpStatus.FORBIDDEN);
+        }
+        commentRepository.delete(comment);
+    }
+
     public CommentDTO mapToCommentDTO(Comment comment) {
         CommentDTO dto = new CommentDTO();
         dto.setCommentId(comment.getCommentId());

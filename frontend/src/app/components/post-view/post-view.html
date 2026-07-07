@@ -110,6 +110,8 @@
               <span class="c-date">{{ comment.createdAt }}</span>
             </div>
             <p class="c-text">{{ comment.content }}</p>
+            <button title="Delete Comment" type="button" class="delete-btn"
+              (click)="confirmDeleteComment(comment)"><i class="fa-solid fa-trash"></i></button>
           </div>
         </div>
         } @empty {
@@ -118,6 +120,29 @@
       </div>
     </div>
   </div>
-
+  @if (deletingComment()) {
+  <div class="confirm-overlay" (click)="cancelDelete()">
+    <div class="confirm-dialog" (click)="$event.stopPropagation()">
+      <div class="confirm-icon">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 class="confirm-title">Delete Comment?</h3>
+      <p class="confirm-desc">
+        This action cannot be undone. The comment will be permanently removed.
+      </p>
+      <div class="confirm-actions">
+        <button type="button" class="btn-cancel" (click)="cancelDelete()" [disabled]="isDeleting">Cancel</button>
+        <button type="button" class="btn-delete" (click)="executeDelete()" [disabled]="isDeleting">
+          @if (isDeleting) {
+          <span class="btn-spinner"></span>
+          Deleting...
+          } @else {
+          Delete
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+  }
 </div>
 }
