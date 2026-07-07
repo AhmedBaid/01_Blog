@@ -208,6 +208,7 @@ The backend exposes a REST API at `http://localhost:8080`:
 | GET | `/api/users/{userId}/posts` | Get user's posts |
 | GET | `/api/posts/{postId}/comments` | Get post comments |
 | POST | `/api/posts/{postId}/comment` | Add comment |
+| DELETE | `/api/comments/{comment}` | Delete comment |
 | POST | `/api/follow/{userId}` | Toggle follow/unfollow |
 | GET | `/api/followers/{userId}` | Get user's followers |
 | GET | `/api/following/{userId}` | Get who a user follows |
