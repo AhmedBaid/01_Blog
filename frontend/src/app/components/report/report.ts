@@ -77,7 +77,7 @@ export class ReportModalComponent {
         this.closeModal();
       },
       error: (err) => {
-        console.log(err)
+        console.error(err);
         this.notification.error(err.error?.message || 'Could not submit report', 'Error');
         this.isSubmitting.set(false);
       },

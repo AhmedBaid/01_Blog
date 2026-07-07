@@ -65,7 +65,6 @@ export class CreatePost {
     for (const file of files) {
       try {
         const realMimeType = await this.getRealMimeType.validateRealMimeType(file);
-        console.log(`File: ${file.name}, Real MIME Type: ${realMimeType}`);
         if (!this.ALLOWED_TYPES.has(realMimeType)) {
           this.notificationToast.error(`File ${file.name} has an invalid format.`);
           continue;

@@ -44,7 +44,6 @@ public class JwtUtil {
     }
 
     private String generateToken(Map<String, Object> claims, String username) {
-        System.out.println("Generating token for user: " + username);
         Date now = new Date();
         Date expiration = new Date(now.getTime() + jwtExpiration);
 

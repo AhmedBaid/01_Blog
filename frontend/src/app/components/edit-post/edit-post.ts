@@ -115,7 +115,6 @@ export class EditPostComponent {
 
   removeFile(index: number): void {
     const previewToRemove = this.previews()[index].url;
-    console.log('Removing file with preview URL:', previewToRemove);
     URL.revokeObjectURL(previewToRemove);
     this.selectedFiles.splice(index, 1);
     this.removedMediaUrls.push(previewToRemove);
@@ -159,7 +158,6 @@ export class EditPostComponent {
       formData.append('medias', file);
     });
     this.removedMediaUrls.forEach((url) => {
-      console.log('url to remove:', url);
       const fileName = this.getName(url);
       formData.append('removedMedias', fileName);
     });

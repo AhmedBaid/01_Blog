@@ -85,7 +85,6 @@ public class PostService {
 
     @Transactional
     public PostDTO updatePost(Long postId, EditPostDto editPostDto) {
-        System.out.println("removed files " + editPostDto.getRemovedMedias());
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
@@ -162,7 +161,6 @@ public class PostService {
         List<String> savedFileNames = new ArrayList<>();
         for (MultipartFile file : medias) {
             String contentType = GetRealMimeType.getRealMimeType(file);
-            System.out.println("Content Type: " + contentType);
             if (contentType == null || !ALLOWED_MEDIA_TYPES.contains(contentType)) {
                 throw new GlobalException("Invalid media type", HttpStatus.BAD_REQUEST);
             }

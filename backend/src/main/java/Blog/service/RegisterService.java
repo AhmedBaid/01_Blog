@@ -65,7 +65,6 @@ public class RegisterService {
         }
 
         String contentType = GetRealMimeType.getRealMimeType(avatar);
-        System.out.println("Avatar content type: +++++++++++++++++++" + contentType);
         if (contentType == null || !ALLOWED_AVATAR_TYPES.contains(contentType)) {
             throw new GlobalException("Avatar must be a JPEG, PNG, WEBP, or GIF image", HttpStatus.BAD_REQUEST);
         }

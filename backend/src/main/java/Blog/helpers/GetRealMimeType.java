@@ -12,8 +12,6 @@ public class GetRealMimeType {
 
             String realMimeType = tika.detect(file.getInputStream());
 
-            System.out.println("Fake Content Type: " + file.getContentType());
-            System.out.println("Real Content Type: " + realMimeType);
             return realMimeType;
 
         } catch (IOException e) {
