@@ -366,7 +366,6 @@ export class AdminComponent {
     return Math.round((s.bannedUsersCount / s.totalUsers) * 100);
   }
 
-
   onLogout() {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
@@ -374,5 +373,22 @@ export class AdminComponent {
 
   navigateToProfile(userId: number) {
     this.router.navigate(['/profile', userId]);
+  }
+
+  refreshData(type: string) {
+    switch (type) {
+      case 'stats':
+        this.loadStats();
+        break;
+      case 'users':
+        this.loadUsers();
+        break;
+      case 'posts':
+        this.loadPosts();
+        break;
+      case 'reports':
+        this.loadReports();
+        break;
+    }
   }
 }
