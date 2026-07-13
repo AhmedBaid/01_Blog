@@ -2,7 +2,7 @@
   position: fixed;
   top: 22px;
   right: 22px;
-  z-index: 1000;
+  z-index: 10000;
   width: min(360px, calc(100vw - 32px));
   min-height: 74px;
   display: flex;

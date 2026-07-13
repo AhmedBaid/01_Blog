@@ -45,7 +45,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
         @Query("SELECT new Blog.dto.UserDTO(" +
                         "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
-                        "FROM User u")
+                        "FROM User u " + "ORDER BY u.createdAt DESC")
         List<UserDTO> getAllUsersForAdminDashboard();
 
         long countByRole(Role role);

@@ -377,9 +377,6 @@ export class AdminComponent {
 
   refreshData(type: string) {
     switch (type) {
-      case 'stats':
-        this.loadStats();
-        break;
       case 'users':
         this.loadUsers();
         break;

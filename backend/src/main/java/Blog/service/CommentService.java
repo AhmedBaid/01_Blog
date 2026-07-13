@@ -51,7 +51,8 @@ public class CommentService {
             dto.setLastname(commentOwner.getLastname());
             dto.setAvatar(commentOwner.getAvatar() == null ? null
                     : "http://localhost:8080/avatars/" + commentOwner.getAvatar());
-
+            dto.setIsMine(commentOwner.getUsername().equals(
+                    SecurityContextHolder.getContext().getAuthentication().getName()));
             return dto;
         }).toList();
     }
@@ -83,6 +84,10 @@ public class CommentService {
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new GlobalException("Comment not found", HttpStatus.NOT_FOUND));
+        Post post = comment.getPost();
+        if (post.isHidden()) {
+            throw new GlobalException("This post is hidden by admin", HttpStatus.FORBIDDEN);
+        }
         if (!comment.getUser().getUsername().equals(currentUser.getUsername())) {
             throw new GlobalException("You are not the owner of this comment", HttpStatus.FORBIDDEN);
         }
@@ -100,6 +105,8 @@ public class CommentService {
         dto.setLastname(comment.getUser().getLastname());
         dto.setAvatar(comment.getUser().getAvatar() == null ? null
                 : "http://localhost:8080/avatars/" + comment.getUser().getAvatar());
+        dto.setIsMine(comment.getUser().getUsername().equals(
+                SecurityContextHolder.getContext().getAuthentication().getName()));
         return dto;
     }
 }

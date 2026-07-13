@@ -59,7 +59,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         @Query("SELECT new Blog.dto.PostAdminDTO(" +
                         "p.postId, p.title, p.description, p.isHidden, p.createdAt, " +
                         "p.user.userId, p.user.avatar, p.user.firstname, p.user.lastname) " +
-                        "FROM Post p ")
+                        "FROM Post p " + "ORDER BY p.createdAt DESC")
         List<PostAdminDTO> findAllPostsForAdminDashboard();
 
         long countByCreatedAtGreaterThanEqual(LocalDateTime sevenDaysAgo);

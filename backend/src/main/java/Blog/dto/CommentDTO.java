@@ -12,4 +12,5 @@ public class CommentDTO {
     private String firstname;
     private String lastname;
     private String avatar;
+    private boolean IsMine;
 }

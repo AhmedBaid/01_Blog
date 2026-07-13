@@ -8,7 +8,7 @@ import { UserService } from './user.service';
   providedIn: 'root',
 })
 export class AuthService {
-  userService = inject(UserService);
+  private userService = inject(UserService);
   private apiUrl = 'http://localhost:8080/api';
   private http = inject(HttpClient);
   register(userData: FormData): Observable<any> {

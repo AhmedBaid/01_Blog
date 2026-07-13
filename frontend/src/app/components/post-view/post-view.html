@@ -110,8 +110,10 @@
               <span class="c-date">{{ comment.createdAt }}</span>
             </div>
             <p class="c-text">{{ comment.content }}</p>
-            <button title="Delete Comment" type="button" class="delete-btn"
-              (click)="confirmDeleteComment(comment)"><i class="fa-solid fa-trash"></i></button>
+            @if (comment.IsMine) {
+            <button title="Delete Comment" type="button" class="delete-btn" (click)="confirmDeleteComment(comment)"><i
+                class="fa-solid fa-trash"></i></button>
+            }
           </div>
         </div>
         } @empty {

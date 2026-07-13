@@ -53,6 +53,7 @@ export interface Comment {
   firstname: string;
   lastname: string;
   avatar: string;
+  IsMine: boolean;
 }
 
 export interface PostsPage {

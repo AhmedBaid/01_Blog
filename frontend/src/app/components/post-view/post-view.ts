@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Comment, Post } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
+import { AuthService } from '../../core/services/auth.service';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'app-post-view',
@@ -67,6 +69,7 @@ export class PostDetailsComponent {
   fetchPostComments(postId: number): void {
     this.http.get<Comment[]>(`${`${this.apiUrl}`}/${postId}/comments`).subscribe({
       next: (commentsData) => {
+        console.log('Fetched comments:', commentsData);
         this.comments.set(commentsData);
         this.isCommentsLoading.set(false);
       },
@@ -156,10 +159,12 @@ export class PostDetailsComponent {
       next: () => {
         this.comments.update((prev) => prev.filter((c) => c.commentId !== commentId));
         this.deletingComment.set(null);
+        this.isDeleting = false;
         this.notification.success('comment deleted successfully', 'Success');
       },
       error: (err) => {
         console.error(err);
+        this.isDeleting = false;
         this.deletingComment.set(null);
         this.notification.error(err.error?.message || 'could not delete the comment', 'Error');
       },
