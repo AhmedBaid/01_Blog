@@ -58,7 +58,8 @@
       }
 
       <div class="p-actions">
-        <button type="button" class="p-action-btn" [class.liked]="currentPost.likedByCurrentUser">
+        <button type="button" class="p-action-btn" [class.liked]="currentPost.likedByCurrentUser"
+          [disabled]="isLikeSubmitting(currentPost.id)" (click)="toggleLike(currentPost)">
           <i [class]="currentPost.likedByCurrentUser ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
           <span class="count">{{ currentPost.likeCount }}</span>
         </button>

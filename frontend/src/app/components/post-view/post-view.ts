@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Comment, Post } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
-import { AuthService } from '../../core/services/auth.service';
-import { UserService } from '../../core/services/user.service';
+import { PostService } from '../../core/services/post.service';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 @Component({
   selector: 'app-post-view',
@@ -21,6 +21,7 @@ export class PostDetailsComponent {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private notification = inject(NotificationService);
+  private postService = inject(PostService);
   private apiUrl = 'http://localhost:8080/api/posts';
 
   post = signal<Post | null>(null);
@@ -30,6 +31,7 @@ export class PostDetailsComponent {
   isCommentsLoading = signal<boolean>(true);
   isCommentSubmitting = signal<boolean>(false);
   likingPostIds = new Set<number>();
+  likedByCurrentUser = false;
   createCommentForm: FormGroup;
   deletingComment = signal<Comment | null>(null);
   isDeleting = false;
@@ -169,5 +171,42 @@ export class PostDetailsComponent {
         this.notification.error(err.error?.message || 'could not delete the comment', 'Error');
       },
     });
+  }
+
+  toggleLike(post: Post): void {
+    if (this.likingPostIds.has(post.id)) return;
+
+    this.likingPostIds.add(post.id);
+
+    this.postService
+      .LikePost(post.id)
+      .pipe(finalize(() => this.likingPostIds.delete(post.id)))
+      .subscribe({
+        next: (likeResponse) => {
+          this.post.update((currentPost) =>
+            currentPost && currentPost.id === post.id
+              ? {
+                  ...currentPost,
+                  likedByCurrentUser: likeResponse.likedByCurrentUser,
+                  likeCount: likeResponse.likeCount,
+                }
+              : currentPost,
+          );
+
+          this.postService.updatePostInList({
+            ...post,
+            likedByCurrentUser: likeResponse.likedByCurrentUser,
+            likeCount: likeResponse.likeCount,
+          });
+        },
+        error: (err) => {
+          console.error('Failed to toggle like', err);
+          this.notification.error(err.error?.message || 'Could not process like action', 'Error');
+        },
+      });
+  }
+
+  isLikeSubmitting(postId: number): boolean {
+    return this.likingPostIds.has(postId);
   }
 }
