@@ -1,4 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Subject, debounceTime } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { AdminService } from '../../core/services/admin.service';
 import { Router } from '@angular/router';
@@ -17,7 +19,7 @@ interface ConfirmDialog {
 
 @Component({
   selector: 'app-admin',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './admin.html',
   styleUrls: ['./admin.css'],
 })
@@ -35,12 +37,36 @@ export class AdminComponent {
   reports = signal<ReportAdmin[]>([]);
 
   loading = signal(false);
+  usersLoading = signal(false);
+  postsLoading = signal(false);
+  reportsLoading = signal(false);
+
+  usersPage = 0;
+  postsPage = 0;
+  reportsPage = 0;
+
+  usersLast = signal(false);
+  postsLast = signal(false);
+  reportsLast = signal(false);
+
+  usersSearch = signal('');
+  postsSearch = signal('');
+  reportsSearch = signal('');
+
+  private usersSearchSubject = new Subject<string>();
+  private postsSearchSubject = new Subject<string>();
+  private reportsSearchSubject = new Subject<string>();
+
   actionLoading = signal<number | null>(null);
   deleteLoading = signal<number | null>(null);
   confirmDialog = signal<ConfirmDialog | null>(null);
 
   ngOnInit() {
     this.loadStats();
+
+    this.usersSearchSubject.pipe(debounceTime(400)).subscribe(() => this.resetAndLoadUsers());
+    this.postsSearchSubject.pipe(debounceTime(400)).subscribe(() => this.resetAndLoadPosts());
+    this.reportsSearchSubject.pipe(debounceTime(400)).subscribe(() => this.resetAndLoadReports());
   }
 
   toggleSidebar() {
@@ -55,13 +81,13 @@ export class AdminComponent {
         this.loadStats();
         break;
       case 'users':
-        this.loadUsers();
+        if (this.users().length === 0) this.resetAndLoadUsers();
         break;
       case 'posts':
-        this.loadPosts();
+        if (this.posts().length === 0) this.resetAndLoadPosts();
         break;
       case 'reports':
-        this.loadReports();
+        if (this.reports().length === 0) this.resetAndLoadReports();
         break;
     }
   }
@@ -83,37 +109,118 @@ export class AdminComponent {
     });
   }
 
-  loadUsers() {
-    this.loading.set(true);
-    this.adminService.getUsers().subscribe({
-      next: (data) => {
-        this.users.set(data);
-        this.loading.set(false);
+  // ── Users ──────────────────────────────────────────────
+
+  resetAndLoadUsers() {
+    this.users.set([]);
+    this.usersPage = 0;
+    this.usersLast.set(false);
+    this.loadUsersPage();
+  }
+
+  loadUsersPage() {
+    if (this.usersLoading() || this.usersLast()) return;
+    this.usersLoading.set(true);
+    const search = this.usersSearch().trim() || undefined;
+    this.adminService.getUsers(this.usersPage, search).subscribe({
+      next: (page) => {
+        this.users.update((list) => [...list, ...page.content]);
+        this.usersLast.set(page.last);
+        this.usersPage++;
+        this.usersLoading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => this.usersLoading.set(false),
     });
   }
 
-  loadPosts() {
-    this.loading.set(true);
-    this.adminService.getPosts().subscribe({
-      next: (data) => {
-        this.posts.set(data);
-        this.loading.set(false);
+  loadMoreUsers() {
+    if (this.activeTab() !== 'users') return;
+    this.loadUsersPage();
+  }
+
+  onUsersSearchInput() {
+    this.usersSearchSubject.next(this.usersSearch());
+  }
+
+  // ── Posts ──────────────────────────────────────────────
+
+  resetAndLoadPosts() {
+    this.posts.set([]);
+    this.postsPage = 0;
+    this.postsLast.set(false);
+    this.loadPostsPage();
+  }
+
+  loadPostsPage() {
+    if (this.postsLoading() || this.postsLast()) return;
+    this.postsLoading.set(true);
+    const search = this.postsSearch().trim() || undefined;
+    this.adminService.getPosts(this.postsPage, search).subscribe({
+      next: (page) => {
+        this.posts.update((list) => [...list, ...page.content]);
+        this.postsLast.set(page.last);
+        this.postsPage++;
+        this.postsLoading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => this.postsLoading.set(false),
     });
   }
 
-  loadReports() {
-    this.loading.set(true);
-    this.adminService.getReports().subscribe({
-      next: (data) => {
-        this.reports.set(data);
-        this.loading.set(false);
+  loadMorePosts() {
+    if (this.activeTab() !== 'posts') return;
+    this.loadPostsPage();
+  }
+
+  onPostsSearchInput() {
+    this.postsSearchSubject.next(this.postsSearch());
+  }
+
+  // ── Reports ────────────────────────────────────────────
+
+  resetAndLoadReports() {
+    this.reports.set([]);
+    this.reportsPage = 0;
+    this.reportsLast.set(false);
+    this.loadReportsPage();
+  }
+
+  loadReportsPage() {
+    if (this.reportsLoading() || this.reportsLast()) return;
+    this.reportsLoading.set(true);
+    const search = this.reportsSearch().trim() || undefined;
+    this.adminService.getReports(this.reportsPage, search).subscribe({
+      next: (page) => {
+        this.reports.update((list) => [...list, ...page.content]);
+        this.reportsLast.set(page.last);
+        this.reportsPage++;
+        this.reportsLoading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => this.reportsLoading.set(false),
     });
+  }
+
+  loadMoreReports() {
+    if (this.activeTab() !== 'reports') return;
+    this.loadReportsPage();
+  }
+
+  onReportsSearchInput() {
+    this.reportsSearchSubject.next(this.reportsSearch());
+  }
+
+  // ── Infinite scroll ────────────────────────────────────
+
+  onTabScroll(event: Event) {
+    const el = event.target as HTMLElement;
+    if (!el) return;
+    const pos = el.scrollTop + el.clientHeight;
+    const max = el.scrollHeight;
+    if (pos >= max - 300) {
+      const tab = this.activeTab();
+      if (tab === 'users') this.loadMoreUsers();
+      else if (tab === 'posts') this.loadMorePosts();
+      else if (tab === 'reports') this.loadMoreReports();
+    }
   }
 
   openConfirmDialog(
@@ -378,13 +485,13 @@ export class AdminComponent {
   refreshData(type: string) {
     switch (type) {
       case 'users':
-        this.loadUsers();
+        this.resetAndLoadUsers();
         break;
       case 'posts':
-        this.loadPosts();
+        this.resetAndLoadPosts();
         break;
       case 'reports':
-        this.loadReports();
+        this.resetAndLoadReports();
         break;
     }
   }

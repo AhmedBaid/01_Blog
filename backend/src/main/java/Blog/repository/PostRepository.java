@@ -62,6 +62,22 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                         "FROM Post p " + "ORDER BY p.createdAt DESC")
         List<PostAdminDTO> findAllPostsForAdminDashboard();
 
+        @Query("SELECT new Blog.dto.PostAdminDTO(" +
+                        "p.postId, p.title, p.description, p.isHidden, p.createdAt, " +
+                        "p.user.userId, p.user.avatar, p.user.firstname, p.user.lastname) " +
+                        "FROM Post p " +
+                        "WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "ORDER BY p.createdAt DESC")
+        Page<PostAdminDTO> findAllPostsForAdminDashboard(@Param("search") String search, Pageable pageable);
+
+        @Query("SELECT new Blog.dto.PostAdminDTO(" +
+                        "p.postId, p.title, p.description, p.isHidden, p.createdAt, " +
+                        "p.user.userId, p.user.avatar, p.user.firstname, p.user.lastname) " +
+                        "FROM Post p " +
+                        "ORDER BY p.createdAt DESC")
+        Page<PostAdminDTO> findAllPostsForAdminDashboard(Pageable pageable);
+
         long countByCreatedAtGreaterThanEqual(LocalDateTime sevenDaysAgo);
 
         long countByIsHiddenTrue();

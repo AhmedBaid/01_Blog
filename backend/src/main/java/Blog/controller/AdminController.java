@@ -6,9 +6,12 @@ import Blog.dto.ResponseDTO;
 import Blog.dto.AdminStatsDTO;
 import Blog.dto.UserDTO;
 import Blog.service.AdminService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -21,8 +24,14 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(adminService.getAllUsersForAdmin());
+    public ResponseEntity<Page<UserDTO>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        if (search != null && !search.trim().isEmpty()) {
+            return ResponseEntity.ok(adminService.getAllUsersForAdmin(search.trim(), pageable));
+        }
+        return ResponseEntity.ok(adminService.getAllUsersForAdmin(pageable));
     }
 
     @PutMapping("/users/{userId}/ban")
@@ -39,8 +48,14 @@ public class AdminController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostAdminDTO>> getAllPosts() {
-        return ResponseEntity.ok(adminService.getAllPostsForAdmin());
+    public ResponseEntity<Page<PostAdminDTO>> getAllPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        if (search != null && !search.trim().isEmpty()) {
+            return ResponseEntity.ok(adminService.getAllPostsForAdmin(search.trim(), pageable));
+        }
+        return ResponseEntity.ok(adminService.getAllPostsForAdmin(pageable));
     }
 
     @PutMapping("/posts/{postId}/hide")
@@ -63,8 +78,14 @@ public class AdminController {
     }
 
     @GetMapping("/reports")
-    public ResponseEntity<List<ReportDTO>> getAllReports() {
-        return ResponseEntity.ok(adminService.getAllReports());
+    public ResponseEntity<Page<ReportDTO>> getAllReports(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        if (search != null && !search.trim().isEmpty()) {
+            return ResponseEntity.ok(adminService.getAllReports(search.trim(), pageable));
+        }
+        return ResponseEntity.ok(adminService.getAllReports(pageable));
     }
 
     @PutMapping("/reports/{reportId}/review")

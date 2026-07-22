@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -47,6 +48,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
                         "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
                         "FROM User u " + "ORDER BY u.createdAt DESC")
         List<UserDTO> getAllUsersForAdminDashboard();
+
+        @Query("SELECT new Blog.dto.UserDTO(" +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
+                        "FROM User u " +
+                        "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "OR LOWER(u.firstname) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "OR LOWER(u.lastname) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "ORDER BY u.createdAt DESC")
+        Page<UserDTO> getAllUsersForAdminDashboard(@Param("search") String search, Pageable pageable);
+
+        @Query("SELECT new Blog.dto.UserDTO(" +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
+                        "FROM User u " +
+                        "ORDER BY u.createdAt DESC")
+        Page<UserDTO> getAllUsersForAdminDashboard(Pageable pageable);
 
         long countByRole(Role role);
 

@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PostAdmin, ReportAdmin, Stats, UserAdmin } from '../../models/models';
+import { PostsAdminPage, ReportsPage, Stats, UsersPage } from '../../models/models';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,10 @@ export class AdminService {
     return this.http.get<Stats>(`${this.apiUrl}/stats`);
   }
 
-  getUsers(): Observable<UserAdmin[]> {
-    return this.http.get<UserAdmin[]>(`${this.apiUrl}/users`);
+  getUsers(page: number, search?: string): Observable<UsersPage> {
+    let params = new HttpParams().set('page', page.toString());
+    if (search) params = params.set('search', search);
+    return this.http.get<UsersPage>(`${this.apiUrl}/users`, { params });
   }
 
   toggleBanUser(userId: number): Observable<{ message: string }> {
@@ -26,8 +28,10 @@ export class AdminService {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/users/${userId}`);
   }
 
-  getPosts(): Observable<PostAdmin[]> {
-    return this.http.get<PostAdmin[]>(`${this.apiUrl}/posts`);
+  getPosts(page: number, search?: string): Observable<PostsAdminPage> {
+    let params = new HttpParams().set('page', page.toString());
+    if (search) params = params.set('search', search);
+    return this.http.get<PostsAdminPage>(`${this.apiUrl}/posts`, { params });
   }
 
   toggleHidePost(postId: number): Observable<{ message: string }> {
@@ -38,8 +42,10 @@ export class AdminService {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/posts/${postId}`);
   }
 
-  getReports(): Observable<ReportAdmin[]> {
-    return this.http.get<ReportAdmin[]>(`${this.apiUrl}/reports`);
+  getReports(page: number, search?: string): Observable<ReportsPage> {
+    let params = new HttpParams().set('page', page.toString());
+    if (search) params = params.set('search', search);
+    return this.http.get<ReportsPage>(`${this.apiUrl}/reports`, { params });
   }
 
   reviewReport(reportId: number): Observable<{ message: string }> {

@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,9 +56,35 @@ public class AdminService {
         return users;
     }
 
+    public Page<UserDTO> getAllUsersForAdmin(Pageable pageable) {
+        Page<UserDTO> page = userRepository.getAllUsersForAdminDashboard(pageable);
+        for (UserDTO user : page.getContent()) {
+            long postCount = postRepository.countByUser_Username(user.getUsername());
+            user.setPostsCount(postCount);
+        }
+        return page;
+    }
+
+    public Page<UserDTO> getAllUsersForAdmin(String search, Pageable pageable) {
+        Page<UserDTO> page = userRepository.getAllUsersForAdminDashboard(search, pageable);
+        for (UserDTO user : page.getContent()) {
+            long postCount = postRepository.countByUser_Username(user.getUsername());
+            user.setPostsCount(postCount);
+        }
+        return page;
+    }
+
     public List<PostAdminDTO> getAllPostsForAdmin() {
         List<PostAdminDTO> posts = postRepository.findAllPostsForAdminDashboard();
         return posts;
+    }
+
+    public Page<PostAdminDTO> getAllPostsForAdmin(Pageable pageable) {
+        return postRepository.findAllPostsForAdminDashboard(pageable);
+    }
+
+    public Page<PostAdminDTO> getAllPostsForAdmin(String search, Pageable pageable) {
+        return postRepository.findAllPostsForAdminDashboard(search, pageable);
     }
 
     @Transactional
@@ -129,6 +157,14 @@ public class AdminService {
 
     public List<ReportDTO> getAllReports() {
         return reportRepository.findAllReportsForAdmin();
+    }
+
+    public Page<ReportDTO> getAllReports(Pageable pageable) {
+        return reportRepository.findAllReportsForAdmin(pageable);
+    }
+
+    public Page<ReportDTO> getAllReports(String search, Pageable pageable) {
+        return reportRepository.findAllReportsForAdmin(search, pageable);
     }
 
     @Transactional

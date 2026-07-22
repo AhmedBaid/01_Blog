@@ -155,3 +155,18 @@ export interface ReportAdmin {
   reportedPostId: number | null;
   reportedPostTitle: string | null;
 }
+
+export interface UsersPage {
+  content: UserAdmin[];
+  last: boolean;
+}
+
+export interface PostsAdminPage {
+  content: PostAdmin[];
+  last: boolean;
+}
+
+export interface ReportsPage {
+  content: ReportAdmin[];
+  last: boolean;
+}
