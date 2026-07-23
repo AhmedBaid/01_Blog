@@ -37,7 +37,7 @@
           @if (isFollowSubmitting(user.userId)) {
           <i class="fa-solid fa-spinner fa-spin"></i> Loading...
           } @else {
-          @if (user.FollowedByCurrentUser) {
+          @if (user.followedByCurrentUser) {
           <i class="fa-solid fa-user-check"></i> Unfollow
           } @else {
           <i class="fa-solid fa-user-plus"></i> Follow

@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, finalize } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AdminService } from '../../core/services/admin.service';
+import { UserService } from '../../core/services/user.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { UserAdmin } from '../../models/models';
 
@@ -14,7 +14,7 @@ import { UserAdmin } from '../../models/models';
   styleUrls: ['./users.css'],
 })
 export class UsersComponent {
-  private adminService = inject(AdminService);
+  userService = inject(UserService);
   private http = inject(HttpClient);
   private router = inject(Router);
   private notification = inject(NotificationService);
@@ -48,7 +48,7 @@ export class UsersComponent {
     this.loading.set(true);
 
     const searchTerm = this.search().trim() || undefined;
-    this.adminService.getUsers(this.page, searchTerm, 10).subscribe({
+    this.userService.getUsers(this.page, 10, searchTerm).subscribe({
       next: (page) => {
         console.log("pageeeeeeeeee",page)
         this.users.update((list) => [...list, ...page.content]);

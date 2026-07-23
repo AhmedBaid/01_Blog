@@ -1,5 +1,7 @@
 package Blog.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import Blog.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +24,7 @@ public class UserDTO {
     private Long postsCount;
     private String avatar;
     private String newToken;
-    private boolean FollowedByCurrentUser;
+    private boolean followedByCurrentUser;
     private boolean status;
     private boolean isAdmin;
 

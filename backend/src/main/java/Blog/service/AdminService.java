@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -50,36 +49,29 @@ public class AdminService {
 
     public List<UserDTO> getAllUsersForAdmin() {
         List<UserDTO> users = userRepository.getAllUsersForAdminDashboard();
-        enrichUsers(users);
+        for (UserDTO user : users) {
+            long postCount = postRepository.countByUser_Username(user.getUsername());
+            user.setPostsCount(postCount);
+        }
         return users;
     }
 
     public Page<UserDTO> getAllUsersForAdmin(Pageable pageable) {
         Page<UserDTO> page = userRepository.getAllUsersForAdminDashboard(pageable);
-        enrichUsers(page.getContent());
+        for (UserDTO user : page.getContent()) {
+            long postCount = postRepository.countByUser_Username(user.getUsername());
+            user.setPostsCount(postCount);
+        }
         return page;
     }
 
     public Page<UserDTO> getAllUsersForAdmin(String search, Pageable pageable) {
         Page<UserDTO> page = userRepository.getAllUsersForAdminDashboard(search, pageable);
-        enrichUsers(page.getContent());
-        return page;
-    }
-
-    private void enrichUsers(List<UserDTO> users) {
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        User currentUser = userRepository.findByUsername(currentUsername).orElse(null);
-        if (currentUser == null) return;
-
-        for (UserDTO user : users) {
+        for (UserDTO user : page.getContent()) {
             long postCount = postRepository.countByUser_Username(user.getUsername());
             user.setPostsCount(postCount);
-            if (!user.getUserId().equals(currentUser.getUserId())) {
-                boolean isFollowed = followRepository.existsByFollower_UserIdAndFollowedTo_UserId(
-                        currentUser.getUserId(), user.getUserId());
-                user.setFollowedByCurrentUser(isFollowed);
-            }
         }
+        return page;
     }
 
     public List<PostAdminDTO> getAllPostsForAdmin() {

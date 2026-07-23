@@ -65,6 +65,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
                         "ORDER BY u.createdAt DESC")
         Page<UserDTO> getAllUsersForAdminDashboard(Pageable pageable);
 
+        @Query("SELECT u FROM User u " +
+                        "ORDER BY u.createdAt DESC")
+        Page<User> findAllUsers(Pageable pageable);
+
+        @Query("SELECT u FROM User u " +
+                        "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "OR LOWER(u.firstname) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "OR LOWER(u.lastname) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                        "ORDER BY u.createdAt DESC")
+        Page<User> searchUsers(@Param("search") String search, Pageable pageable);
+
         long countByRole(Role role);
 
         long countByCreatedAtGreaterThanEqual(LocalDateTime sevenDaysAgo);

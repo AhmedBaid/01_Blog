@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { User } from '../../models/models';
+import { User, UsersPage } from '../../models/models';
 
 @Injectable({
   providedIn: 'root',
@@ -35,5 +35,11 @@ export class UserService {
     return this.http.put<User>(`${this.apiUrl}/users/me`, profileData).pipe(
       tap((user) => this.setCurrentUser(user)),
     );
+  }
+
+  getUsers(page: number, size: number, search?: string): Observable<UsersPage> {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+    if (search) params = params.set('search', search);
+    return this.http.get<UsersPage>(`${this.apiUrl}/users`, { params });
   }
 }

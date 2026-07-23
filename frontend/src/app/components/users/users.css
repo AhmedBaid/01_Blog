@@ -9,6 +9,10 @@
   display: none;
 }
 
+.specialCard{
+  border-color: #ff7800 !important;
+}
+
 .users-header {
   display: flex;
   justify-content: space-between;
@@ -215,6 +219,21 @@
 
 .card-name:hover {
   color: #ff7800;
+}
+
+.you-badge {
+  display: inline-block;
+  background: #ff7800;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-left: 8px;
+  vertical-align: middle;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .card-username {

@@ -11,12 +11,8 @@
 
   <div class="search-bar">
     <i class="fa-solid fa-search"></i>
-    <input
-      type="text"
-      placeholder="Search by name, username or email..."
-      [(ngModel)]="search"
-      (input)="onSearchInput()"
-    />
+    <input type="text" placeholder="Search by name, username or email..." [(ngModel)]="search"
+      (input)="onSearchInput()" />
     @if (search()) {
     <button type="button" class="search-clear" (click)="search.set(''); onSearchInput()" title="Clear search">
       <i class="fa-solid fa-xmark"></i>
@@ -40,10 +36,11 @@
   @if (users().length > 0) {
   <div class="users-grid">
     @for (user of users(); track user.userId) {
-    <div class="user-card">
+    <div class="user-card" [class.specialCard]="userService.currentUser()?.userId === user.userId">
       <div class="card-avatar" (click)="goToProfile(user.userId)" title="View profile">
         @if (user.avatar) {
-        <img title="user image" [src]="user.avatar" [alt]="user.firstname" [title]="user.firstname + ' ' + user.lastname" class="avatar-img" />
+        <img title="user image" [src]="user.avatar" [alt]="user.firstname"
+          [title]="user.firstname + ' ' + user.lastname" class="avatar-img" />
         } @else {
         <div class="avatar-fallback">
           {{ user.firstname.charAt(0).toUpperCase() }}{{ user.lastname.charAt(0).toUpperCase() }}
@@ -54,6 +51,9 @@
       <div class="card-body">
         <div class="card-name" (click)="goToProfile(user.userId)" title="View profile">
           {{ user.firstname }} {{ user.lastname }}
+          @if (userService.currentUser()?.userId === user.userId) {
+          <span class="you-badge">Your card</span>
+          }
         </div>
         <div class="card-username">&#64;{{ user.username }}</div>
 
@@ -85,14 +85,10 @@
         </div>
       </div>
 
+      @if (userService.currentUser()?.userId !== user.userId) {
       <div class="card-actions">
-        <button
-          type="button"
-          class="btn-follow"
-          [class.following]="user.followedByCurrentUser"
-          (click)="toggleFollow(user)"
-          [disabled]="isFollowLoading(user.userId)"
-        >
+        <button type="button" class="btn-follow" [class.following]="user.followedByCurrentUser"
+          (click)="toggleFollow(user)" [disabled]="isFollowLoading(user.userId)">
           @if (isFollowLoading(user.userId)) {
           <i class="fa-solid fa-spinner fa-spin"></i> Loading...
           } @else if (user.followedByCurrentUser) {
@@ -106,6 +102,13 @@
           <i class="fa-solid fa-arrow-right"></i> View Profile
         </button>
       </div>
+      }@else{
+      <div class="card-actions">
+        <button type="button" class="btn-view" (click)="goToProfile(user.userId)">
+          <i class="fa-solid fa-arrow-right"></i> View Profile
+        </button>
+      </div>
+      }
     </div>
     }
   </div>

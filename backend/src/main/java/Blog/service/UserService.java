@@ -1,5 +1,6 @@
 package Blog.service;
 
+import java.util.List;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,7 +9,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,6 +64,22 @@ public class UserService {
         User currentUser = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
         return mapUserToUserDTO(user, currentUser.getUserId(), id);
+    }
+
+    public Page<UserDTO> getAllUsers(int page, int size, String search) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<User> userPage;
+        if (search != null && !search.trim().isEmpty()) {
+            userPage = userRepository.searchUsers(search.trim(), pageable);
+        } else {
+            userPage = userRepository.findAllUsers(pageable);
+        }
+
+        return userPage.map(user -> mapUserToUserDTO(user, currentUser.getUserId(), user.getUserId()));
     }
 
     public UserDTO updateCurrentUserProfile(String username, EditProfileDto editProfileDto) {

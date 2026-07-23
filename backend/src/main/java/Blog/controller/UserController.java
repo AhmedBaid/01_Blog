@@ -3,6 +3,7 @@ package Blog.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import Blog.dto.FollowDTO;
@@ -20,16 +22,19 @@ import Blog.enums.Role;
 import Blog.exception.GlobalException;
 import Blog.repository.PostRepository;
 import Blog.repository.UserRepository;
+import Blog.service.UserService;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository, PostRepository postRepository) {
+    public UserController(UserRepository userRepository, PostRepository postRepository, UserService userService) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.userService = userService;
     }
 
     @GetMapping("/me")
@@ -67,6 +72,14 @@ public class UserController {
             dto.setBio(user.getBio());
             return dto;
         }).toList();
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<Page<UserDTO>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(userService.getAllUsers(page, size, search));
     }
 
     @GetMapping("users/search/{username}")
