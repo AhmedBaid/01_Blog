@@ -52,6 +52,13 @@ export class CreatePost {
     });
   }
 
+  ngOnInit() {
+    if (this.postService.triggerOpenCreatePost()) {
+      this.postService.triggerOpenCreatePost.set(false);
+      this.openCreatePostModal();
+    }
+  }
+
   async onFileSelected(event: any): Promise<void> {
     if (!event.target.files || event.target.files.length === 0) return;
 

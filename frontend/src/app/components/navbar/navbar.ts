@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { followDto, NotifDto, User } from '../../models/models';
 import { NotificationService } from '../../core/services/notification.service';
+import { PostService } from '../../core/services/post.service';
 import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
 
 @Component({
@@ -19,6 +20,7 @@ export class NavbarComponent {
   private router = inject(Router);
   private http = inject(HttpClient);
   private notificationToast = inject(NotificationService);
+  private postService = inject(PostService);
   private apiNotif = 'http://localhost:8080/api/notifications';
   private apiSearch = 'http://localhost:8080/api/users/search';
   private searchSubject = new Subject<string>();
@@ -33,6 +35,7 @@ export class NavbarComponent {
   isSearchLoading = signal<boolean>(false);
   showResultsDropdown = signal<boolean>(false);
   navigateToCreatePost() {
+    this.postService.triggerOpenCreatePost.set(true);
     this.router.navigate(['/home']);
   }
   navigateToDashboard() {

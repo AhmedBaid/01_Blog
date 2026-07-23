@@ -10,6 +10,7 @@ export class PostService {
   apiUrl = 'http://localhost:8080/api';
   private http = inject(HttpClient);
   posts = signal<Post[]>([]);
+  triggerOpenCreatePost = signal(false);
 
   createPost(postData: FormData): Observable<Post> {
     return this.http.post<Post>(`${this.apiUrl}/posts`, postData);
