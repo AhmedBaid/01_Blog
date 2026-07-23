@@ -1,6 +1,118 @@
-<div>explore</div>
-<div>explore</div>
-<div>explore</div>
-<div>explore</div>
-<div>explore</div>
+<div class="explore-page">
+  <div class="combine">
+    <header class="explore-header">
+      <div>
+        <h2>Explore</h2>
+        <p class="text-muted">Discover posts from people you haven't followed yet</p>
+      </div>
+      <button type="button" class="refresh-btn" (click)="refresh()" title="Refresh">
+        <i class="fa-solid fa-rotate-right"></i> Refresh
+      </button>
+    </header>
 
+    <div class="search-bar">
+      <i class="fa-solid fa-search"></i>
+      <input type="text" placeholder="Search by title or description..." [(ngModel)]="search"
+        (input)="onSearchInput()" />
+      @if (search()) {
+      <button type="button" class="search-clear" (click)="search.set(''); onSearchInput()" title="Clear search">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      }
+    </div>
+  </div>
+
+  @if (loading() && posts().length === 0) {
+  <div class="loading-spinner">
+    <div class="spinner"></div>
+    <span>Loading posts...</span>
+  </div>
+  }
+
+  @if (!loading() && posts().length === 0 && !search()) {
+  <div class="empty-state">
+    <i class="fa-solid fa-compass"></i>
+    <p>No new posts to discover</p>
+  </div>
+  }
+
+  @if (!loading() && posts().length === 0 && search()) {
+  <div class="empty-state">
+    <i class="fa-solid fa-search"></i>
+    <p>No posts matching "{{ search() }}"</p>
+  </div>
+  }
+
+  <div class="explore-feed">
+    @for (post of posts(); track post.id) {
+    <div class="post-card">
+      <div class="post-header">
+        @if (post.avatar) {
+        <img title="avatar" class="p-avatar" [src]="post.avatar" [alt]="post.firstname"
+          (click)="goToProfile(post.userId)" />
+        } @else {
+        <div class="p-avatar-fb" (click)="goToProfile(post.userId)">
+          {{ post.firstname.charAt(0).toUpperCase() }}{{ post.lastname.charAt(0).toUpperCase() }}
+        </div>
+        }
+        <div class="p-author-info" (click)="goToProfile(post.userId)">
+          <div class="p-fullname">{{ post.firstname }} {{ post.lastname }}</div>
+          <div class="p-username">&#64;{{ post.username }} · {{ post.createdAt }}</div>
+        </div>
+      </div>
+
+      <h2 class="p-title">{{ post.title }}</h2>
+      <p class="p-desc">{{ post.description }}</p>
+
+      @if (post.mediaUrls && post.mediaUrls.length > 0) {
+      <div class="p-media-slider">
+        @if (post.mediaUrls.length > 1) {
+        <button title="prev" type="button" class="slide-arrow prev" (click)="prevMedia(post)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button title="next" type="button" class="slide-arrow next" (click)="nextMedia(post)">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        }
+
+        <div class="slider-content">
+          @let activeUrl = post.mediaUrls[post.currentMediaIndex || 0];
+
+          @if (isVideo(activeUrl)) {
+          <video [src]="activeUrl" controls class="slider-media"></video>
+          } @else {
+          <img [src]="activeUrl" alt="Post media" class="slider-media" />
+          }
+        </div>
+
+        @if (post.mediaUrls.length > 1) {
+        <div class="slider-indicators">
+          @for (med of post.mediaUrls; track med; let idx = $index) {
+          <span class="dot" [class.active]="(post.currentMediaIndex || 0) === idx"></span>
+          }
+        </div>
+        }
+      </div>
+      }
+
+      <div class="p-actions">
+        <button type="button" class="p-action-btn" (click)="viewPost(post.id)">
+          <i class="fa-solid fa-arrow-right"></i>
+          <span>View Post</span>
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (loadingMore()) {
+  <div class="load-more">
+    <div class="spinner"></div>
+    <span>Loading more posts...</span>
+  </div>
+  }
+
+  @if (last() && posts().length > 0) {
+  <div class="end-of-list">You've seen everything for now</div>
+  }
+</div>

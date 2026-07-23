@@ -30,35 +30,30 @@
 }
 
 .text-muted {
-  color: #555;
+  color: #777 !important;
   font-size: 0.85rem;
   margin: 4px 0 0 0;
 }
-
 .refresh-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: 10px;
-  border: 1px solid #1e1e1e;
-  background: #141414;
-  color: #888;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9px;
+  border: 1px solid #ff7800;
+  background: transparent;
+  color: #ff7800;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-}
-
-.refresh-btn i {
-  font-size: 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
 }
 
 .refresh-btn:hover {
-  background: #1e1e1e;
-  color: #aaa;
-  border-color: #2a2a2a;
+  background: #ff7800;
+  color: #fff;
 }
 
 

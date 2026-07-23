@@ -36,6 +36,14 @@ export class PostService {
     return this.http.get<PostsPage>(`${this.apiUrl}/users/${userId}/posts?page=${page}`);
   }
 
+  getExplorePosts(page: number, search?: string): Observable<PostsPage> {
+    let url = `${this.apiUrl}/posts/explore?page=${page}`;
+    if (search && search.trim()) {
+      url += `&search=${encodeURIComponent(search.trim())}`;
+    }
+    return this.http.get<PostsPage>(url);
+  }
+
   addPost(post: Post): void {
     this.posts.update((current) => [post, ...current]);
   }

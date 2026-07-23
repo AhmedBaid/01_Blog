@@ -208,6 +208,25 @@ public class PostService {
         return postsPage;
     }
 
+    public Page<PostDTO> getExplorePosts(Pageable pageable, String search) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new GlobalException("User not found", HttpStatus.NOT_FOUND));
+
+        Page<PostDTO> postsPage;
+        if (search != null && !search.isBlank()) {
+            postsPage = postRepository.findExplorePostsWithStats(currentUser.getUserId(), search, pageable);
+        } else {
+            postsPage = postRepository.findExplorePostsWithStats(currentUser.getUserId(), pageable);
+        }
+
+        postsPage.forEach(dto -> {
+            dto.setItsMyPost(false);
+        });
+
+        return postsPage;
+    }
+
     public Page<PostDTO> getUserPosts(Long userId, Pageable pageable) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User currentUser = userRepository.findByUsername(username)

@@ -69,6 +69,14 @@ public class PostController {
         return ResponseEntity.ok(likeResponse);
     }
 
+    @GetMapping("/posts/explore")
+    public ResponseEntity<Page<PostDTO>> getExplorePosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by("createdAt").descending());
+        return ResponseEntity.ok(postService.getExplorePosts(pageable, search));
+    }
+
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDTO> getPostDetails(@PathVariable Long postId, Principal principal) {
         String username = principal.getName();
