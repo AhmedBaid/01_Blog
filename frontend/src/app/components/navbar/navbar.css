@@ -820,4 +820,10 @@
   .nb-create-text {
     display: none;
   }
+  .navbar {
+    padding:5px 10px !important;
+  }
+  .nb-btn{
+    padding: 8px 2px !important;
+  }
 }
