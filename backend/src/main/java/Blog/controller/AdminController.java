@@ -26,8 +26,9 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<Page<UserDTO>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String search) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         if (search != null && !search.trim().isEmpty()) {
             return ResponseEntity.ok(adminService.getAllUsersForAdmin(search.trim(), pageable));
         }

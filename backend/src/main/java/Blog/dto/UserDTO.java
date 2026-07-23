@@ -27,7 +27,7 @@ public class UserDTO {
     private boolean isAdmin;
 
     public UserDTO(Long userId, String avatar, String firstname, String lastname, String username, String email,
-            Role role, boolean status, Long followersCount,Long followingCount) {
+            Role role, boolean status, Long followersCount, Long followingCount) {
         this.userId = userId;
         this.avatar = avatar == null ? null : "http://localhost:8080/avatars/" + avatar;
         this.firstname = firstname;
@@ -38,5 +38,20 @@ public class UserDTO {
         this.status = status;
         this.followersCount = followersCount;
         this.followingCount = followingCount;
+    }
+
+    public UserDTO(Long userId, String avatar, String firstname, String lastname, String username, String email,
+            Role role, boolean status, Long followersCount, Long followingCount, String bio) {
+        this.userId = userId;
+        this.avatar = avatar == null ? null : "http://localhost:8080/avatars/" + avatar;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.email = email;
+        this.isAdmin = role == Role.ADMIN;
+        this.status = status;
+        this.followersCount = followersCount;
+        this.followingCount = followingCount;
+        this.bio = bio;
     }
 }

@@ -45,12 +45,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
         List<FollowDTO> searchUsersByUsername(@Param("username") String username);
 
         @Query("SELECT new Blog.dto.UserDTO(" +
-                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount, u.bio) " +
                         "FROM User u " + "ORDER BY u.createdAt DESC")
         List<UserDTO> getAllUsersForAdminDashboard();
 
         @Query("SELECT new Blog.dto.UserDTO(" +
-                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount, u.bio) " +
                         "FROM User u " +
                         "WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :search, '%')) " +
                         "OR LOWER(u.firstname) LIKE LOWER(CONCAT('%', :search, '%')) " +
@@ -60,7 +60,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         Page<UserDTO> getAllUsersForAdminDashboard(@Param("search") String search, Pageable pageable);
 
         @Query("SELECT new Blog.dto.UserDTO(" +
-                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount) " +
+                        "u.userId, u.avatar, u.firstname, u.lastname, u.username, u.email, u.role, u.isBanned, u.followersCount, u.followingCount, u.bio) " +
                         "FROM User u " +
                         "ORDER BY u.createdAt DESC")
         Page<UserDTO> getAllUsersForAdminDashboard(Pageable pageable);

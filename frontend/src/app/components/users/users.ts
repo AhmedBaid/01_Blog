@@ -32,7 +32,7 @@ export class UsersComponent {
 
   ngOnInit() {
     this.loadUsersPage();
-    this.searchSubject.pipe(debounceTime(400)).subscribe(() => this.resetAndLoad());
+    this.searchSubject.pipe(debounceTime(1500)).subscribe(() => this.resetAndLoad());
   }
 
   resetAndLoad() {
@@ -50,6 +50,7 @@ export class UsersComponent {
     const searchTerm = this.search().trim() || undefined;
     this.adminService.getUsers(this.page, searchTerm, 10).subscribe({
       next: (page) => {
+        console.log("pageeeeeeeeee",page)
         this.users.update((list) => [...list, ...page.content]);
         this.last.set(page.last);
         this.page++;
