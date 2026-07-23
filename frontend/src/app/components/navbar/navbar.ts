@@ -34,14 +34,21 @@ export class NavbarComponent {
   searchResults = signal<followDto[]>([]);
   isSearchLoading = signal<boolean>(false);
   showResultsDropdown = signal<boolean>(false);
+
   navigateToCreatePost() {
     this.postService.triggerOpenCreatePost.set(true);
     this.router.navigate(['/home']);
   }
+
+  navigateToHome() {
+    this.router.navigate(['/home']);
+  }
+
   navigateToDashboard() {
     this.router.navigate(['/admin/dashboard']);
     this.showProfileMenu = false;
   }
+
   ngOnInit() {
     this.http.get<NotifDto[]>(`${this.apiNotif}`).subscribe({
       next: (data) => {
@@ -97,17 +104,21 @@ export class NavbarComponent {
       },
     });
   }
+
   navigateToProfile() {
     this.router.navigate(['/profile/me']);
     this.showProfileMenu = false;
   }
+
   toggleProfileMenu() {
     this.showProfileMenu = !this.showProfileMenu;
   }
+
   logout() {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
   }
+
   showNotif() {
     this.showNotifMenu = true;
     this.isGetNotifLoading.set(true);
@@ -122,9 +133,11 @@ export class NavbarComponent {
       },
     });
   }
+
   closeNotifMenu() {
     this.showNotifMenu = false;
   }
+  
   markAsRead(notifId: number, postId: number): void {
     this.closeNotifMenu();
     this.http.put(`${this.apiNotif}/${notifId}/read`, {}).subscribe({
