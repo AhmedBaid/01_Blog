@@ -129,7 +129,7 @@ export class NavbarComponent {
         this.router.navigate([`/post/${postId}`]);
       },
       error: (err) => {
-          this.notificationToast.error(err.error?.message || 'Could not read the notif', 'Error');
+        this.notificationToast.error(err.error?.message || 'Could not read the notif', 'Error');
       },
     });
   }
@@ -154,5 +154,13 @@ export class NavbarComponent {
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
+  }
+  navigateToUsers() {
+    this.router.navigate(['/users']);
+    this.showProfileMenu = false;
+  }
+  navigateToExplore() {
+    this.router.navigate(['/explore']);
+    this.showProfileMenu = false;
   }
 }

@@ -214,7 +214,7 @@
         <i class="fa-solid fa-search"></i>
         <input type="text" placeholder="Search by name, username or email..." [(ngModel)]="usersSearch" (input)="onUsersSearchInput()" />
         @if (usersSearch()) {
-        <button class="search-clear" (click)="usersSearch.set(''); onUsersSearchInput()">
+        <button title="user search" class="search-clear" (click)="usersSearch.set(''); onUsersSearchInput()">
           <i class="fa-solid fa-xmark"></i>
         </button>
         }
@@ -337,7 +337,7 @@
         <i class="fa-solid fa-search"></i>
         <input type="text" placeholder="Search by title or description..." [(ngModel)]="postsSearch" (input)="onPostsSearchInput()" />
         @if (postsSearch()) {
-        <button class="search-clear" (click)="postsSearch.set(''); onPostsSearchInput()">
+        <button title="post search"  class="search-clear" (click)="postsSearch.set(''); onPostsSearchInput()">
           <i class="fa-solid fa-xmark"></i>
         </button>
         }
@@ -454,7 +454,7 @@
         <i class="fa-solid fa-search"></i>
         <input type="text" placeholder="Search by reason, reporter or reported user..." [(ngModel)]="reportsSearch" (input)="onReportsSearchInput()" />
         @if (reportsSearch()) {
-        <button class="search-clear" (click)="reportsSearch.set(''); onReportsSearchInput()">
+        <button title="report search"  class="search-clear" (click)="reportsSearch.set(''); onReportsSearchInput()">
           <i class="fa-solid fa-xmark"></i>
         </button>
         }

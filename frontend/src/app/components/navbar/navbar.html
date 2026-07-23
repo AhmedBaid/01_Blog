@@ -161,6 +161,12 @@
             <button class="nb-dropdown-btn profile-btn" (click)="navigateToProfile()">
               <i class="fa-solid fa-user"></i> Profile
             </button>
+            <button class="nb-dropdown-btn profile-btn" (click)="navigateToExplore()">
+              <i class="fa-solid fa-newspaper"></i> Explore
+            </button>
+            <button class="nb-dropdown-btn profile-btn" (click)="navigateToUsers()">
+              <i class="fa-solid fa-users"></i> Users
+            </button>
             @if(user.admin){
             <button class="nb-dropdown-btn profile-btn" (click)="navigateToDashboard()">
               <i class="fa-solid fa-chart-line"></i> Dashboard

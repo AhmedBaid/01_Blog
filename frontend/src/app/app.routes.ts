@@ -8,6 +8,8 @@ import { ProfileComponent } from './components/profile/profile';
 import { PostDetailsComponent } from './components/post-view/post-view';
 import { adminGuard } from './core/guards/adminGuard.guard';
 import { AdminComponent } from './components/admin/admin';
+import { UsersComponent } from './components/users/users';
+import { ExploreComponent } from './components/explore/explore';
 
 export const routes: Routes = [
   {
@@ -24,6 +26,16 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'users',
+    component: UsersComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'explore',
+    component: ExploreComponent,
     canActivate: [authGuard],
   },
   {
