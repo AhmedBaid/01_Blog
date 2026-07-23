@@ -37,12 +37,12 @@
   <div class="users-grid">
     @for (user of users(); track user.userId) {
     <div class="user-card" [class.specialCard]="userService.currentUser()?.userId === user.userId">
-      <div class="card-avatar" (click)="goToProfile(user.userId)" title="View profile">
+      <div class="card-avatar">
         @if (user.avatar) {
-        <img title="user image" [src]="user.avatar" [alt]="user.firstname"
-          [title]="user.firstname + ' ' + user.lastname" class="avatar-img" />
+        <img title="user image" [src]="user.avatar" [alt]="user.firstname" class="avatar-img"
+          (click)="openImagePreview(user.avatar)" />
         } @else {
-        <div class="avatar-fallback">
+        <div class="avatar-fallback" (click)="openImageFl(user.firstname,user.lastname)" title="profile image">
           {{ user.firstname.charAt(0).toUpperCase() }}{{ user.lastname.charAt(0).toUpperCase() }}
         </div>
         }
@@ -123,5 +123,20 @@
   @if (last() && users().length > 0) {
   <div class="end-of-list">All users loaded</div>
   }
+  }
+
+  @if (selectedImage(); as imageUrl) {
+  <div class="image-popup-overlay" (click)="closeImagePreview()">
+    <div class="image-popup-container" (click)="$event.stopPropagation()">
+      <img [src]="imageUrl" alt="User avatar" class="image-popup-img" />
+    </div>
+  </div>
+  }
+  @if (resumeName(); as resumeName) {
+  <div class="image-popup-overlay" (click)="closeImageFL()">
+    <div class="resumeName-countainer" (click)="$event.stopPropagation()">
+      {{resumeName}}
+    </div>
+  </div>
   }
 </div>

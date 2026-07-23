@@ -50,7 +50,7 @@ export class NavbarComponent {
     });
     this.searchSubscription = this.searchSubject
       .pipe(
-        debounceTime(1500),
+        debounceTime(1000),
         distinctUntilChanged(),
         switchMap((searchTerm) => {
           if (!searchTerm.trim()) {

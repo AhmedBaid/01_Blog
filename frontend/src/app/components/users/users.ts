@@ -25,14 +25,17 @@ export class UsersComponent {
   loadingMore = signal(false);
   last = signal(false);
   search = signal('');
+  selectedImage = signal<string | null>(null);
+  resumeName = signal<string | null>(null);
   followingIds = new Set<number>();
 
   private page = 0;
   private searchSubject = new Subject<string>();
 
   ngOnInit() {
+    this.userService.loadCurrentUser();
     this.loadUsersPage();
-    this.searchSubject.pipe(debounceTime(1500)).subscribe(() => this.resetAndLoad());
+    this.searchSubject.pipe(debounceTime(1000)).subscribe(() => this.resetAndLoad());
   }
 
   resetAndLoad() {
@@ -50,7 +53,7 @@ export class UsersComponent {
     const searchTerm = this.search().trim() || undefined;
     this.userService.getUsers(this.page, 10, searchTerm).subscribe({
       next: (page) => {
-        console.log("pageeeeeeeeee",page)
+        console.log('pageeeeeeeeee', page);
         this.users.update((list) => [...list, ...page.content]);
         this.last.set(page.last);
         this.page++;
@@ -106,6 +109,7 @@ export class UsersComponent {
         },
         error: (err) => {
           this.notification.error(err.error?.message || 'Could not follow user', 'Error');
+          this.followingIds.delete(user.userId);
         },
       });
   }
@@ -116,6 +120,21 @@ export class UsersComponent {
 
   goToProfile(userId: number) {
     this.router.navigate(['/profile', userId]);
+  }
+
+  openImagePreview(url: string) {
+    this.selectedImage.set(url);
+  }
+  openImageFl(firstname: string, lastname: string) {
+    this.resumeName.set(firstname.charAt(0).toLocaleUpperCase() + lastname.charAt(0).toLocaleUpperCase());
+  }
+
+  closeImagePreview() {
+    this.selectedImage.set(null);
+  }
+
+  closeImageFL() {
+    this.resumeName.set(null);
   }
 
   refresh() {

@@ -64,9 +64,9 @@ export class AdminComponent {
   ngOnInit() {
     this.loadStats();
 
-    this.usersSearchSubject.pipe(debounceTime(1500)).subscribe(() => this.resetAndLoadUsers());
-    this.postsSearchSubject.pipe(debounceTime(1500)).subscribe(() => this.resetAndLoadPosts());
-    this.reportsSearchSubject.pipe(debounceTime(1500)).subscribe(() => this.resetAndLoadReports());
+    this.usersSearchSubject.pipe(debounceTime(1000)).subscribe(() => this.resetAndLoadUsers());
+    this.postsSearchSubject.pipe(debounceTime(1000)).subscribe(() => this.resetAndLoadPosts());
+    this.reportsSearchSubject.pipe(debounceTime(1000)).subscribe(() => this.resetAndLoadReports());
   }
 
   toggleSidebar() {
