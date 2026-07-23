@@ -614,6 +614,8 @@
 }
 
 .bar-fill .bar-value {
+  position: relative;
+  top: -30px;
   font-family: 'Syne', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
