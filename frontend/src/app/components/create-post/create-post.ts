@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { UserService } from '../../core/services/user.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NotificationService } from '../../core/services/notification.service';
@@ -50,13 +50,13 @@ export class CreatePost {
       title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(15)]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(30)]],
     });
-  }
 
-  ngOnInit() {
-    if (this.postService.triggerOpenCreatePost()) {
-      this.postService.triggerOpenCreatePost.set(false);
-      this.openCreatePostModal();
-    }
+    effect(() => {
+      if (this.postService.triggerOpenCreatePost()) {
+        this.postService.triggerOpenCreatePost.set(false);
+        this.openCreatePostModal();
+      }
+    });
   }
 
   async onFileSelected(event: any): Promise<void> {
