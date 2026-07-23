@@ -14,9 +14,10 @@ export class AdminService {
     return this.http.get<Stats>(`${this.apiUrl}/stats`);
   }
 
-  getUsers(page: number, search?: string): Observable<UsersPage> {
+  getUsers(page: number, search?: string, size?: number): Observable<UsersPage> {
     let params = new HttpParams().set('page', page.toString());
     if (search) params = params.set('search', search);
+    if (size) params = params.set('size', size.toString());
     return this.http.get<UsersPage>(`${this.apiUrl}/users`, { params });
   }
 
