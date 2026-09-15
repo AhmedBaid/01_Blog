@@ -1,6 +1,5 @@
 package Blog.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import Blog.enums.Role;
 import lombok.AllArgsConstructor;
