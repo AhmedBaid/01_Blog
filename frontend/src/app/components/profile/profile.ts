@@ -141,7 +141,7 @@ export class ProfileComponent {
 
             return {
               ...cuser,
-              FollowedByCurrentUser: isFollowe,
+              followedByCurrentUser: isFollowe,
             };
           });
 
